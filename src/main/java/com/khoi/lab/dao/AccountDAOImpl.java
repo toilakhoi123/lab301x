@@ -25,6 +25,11 @@ public class AccountDAOImpl implements AccountDAO {
 
         accountRegister("waf", "Le Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
         accountRegister("akari", "Le Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
+
+        accountLogin("waf", "toilakhoi");
+
+        Account acc1 = accountFindWithId(Long.valueOf(1));
+        System.out.println(acc1.getLastLoginDate());
     }
 
     @Override
@@ -48,11 +53,35 @@ public class AccountDAOImpl implements AccountDAO {
         try {
             Account account = tq.getSingleResult();
             System.out.println("| [accountLogin] Details match account: " + account);
+            account.setLastLoginDate(new java.sql.Date(System.currentTimeMillis()));
+            account = accountUpdate(account);
             return account;
         } catch (NoResultException e) {
             System.out.println("| [accountLogin] Didn't match any account!");
             return null;
         }
+    }
+
+    @Override
+    @Transactional
+    public Account accountChangePassword(Long id, String password, String newPassword, String newPasswordConfirm) {
+        Account account = accountFindWithId(id);
+        if (account.getPassword() == password && newPassword == newPasswordConfirm) {
+            account.setPassword(newPassword);
+            account = accountUpdate(account);
+        }
+        return account;
+    }
+
+    @Override
+    @Transactional
+    public Account accountResetPassword(Long id, String newPassword, String newPasswordConfirm) {
+        Account account = accountFindWithId(id);
+        if (newPassword == newPasswordConfirm) {
+            account.setPassword(newPassword);
+            account = accountUpdate(account);
+        }
+        return account;
     }
 
     @Override
