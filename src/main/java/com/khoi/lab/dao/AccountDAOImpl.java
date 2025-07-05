@@ -27,9 +27,6 @@ public class AccountDAOImpl implements AccountDAO {
         accountRegister("akari", "Le Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
 
         accountLogin("waf", "toilakhoi");
-
-        Account acc1 = accountFindWithId(Long.valueOf(1));
-        System.out.println(acc1.getLastLoginDate());
     }
 
     @Override
