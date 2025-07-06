@@ -63,23 +63,10 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     @Transactional
-    public Account accountChangePassword(Long id, String password, String newPassword, String newPasswordConfirm) {
+    public Account accountChangePassword(Long id, String newPassword) {
         Account account = accountFindWithId(id);
-        if (account.getPassword() == password && newPassword == newPasswordConfirm) {
-            account.setPassword(newPassword);
-            account = accountUpdate(account);
-        }
-        return account;
-    }
-
-    @Override
-    @Transactional
-    public Account accountResetPassword(Long id, String newPassword, String newPasswordConfirm) {
-        Account account = accountFindWithId(id);
-        if (newPassword == newPasswordConfirm) {
-            account.setPassword(newPassword);
-            account = accountUpdate(account);
-        }
+        account.setPassword(newPassword);
+        account = accountUpdate(account);
         return account;
     }
 

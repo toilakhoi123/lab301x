@@ -40,22 +40,10 @@ public interface AccountDAO {
      * Change current password to the new one
      * 
      * @param id
-     * @param password
      * @param newPassword
-     * @param newPasswordConfirm
      * @return
      */
-    Account accountChangePassword(Long id, String password, String newPassword, String newPasswordConfirm);
-
-    /**
-     * Reset current password (forgotten) to the new one
-     * 
-     * @param id
-     * @param newPassword
-     * @param newPasswordConfirm
-     * @return
-     */
-    Account accountResetPassword(Long id, String newPassword, String newPasswordConfirm);
+    Account accountChangePassword(Long id, String newPassword);
 
     void accountSave(Account account);
 
