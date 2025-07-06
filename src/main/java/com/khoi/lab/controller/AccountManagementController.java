@@ -171,9 +171,4 @@ public class AccountManagementController {
         System.out.println("| Logged the current user out!");
         return new ModelAndView("index");
     }
-
-    // @GetMapping("/accounts")
-    // public ModelAndView accountDashboard() {
-    // return new String("admin/account_dashboard");
-    // }
 }
