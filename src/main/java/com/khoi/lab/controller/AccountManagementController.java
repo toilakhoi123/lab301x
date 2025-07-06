@@ -37,6 +37,7 @@ public class AccountManagementController {
 
     /**
      * Handles login request
+     * (loginSuccess/loginFailure/loginAlready/loginDisabled)
      * 
      * @param session
      * @param usernameOrEmailOrPhone
@@ -55,8 +56,6 @@ public class AccountManagementController {
             Account account = accountDAO.accountLogin(usernameOrEmailOrPhone, password);
 
             if (account == null) {
-                System.out.println("| Log in failed (wrong credentials)!");
-
                 // login failure
                 ModelAndView mav = new ModelAndView("login");
                 mav.addObject("loginFailure", true);
@@ -64,7 +63,6 @@ public class AccountManagementController {
             } else {
                 // check if account is disabled
                 if (!account.isDisabled()) {
-                    System.out.println("| Successfully logged in!");
                     session.setAttribute("account", account);
 
                     // login success
@@ -81,7 +79,7 @@ public class AccountManagementController {
                 }
             }
         } else {
-            System.err.println("| Already logged in!");
+            System.out.println("| Already logged in!");
             ModelAndView mav = new ModelAndView("index");
             mav.addObject("loginAlready", true);
             return mav;
@@ -96,6 +94,69 @@ public class AccountManagementController {
     @GetMapping("/register")
     public ModelAndView register() {
         return new ModelAndView("register");
+    }
+
+    /**
+     * Handles register request
+     * (registerSuccess/registerPasswordMismatch/registerUsernameExists/registerUsernameExists/registerPhoneNumberExists)
+     * 
+     * @param firstName
+     * @param lastName
+     * @param username
+     * @param phoneNumber
+     * @param email
+     * @param password
+     * @param passwordConfirm
+     * @return
+     */
+    @PostMapping("/register")
+    public ModelAndView registerRequest(
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String username,
+            @RequestParam String phoneNumber,
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String passwordConfirm) {
+        System.out.println("registering..");
+
+        // check password confirm
+        if (!password.equals(passwordConfirm)) {
+            System.out.println("| Password mismatch: " + password + " vs " + passwordConfirm);
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("registerPasswordMismatch", true);
+            return mav;
+        }
+
+        // check account username exist
+        if (accountDAO.accountFindWithUsername(username) != null) {
+            System.out.println("| Username exists!");
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("registerUsernameExists", true);
+            return mav;
+        }
+
+        // check account username exist
+        if (accountDAO.accountFindWithEmail(email) != null) {
+            System.out.println("| Email exists!");
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("registerEmailExists", true);
+            return mav;
+        }
+
+        // check account phone number exist
+        if (accountDAO.accountFindWithPhoneNumber(phoneNumber) != null) {
+            System.out.println("| Phone number exists!");
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("registerPhoneNumberExists", true);
+            return mav;
+        }
+
+        // register successful
+        accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password);
+        ModelAndView mav = new ModelAndView("login");
+        mav.addObject("registerSuccess", true);
+        return mav;
     }
 
     /**

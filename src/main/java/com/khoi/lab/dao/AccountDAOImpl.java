@@ -52,6 +52,7 @@ public class AccountDAOImpl implements AccountDAO {
         try {
             Account account = tq.getSingleResult();
             System.out.println("| [accountLogin] Details match account: " + account);
+            System.out.println("| [accountLogin] Logged in!");
             account.setLastLoginDate(new java.sql.Date(System.currentTimeMillis()));
             account = accountUpdate(account);
             return account;
@@ -107,6 +108,38 @@ public class AccountDAOImpl implements AccountDAO {
             return account;
         } catch (NoResultException e) {
             System.out.println("| [accountFindWithUsername] Account not found!");
+            return null;
+        }
+    }
+
+    @Override
+    public Account accountFindWithEmail(String email) {
+        TypedQuery<Account> tq = em.createQuery(
+                "SELECT a FROM Account a WHERE a.email=:email",
+                Account.class);
+        tq.setParameter("email", email);
+        try {
+            Account account = tq.getSingleResult();
+            System.out.println("| [accountFindWithEmail] Account found: " + account);
+            return account;
+        } catch (NoResultException e) {
+            System.out.println("| [accountFindWithEmail] Account not found!");
+            return null;
+        }
+    }
+
+    @Override
+    public Account accountFindWithPhoneNumber(String phoneNumber) {
+        TypedQuery<Account> tq = em.createQuery(
+                "SELECT a FROM Account a WHERE a.phoneNumber=:phoneNumber",
+                Account.class);
+        tq.setParameter("phoneNumber", phoneNumber);
+        try {
+            Account account = tq.getSingleResult();
+            System.out.println("| [accountFindWithPhoneNumber] Account found: " + account);
+            return account;
+        } catch (NoResultException e) {
+            System.out.println("| [accountFindWithPhoneNumber] Account not found!");
             return null;
         }
     }

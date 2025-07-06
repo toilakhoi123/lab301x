@@ -53,6 +53,10 @@ public interface AccountDAO {
 
     Account accountFindWithUsername(String username);
 
+    Account accountFindWithEmail(String email);
+
+    Account accountFindWithPhoneNumber(String phoneNumber);
+
     /**
      * Get full list of existing accounts
      * 
