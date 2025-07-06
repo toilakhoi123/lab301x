@@ -17,13 +17,15 @@ public interface AccountDAO {
      * Register new user account
      * 
      * @param username
-     * @param name
+     * @param firstName
+     * @param lastName
      * @param email
      * @param phoneNumber
      * @param password
      * @return
      */
-    Account accountRegister(String username, String name, String email, String phoneNumber, String password);
+    Account accountRegister(String username, String firstName, String lastName, String email, String phoneNumber,
+            String password);
 
     /**
      * Log an user in with their username/email/phone and password

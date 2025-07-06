@@ -22,8 +22,11 @@ public class Account {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstName")
+    private String firstName;
+
+    @Column(name = "lastName")
+    private String lastName;
 
     @Column(name = "email")
     private String email;
@@ -53,14 +56,17 @@ public class Account {
      * Register constructor
      * 
      * @param username
-     * @param name
+     * @param firstName
+     * @param lastName
      * @param email
      * @param phoneNumber
      * @param password
      */
-    public Account(String username, String name, String email, String phoneNumber, String password) {
+    public Account(String username, String firstName, String lastName, String email, String phoneNumber,
+            String password) {
         this.username = username;
-        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
@@ -78,14 +84,6 @@ public class Account {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getEmail() {
@@ -136,8 +134,25 @@ public class Account {
         this.lastLoginDate = lastLoginDate;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
-        return "Account [id=" + id + ", username=" + username + ", name=" + name + ", phoneNumber=" + phoneNumber + "]";
+        return "Account [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName
+                + ", phoneNumber=" + phoneNumber + "]";
     }
 }

@@ -23,22 +23,24 @@ public class AccountDAOImpl implements AccountDAO {
     public void initiate() {
         System.out.println("| [initiate] Initiating test data.");
 
-        accountRegister("waf", "Le Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
-        accountRegister("akari", "Le Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
+        accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
+        Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
 
-        accountLogin("waf", "toilakhoi");
+        acc2.setDisabled(true);
     }
 
     @Override
     @Transactional
-    public Account accountRegister(String username, String name, String email, String phoneNumber, String password) {
-        Account account = new Account(username, name, email, phoneNumber, password);
+    public Account accountRegister(String username, String firstName, String lastName, String email, String phoneNumber,
+            String password) {
+        Account account = new Account(username, firstName, lastName, email, phoneNumber, password);
         accountSave(account);
         System.out.println("| [accountRegister] Registered account: " + account);
         return account;
     }
 
     @Override
+    @Transactional
     public Account accountLogin(String usernameOrEmailOrPhone, String password) {
         TypedQuery<Account> tq = em.createQuery(
                 "SELECT a FROM Account a WHERE (a.username=:username OR a.email=:email OR a.phoneNumber=:phone) AND a.password=:password",

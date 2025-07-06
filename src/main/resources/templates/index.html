@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEMO Home page</title>
+</head>
+<body>
+    <div th:if="${session.account}">
+        Welcome <strong><span th:text="${session.account != null ? session.account.getUsername() : ''}"></span></strong>! <br>
+
+        <form th:action="@{/logout}" method="get">
+            <button type="submit">Log out</button>
+        </form>
+    </div>
+    <div th:if="${session.account==null}">
+        Please log in or register!
+
+        <form th:action="@{/login}" method="get">
+            <button type="submit">Log in</button>
+        </form>
+    </div>
+</body>
+</html>
