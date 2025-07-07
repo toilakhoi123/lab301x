@@ -1,9 +1,11 @@
 package com.khoi.lab.dao;
 
+import java.sql.Date;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.PasswordResetCode;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -23,10 +25,14 @@ public class AccountDAOImpl implements AccountDAO {
     public void initiate() {
         System.out.println("| [initiate] Initiating test data.");
 
-        accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
+        Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
         Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
+        Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11");
 
+        acc1.setAdmin(true);
         acc2.setDisabled(true);
+        acc2.setLastLoginDate(Date.valueOf("2025-07-06"));
+        acc3.setLastLoginDate(Date.valueOf("2025-07-01"));
     }
 
     @Override
@@ -152,5 +158,28 @@ public class AccountDAOImpl implements AccountDAO {
         List<Account> accounts = tq.getResultList();
         System.out.println("| [accountList] Found and returned: " + accounts.size() + " accounts!");
         return accounts;
+    }
+
+    @Override
+    @Transactional
+    public void createPasswordResetCodeForAccount(Long id, String token) {
+        PasswordResetCode code = new PasswordResetCode(token, id);
+        em.persist(code);
+    }
+
+    @Override
+    public PasswordResetCode findPasswordResetCodeWithAccountId(Long id) {
+        TypedQuery<PasswordResetCode> tq = em.createQuery(
+                "SELECT c FROM PasswordResetCode c WHERE c.accountId=:id",
+                PasswordResetCode.class);
+        tq.setParameter("id", id);
+        try {
+            PasswordResetCode code = tq.getSingleResult();
+            System.out.println("| [findPasswordResetCodeWithAccountId] Code found: " + code);
+            return code;
+        } catch (NoResultException e) {
+            System.out.println("| [findPasswordResetCodeWithAccountId] Code not found!");
+            return null;
+        }
     }
 }

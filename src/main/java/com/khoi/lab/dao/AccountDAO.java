@@ -3,6 +3,7 @@ package com.khoi.lab.dao;
 import java.util.List;
 
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.PasswordResetCode;
 
 /**
  * Data Access Object for Accounts
@@ -63,4 +64,20 @@ public interface AccountDAO {
      * @return
      */
     List<Account> accountList();
+
+    /**
+     * Create & associate a password reset token with an account
+     * 
+     * @param id
+     * @param token
+     */
+    void createPasswordResetCodeForAccount(Long id, String token);
+
+    /**
+     * Find password reset code by account Id
+     * 
+     * @param id
+     * @return
+     */
+    PasswordResetCode findPasswordResetCodeWithAccountId(Long id);
 }

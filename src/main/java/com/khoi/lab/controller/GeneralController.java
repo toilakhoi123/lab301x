@@ -17,7 +17,6 @@ public class GeneralController {
      */
     public GeneralController(AccountDAO accountDAO) {
         this.accountDAO = accountDAO;
-        this.accountDAO.accountList();
     }
 
     /**

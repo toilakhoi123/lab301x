@@ -1,5 +1,6 @@
 package com.khoi.lab.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,12 +9,17 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.service.EmailSenderService;
+import com.khoi.lab.service.RandomString;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthenticationController {
     private final AccountDAO accountDAO;
+
+    @Autowired
+    private EmailSenderService senderService;
 
     /**
      * DAO Initiator
@@ -155,6 +161,49 @@ public class AuthenticationController {
         accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password);
         ModelAndView mav = new ModelAndView("login");
         mav.addObject("registerSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Forgot password page
+     * 
+     * @return
+     */
+    @GetMapping("/forgot-password")
+    public ModelAndView forgotPassword() {
+        return new ModelAndView("forgot-password");
+    }
+
+    /**
+     * Handle password forgot request
+     * (accountNotFound/emailSent)
+     * 
+     * @param email
+     * @return
+     */
+    @PostMapping("/forgot-password")
+    public ModelAndView forgotPasswordRequest(@RequestParam String email) {
+        Account account = accountDAO.accountFindWithEmail(email);
+
+        // check if email associates with an account
+        if (account == null) {
+            ModelAndView mav = new ModelAndView("forgot-password");
+            mav.addObject("accountNotFound", true);
+            return mav;
+        }
+
+        // create token
+        String token = RandomString.getAlphaNumericString(6);
+        accountDAO.createPasswordResetCodeForAccount(account.getId(), token);
+
+        // send email async
+        new Thread(() -> {
+            senderService.sendEmail(email, "Password Reset", "Your password reset code is: " + token);
+        }).start();
+
+        // TODO: forward to next view
+        ModelAndView mav = new ModelAndView("forgot-password");
+        mav.addObject("emailSent", true);
         return mav;
     }
 
