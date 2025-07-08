@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.service.EmailSenderService;
-import com.khoi.lab.service.RandomString;
+import com.khoi.lab.service.StringService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -193,7 +193,7 @@ public class AuthenticationController {
         }
 
         // create token
-        String code = RandomString.getAlphaNumericString(6);
+        String code = StringService.getAlphaNumericString(6);
         accountDAO.createPasswordResetCodeForAccount(account.getId(), code);
 
         // send email async
