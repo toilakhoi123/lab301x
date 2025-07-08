@@ -125,15 +125,27 @@
                     <h1 class="h3 mb-2 text-gray-800">Accounts</h1>
                     <p class="mb-4">Manage accounts present in the system.</p>
 
-                    <!-- DataTales Example -->
+                    <!-- datatable -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">User Accounts</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                                <!-- inactivity filter -->
+                                <div class="mb-3">
+                                    <label for="loginFilter">Filter by inactivity:</label>
+                                    <select id="loginFilter" class="form-control w-auto d-inline-block ml-2">
+                                        <option value="">All</option>
+                                        <option value="7">1 week+</option>
+                                        <option value="30">1 month+</option>
+                                        <option value="90">1 quarter+</option>
+                                        <option value="365">1 year+</option>
+                                    </select>
+                                </div>
+                                <!-- table -->
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <!-- Datatable headers -->
+                                    <!-- headers -->
                                     <thead>
                                         <tr>
                                             <th>Full Name</th>
@@ -146,9 +158,9 @@
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <!-- Datatable data -->
+                                    <!-- data -->
                                     <tbody>
-                                        <!-- populate -->
+                                        <!-- populate data -->
                                         <div th:each="account : ${accounts}">
                                             <tr>
                                                 <td th:text="${account.getFullName()}"></td>
