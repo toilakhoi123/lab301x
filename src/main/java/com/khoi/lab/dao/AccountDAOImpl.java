@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.PasswordResetCode;
+import com.khoi.lab.service.CryptographyService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -54,7 +55,7 @@ public class AccountDAOImpl implements AccountDAO {
         tq.setParameter("username", usernameOrEmailOrPhone);
         tq.setParameter("email", usernameOrEmailOrPhone);
         tq.setParameter("phone", usernameOrEmailOrPhone);
-        tq.setParameter("password", password);
+        tq.setParameter("password", CryptographyService.encrypt(password));
         try {
             Account account = tq.getSingleResult();
             System.out.println("| [accountLogin] Details match account: " + account);

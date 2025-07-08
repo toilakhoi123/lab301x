@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CryptographyService {
     private static final String ALGORITHM = "AES";
-    private static final String SECRET_KEY = "lab301x";
+    private static final String SECRET_KEY = "lab301xsecretkey";
 
     /**
      * Encrypt input string
