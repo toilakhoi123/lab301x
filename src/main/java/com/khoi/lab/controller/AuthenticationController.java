@@ -78,7 +78,7 @@ public class AuthenticationController {
                     System.out.println("| Account is disabled by admins!!!");
 
                     // account disabled
-                    ModelAndView mav = new ModelAndView("index");
+                    ModelAndView mav = new ModelAndView("login");
                     mav.addObject("loginDisabled", true);
                     return mav;
                 }
