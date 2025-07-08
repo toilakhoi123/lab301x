@@ -148,6 +148,7 @@
                                     </thead>
                                     <!-- Datatable data -->
                                     <tbody>
+                                        <!-- populate -->
                                         <div th:each="account : ${accounts}">
                                             <tr>
                                                 <td th:text="${account.getFullName()}"></td>
@@ -160,7 +161,7 @@
                                                 </td>
                                                 <td>
                                                     <span th:if="${account.getLastLoginDate() == null}">Never</span>
-                                                    <span th:if="${account.getLastLoginDate() != null}" th:text="${account.getLastLoginDate()}"></span>
+                                                    <span th:if="${account.getLastLoginDate() != null}" th:text="${#dates.format(account.getLastLoginDate(), 'dd/MM/yyyy')}"></span>
                                                 </td>
                                                 <td>
                                                     <span th:if="${account.isDisabled()}">✔️</span>
@@ -168,79 +169,107 @@
                                                 </td>
                                                 <td>
                                                     <!-- enable account -->
-                                                    <span th:if="${account.isDisabled()}">
-                                                        <form action="/admin/accounts/edit" method="post">
-                                                            <input type="hidden" name="isDisabled" value="false">
-                                                            <input type="hidden" name="id" th:value="${account.getId()}">
-                                                            <button type="submit">
-                                                                <a class="btn-sm btn-success btn-icon-split m-1">
-                                                                    <span class="icon text-white-50">
-                                                                        <i class="fas fa-flag"></i>
-                                                                    </span>
-                                                                    <div>Enable</div>
-                                                                </a>
-                                                            </button>
-                                                        </form>
-                                                    </span>
+                                                    <a 
+                                                        href="#"
+                                                        th:if="${account.isDisabled() and account.getId()!=session.account.getId()}"
+                                                        th:attr="data-id=${account.getId()}"
+                                                        class="btn-sm btn-success btn-icon-split m-1 account-action" 
+                                                        data-isdisabled="false"
+                                                        data-isadmin=""
+                                                    >
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-flag"></i>
+                                                        </span>
+                                                        <span class="text">Enable</span>
+                                                    </a>
                                                     <!-- disable account -->
-                                                    <span th:if="${!account.isDisabled()}">
-                                                        <form action="/admin/accounts/edit" method="post">
-                                                            <input type="hidden" name="isDisabled" value="true">
-                                                            <input type="hidden" name="id" th:value="${account.getId()}">
-                                                            <button type="submit">
-                                                                <a class="btn-sm btn-danger btn-icon-split m-1">
-                                                                    <span class="icon text-white-50">
-                                                                        <i class="fas fa-flag"></i>
-                                                                    </span>
-                                                                    <div>Disable</div>
-                                                                </a>
-                                                            </button>
-                                                        </form>
-                                                    </span>
+                                                    <a 
+                                                        href="#"
+                                                        th:if="${!account.isDisabled() and account.getId()!=session.account.getId()}"
+                                                        th:attr="data-id=${account.getId()}"
+                                                        class="btn-sm btn-danger btn-icon-split m-1 account-action" 
+                                                        data-isdisabled="true"
+                                                        data-isadmin=""
+                                                    >
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-flag"></i>
+                                                        </span>
+                                                        <span class="text">Disable</span>
+                                                    </a>
                                                     <!-- convert to normal user -->
-                                                    <span th:if="${account.isAdmin()}">
-                                                        <a class="btn-sm btn-warning btn-icon-split m-1">
-                                                            <span class="icon text-white-50">
-                                                                <i class="fas fa-flag"></i>
-                                                            </span>
-                                                            <form action="/admin/accounts/edit" method="post">
-                                                                <input type="hidden" name="isAdmin" value="false">
-                                                                <input type="hidden" name="id" th:value="${account.getId()}">
-                                                                <span class="text">Convert to USER</span>
-                                                            </form>
-                                                        </a>
-                                                    </span>
+                                                    <a 
+                                                        href="#"
+                                                        th:if="${account.isAdmin() and account.getId()!=session.account.getId()}"
+                                                        th:attr="data-id=${account.getId()}"
+                                                        class="btn-sm btn-warning btn-icon-split m-1 account-action"
+                                                        data-isadmin="false"
+                                                        data-isdisabled=""
+                                                        th:classappend="${session.account.getId() == account.id} ? 'disabled'"
+                                                    >
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-flag"></i>
+                                                        </span>
+                                                        <span class="text">Convert to USER</span>
+                                                    </a>
                                                     <!-- convert to admin -->
-                                                    <span th:if="${!account.isAdmin()}">
-                                                        <a class="btn-sm btn-warning btn-icon-split m-1">
-                                                            <span class="icon text-white-50">
-                                                                <i class="fas fa-flag"></i>
-                                                            </span>
-                                                            <form action="/admin/accounts/edit" method="post">
-                                                                <input type="hidden" name="isAdmin" value="true">
-                                                                <input type="hidden" name="id" th:value="${account.getId()}">
-                                                                <span class="text">Convert to ADMIN</span>
-                                                            </form>
-                                                        </a>
-                                                    </span>
+                                                    <a 
+                                                        href="#"
+                                                        th:if="${!account.isAdmin() and account.getId()!=session.account.getId()}"
+                                                        th:attr="data-id=${account.getId()}"
+                                                        class="btn-sm btn-warning btn-icon-split m-1 account-action"
+                                                        data-isadmin="true"
+                                                        data-isdisabled=""
+                                                        th:classappend="${session.account.getId() == account.id} ? 'disabled'"
+                                                    >
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-flag"></i>
+                                                        </span>
+                                                        <span class="text">Convert to ADMIN</span>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </div>
+                                        <!-- account actions js -->
+                                        <script>
+                                            document.addEventListener("DOMContentLoaded", () => {
+                                                document.querySelectorAll(".account-action").forEach(button => {
+                                                    button.addEventListener("click", async (e) => {
+                                                        e.preventDefault()
 
-                                        <!-- <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr> -->
+                                                        if (button.classList.contains("disabled")) {
+                                                            console.log("This action is disabled for your own account.");
+                                                            return;
+                                                        }
+                                                        
+                                                        const id = button.dataset.id;
+                                                        const isAdmin = button.dataset.isadmin || null;
+                                                        const isDisabled = button.dataset.isdisabled || null;
+
+                                                        const requestBody = {
+                                                            method: "POST",
+                                                            body: JSON.stringify({
+                                                                id: id,
+                                                                isAdmin: isAdmin,
+                                                                isDisabled: isDisabled,
+                                                            }),
+                                                            headers: {
+                                                                "Content-type": "application/json; charset=UTF-8"
+                                                            }
+                                                        };
+
+                                                        console.log("Sending request:", requestBody);
+
+                                                        await fetch("/admin/accounts/edit", requestBody);
+                                                        window.location.reload();
+                                                    });
+                                                });
+                                            });
+                                        </script>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <!-- End of Main Content -->
