@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
  * Create random string (token) service
  */
 @Service
-public class RandomString {
+public class StringService {
     /**
      * Generate a random string of length n
      * 
