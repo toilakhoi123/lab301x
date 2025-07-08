@@ -103,7 +103,7 @@ public class AuthenticationController {
 
     /**
      * Handles register request
-     * (registerSuccess/registerPasswordMismatch/registerUsernameExists/registerUsernameExists/registerPhoneNumberExists)
+     * (registerSuccess/passwordMismatch/registerUsernameExists/registerUsernameExists/registerPhoneNumberExists)
      * 
      * @param firstName
      * @param lastName
@@ -129,7 +129,7 @@ public class AuthenticationController {
         if (!password.equals(passwordConfirm)) {
             System.out.println("| Password mismatch: " + password + " vs " + passwordConfirm);
             ModelAndView mav = new ModelAndView("register");
-            mav.addObject("registerPasswordMismatch", true);
+            mav.addObject("passwordMismatch", true);
             return mav;
         }
 
@@ -193,17 +193,105 @@ public class AuthenticationController {
         }
 
         // create token
-        String token = RandomString.getAlphaNumericString(6);
-        accountDAO.createPasswordResetCodeForAccount(account.getId(), token);
+        String code = RandomString.getAlphaNumericString(6);
+        accountDAO.createPasswordResetCodeForAccount(account.getId(), code);
 
         // send email async
         new Thread(() -> {
-            senderService.sendEmail(email, "Password Reset", "Your password reset code is: " + token);
+            senderService.sendEmail(email, "Password Reset", "Your password reset code is: " + code);
         }).start();
 
-        // TODO: forward to next view
-        ModelAndView mav = new ModelAndView("forgot-password");
+        // forward to verify-code view
+        ModelAndView mav = new ModelAndView("verify-code");
         mav.addObject("emailSent", true);
+        mav.addObject("accountId", account.getId());
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    /**
+     * Verify code page.
+     * Redirect to forgot-password page
+     * 
+     * @param param
+     * @return
+     */
+    @GetMapping("/verify-code")
+    public ModelAndView verifyCode(@RequestParam String param) {
+        ModelAndView mav = new ModelAndView("/forgot-password");
+        return mav;
+    }
+
+    /**
+     * Handles verification code validation request
+     * (validCode/invalidCode)
+     * 
+     * @param accountId
+     * @param code
+     * @param codeEntered
+     * @return
+     */
+    @PostMapping("/verify-code")
+    public ModelAndView verifyCodeRequest(
+            @RequestParam Long accountId,
+            @RequestParam String code,
+            @RequestParam String codeEntered) {
+        if (code.equals(codeEntered)) {
+            // correct code
+            System.out.println("| Valid code entered!");
+            ModelAndView mav = new ModelAndView("reset-password");
+            mav.addObject("validCode", true);
+            mav.addObject("accountId", accountId);
+            return mav;
+        }
+
+        // incorrect code
+        System.out.println("| Invalid code entered!");
+        ModelAndView mav = new ModelAndView("verify-code");
+        mav.addObject("invalidCode", true);
+        mav.addObject("accountId", accountId);
+        mav.addObject("code", code);
+        return mav;
+    }
+
+    /**
+     * Reset password page
+     * Redirect to forgot-password page
+     * 
+     * @return
+     */
+    @GetMapping("/reset-password")
+    public ModelAndView resetPassword() {
+        ModelAndView mav = new ModelAndView("/forgot-password");
+        return mav;
+    }
+
+    /**
+     * Handle reset password request
+     * (passwordResetSuccess/passwordMismatch)
+     * 
+     * @param accountId
+     * @param password
+     * @param passwordConfirm
+     * @return
+     */
+    @PostMapping("/reset-password")
+    public ModelAndView resetPasswordRequest(
+            @RequestParam Long accountId,
+            @RequestParam String password,
+            @RequestParam String passwordConfirm) {
+        if (!password.equals(passwordConfirm)) {
+            // confirmation does not match
+            ModelAndView mav = new ModelAndView("reset-password");
+            mav.addObject("passwordMismatch", true);
+            mav.addObject("accountId", accountId);
+            return mav;
+        }
+
+        // confirmation valid, set new password
+        accountDAO.accountChangePassword(accountId, password);
+        ModelAndView mav = new ModelAndView("login");
+        mav.addObject("passwordResetSuccess", true);
         return mav;
     }
 
