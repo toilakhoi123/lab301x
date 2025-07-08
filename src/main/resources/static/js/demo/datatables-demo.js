@@ -1,8 +1,8 @@
 $(document).ready(function() {
   var table = $('#dataTable').DataTable({
-    dom: "<'row mb-2'<'col-sm-6'f><'col-sm-6 text-right'B>>" +
-    "<'row'<'col-sm-12'tr>>" +
-    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    dom:  "<'row mb-2'<'col-sm-6 text-left'f><'col-sm-6 text-right'B>>" +
+          "<'row'<'col-sm-12'tr>>" +
+          "<'row'<'col-sm-5'i><'col-sm-7'p>>",
     buttons: [
       {
         filename: 'User Data',

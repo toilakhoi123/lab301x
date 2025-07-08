@@ -21,7 +21,6 @@
     
     <!-- Custom styles for this page -->
     <link rel="stylesheet" th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}">
-    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.4/css/buttons.dataTables.min.css"> -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">
 </head>
 
@@ -126,6 +125,9 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Accounts</h1>
                     <p class="mb-4">Manage accounts present in the system.</p>
+
+                    <!-- align table search bar to left -->
+                    <style>#dataTable_filter {display: flex; align-items: flex-start;}</style>
 
                     <!-- datatable -->
                     <div class="card shadow mb-4">
@@ -347,13 +349,6 @@
     <script th:src="@{/js/demo/datatables-demo.js}"></script>
 
     <!-- Export to excel -->
-    <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
-    <!-- <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script> -->
-    <!-- <script src="https://cdn.datatables.net/buttons/3.2.4/js/dataTables.buttons.js"></script>
-    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> -->
-
-    <!-- DataTables Buttons for Bootstrap 4 -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
