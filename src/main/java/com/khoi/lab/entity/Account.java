@@ -2,6 +2,8 @@ package com.khoi.lab.entity;
 
 import java.sql.Date;
 
+import com.khoi.lab.service.CryptographyService;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,9 +72,9 @@ public class Account {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.password = password;
         this.isAdmin = false;
         this.isDisabled = false;
+        setPassword(password);
     }
 
     public Long getId() {
@@ -104,11 +106,11 @@ public class Account {
     }
 
     public String getPassword() {
-        return password;
+        return CryptographyService.decrypt(password);
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = CryptographyService.encrypt(password);
     }
 
     public boolean isAdmin() {

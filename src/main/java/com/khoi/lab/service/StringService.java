@@ -7,7 +7,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RandomString {
-    // function to generate a random string of length n
+    /**
+     * Generate a random string of length n
+     * 
+     * @param n
+     * @return
+     */
     public static String getAlphaNumericString(int n) {
         // choose a Character random from this String
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
