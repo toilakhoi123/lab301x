@@ -1,5 +1,34 @@
 $(document).ready(function() {
-  var table = $('#dataTable').DataTable();
+  var table = $('#dataTable').DataTable({
+    dom: "<'row mb-2'<'col-sm-6'f><'col-sm-6 text-right'B>>" +
+    "<'row'<'col-sm-12'tr>>" +
+    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+    buttons: [
+      {
+        filename: 'User Data',
+        sheetName: 'User Data',
+        extend: 'excelHtml5',
+        text: '<i class="fas fa-file-excel"></i> Export to Excel',
+        className: 'btn btn-success',
+        exportOptions: {
+          columns: [0, 1, 2, 3, 4, 5, 6],
+          format: {
+            body: function ( data, row, column, node ) {
+              // process data for account status column
+              if (column === 6) {
+                if (data.includes('✔️')) {
+                  return 'true';
+                } else if (data.includes('❌')) {
+                  return 'false';
+                }
+              }
+              return data.replaceAll("<span>", "").replaceAll("</span>", "");
+            }
+          }
+        }
+      }
+    ]
+  });
 
   // Custom filter function
   $.fn.dataTable.ext.search.push(

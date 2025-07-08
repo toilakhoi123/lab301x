@@ -18,9 +18,11 @@
 
     <!-- Custom styles for this template -->
     <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
-
+    
     <!-- Custom styles for this page -->
-    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}">
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.2.4/css/buttons.dataTables.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">
 </head>
 
 <body id="page-top">
@@ -132,6 +134,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
+                                <!-- table -->
                                 <!-- inactivity filter -->
                                 <div class="mb-3">
                                     <label for="loginFilter">Filter by inactivity:</label>
@@ -143,7 +146,6 @@
                                         <option value="365">1 year+</option>
                                     </select>
                                 </div>
-                                <!-- table -->
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <!-- headers -->
                                     <thead>
@@ -343,5 +345,18 @@
 
     <!-- Page level custom scripts -->
     <script th:src="@{/js/demo/datatables-demo.js}"></script>
+
+    <!-- Export to excel -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script> -->
+    <!-- <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script> -->
+    <!-- <script src="https://cdn.datatables.net/buttons/3.2.4/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.2.4/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> -->
+
+    <!-- DataTables Buttons for Bootstrap 4 -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </body>
-</html>
+</html> 
