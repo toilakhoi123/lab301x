@@ -29,11 +29,68 @@ public class AccountDAOImpl implements AccountDAO {
         Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
         Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
         Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11");
+        Account acc4 = accountRegister("skywalker", "Luke", "Skywalker", "luke.skywalker@jedi.com", "0812345678",
+                "force123");
+        Account acc5 = accountRegister("vader", "Anakin", "Skywalker", "darth.vader@empire.com", "0823456789",
+                "darkside");
+        Account acc6 = accountRegister("kenobi", "Obi-Wan", "Kenobi", "obiwan.kenobi@jedi.com", "0834567890",
+                "hello_there");
+        Account acc7 = accountRegister("yoda", "Master", "Yoda", "master.yoda@jedi.com", "0845678901", "wisdom");
+        Account acc8 = accountRegister("han", "Han", "Solo", "han.solo@falcon.com", "0856789012", "chewie");
+        Account acc9 = accountRegister("leia", "Leia", "Organa", "leia.organa@rebel.com", "0867890123", "princess");
+        Account acc10 = accountRegister("chewbacca", "Chew", "Bacca", "chewbacca@falcon.com", "0878901234", "rrraagh");
+        Account acc11 = accountRegister("r2d2", "R2", "D2", "r2.d2@astro.com", "0889012345", "beepboop");
+        Account acc12 = accountRegister("c3po", "C-3", "PO", "c3.po@protocol.com", "0890123456", "etiquette");
+        Account acc13 = accountRegister("palpatine", "Sheev", "Palpatine", "emperor@empire.com", "0901234567",
+                "unlimitedpower");
+        Account acc14 = accountRegister("rey", "Rey", "Skywalker", "rey@jedi.com", "0912345678", "lightforce");
+        Account acc15 = accountRegister("finn", "FN", "2187", "finn@rebel.com", "0923456789", "freedom");
+        Account acc16 = accountRegister("poe", "Poe", "Dameron", "poe.dameron@rebel.com", "0934567890", "blackleader");
+        Account acc17 = accountRegister("bb8", "BB", "8", "bb.8@astro.com", "0945678901", "rolling");
+        Account acc18 = accountRegister("maul", "Darth", "Maul", "darth.maul@sith.com", "0956789012", "doubleblade");
+        Account acc19 = accountRegister("grievous", "General", "Grievous", "general.grievous@separatist.com",
+                "0967890123", "coughcough");
+        Account acc20 = accountRegister("ahsoka", "Ahsoka", "Tano", "ahsoka.tano@jedi.com", "0978901234", "snips");
+        Account acc21 = accountRegister("mace", "Mace", "Windu", "mace.windu@jedi.com", "0989012345", "purple");
+        Account acc22 = accountRegister("jango", "Jango", "Fett", "jango.fett@bounty.com", "0990123456", "clonesource");
+        Account acc23 = accountRegister("boba", "Boba", "Fett", "boba.fett@bounty.com", "0701234567", "sarlacc");
+        Account acc24 = accountRegister("padme", "Padme", "Amidala", "padme.amidala@senate.com", "0712345678", "queen");
+        Account acc25 = accountRegister("snoke", "Supreme", "Leader Snoke", "snoke@firstorder.com", "0723456789",
+                "darkforce");
 
         acc1.setAdmin(true);
+        acc10.setAdmin(true);
+        acc20.setAdmin(true);
         acc2.setDisabled(true);
+        acc13.setDisabled(true);
+        acc15.setDisabled(true);
+
+        acc1.setLastLoginDate(Date.valueOf("2025-07-06"));
         acc2.setLastLoginDate(Date.valueOf("2025-07-06"));
         acc3.setLastLoginDate(Date.valueOf("2025-07-01"));
+        acc4.setLastLoginDate(Date.valueOf("2025-07-15"));
+        acc5.setLastLoginDate(Date.valueOf("2024-07-01"));
+        acc6.setLastLoginDate(Date.valueOf("2024-07-21"));
+        acc7.setLastLoginDate(Date.valueOf("2025-07-01"));
+        acc8.setLastLoginDate(Date.valueOf("2024-07-11"));
+        acc9.setLastLoginDate(Date.valueOf("2024-07-01"));
+        acc10.setLastLoginDate(Date.valueOf("2024-07-01"));
+        acc11.setLastLoginDate(Date.valueOf("2025-04-01"));
+        acc11.setLastLoginDate(Date.valueOf("2025-05-01"));
+        acc12.setLastLoginDate(Date.valueOf("2025-01-21"));
+        acc13.setLastLoginDate(Date.valueOf("2025-01-10"));
+        acc14.setLastLoginDate(Date.valueOf("2025-01-01"));
+        acc15.setLastLoginDate(Date.valueOf("2025-01-12"));
+        acc16.setLastLoginDate(Date.valueOf("2025-01-01"));
+        acc17.setLastLoginDate(Date.valueOf("2023-01-01"));
+        acc18.setLastLoginDate(Date.valueOf("2024-01-06"));
+        acc19.setLastLoginDate(Date.valueOf("2025-01-01"));
+        acc20.setLastLoginDate(Date.valueOf("2025-01-01"));
+        acc21.setLastLoginDate(Date.valueOf("2025-01-31"));
+        acc22.setLastLoginDate(Date.valueOf("2025-01-23"));
+        acc23.setLastLoginDate(Date.valueOf("2023-01-01"));
+        acc24.setLastLoginDate(Date.valueOf("2024-01-19"));
+        acc25.setLastLoginDate(Date.valueOf("2025-01-17"));
     }
 
     @Override
