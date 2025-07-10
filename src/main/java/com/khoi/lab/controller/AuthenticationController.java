@@ -209,6 +209,59 @@ public class AuthenticationController {
         return mav;
     }
 
+    @GetMapping("/change-password")
+    public ModelAndView changePassword(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            return new ModelAndView("login");
+        }
+
+        return new ModelAndView("change-password");
+    }
+
+    /**
+     * Handle change password request
+     * (passwordChangeSuccess/wrongPassword/passwordMismatch)
+     * 
+     * @param session
+     * @param oldPassword
+     * @param password
+     * @param passwordConfirm
+     * @return
+     */
+    @PostMapping("/change-password")
+    public ModelAndView changePasswordRequest(
+            HttpSession session,
+            @RequestParam String oldPassword,
+            @RequestParam String password,
+            @RequestParam String passwordConfirm) {
+        Account account = (Account) session.getAttribute("account");
+
+        // check if correct old password
+        if (!account.getPassword().equals(oldPassword)) {
+            ModelAndView mav = new ModelAndView("change-password");
+            mav.addObject("wrongPassword", true);
+            return mav;
+        }
+
+        // check if password confirmation is right
+        if (!password.equals(passwordConfirm)) {
+            ModelAndView mav = new ModelAndView("change-password");
+            mav.addObject("passwordMismatch", true);
+            return mav;
+        }
+
+        // success
+        account.setPassword(password);
+        account = accountDAO.accountUpdate(account);
+        session.setAttribute("account", account);
+
+        ModelAndView mav = new ModelAndView("index");
+        mav.addObject("passwordChangeSuccess", true);
+        return mav;
+    }
+
     /**
      * Verify code page.
      * Redirect to forgot-password page
