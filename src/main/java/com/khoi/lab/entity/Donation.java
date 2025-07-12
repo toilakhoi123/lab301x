@@ -88,4 +88,10 @@ public class Donation {
     public boolean isAnonymous() {
         return this.account == null;
     }
+
+    @Override
+    public String toString() {
+        return "Donation [account=" + account + ", campaign=" + campaign + ", amount=" + amount + ", confirmed="
+                + confirmed + "]";
+    }
 }

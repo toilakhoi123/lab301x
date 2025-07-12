@@ -43,4 +43,9 @@ public class DonationReceiver {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+    @Override
+    public String toString() {
+        return "DonationReceiver [id=" + id + ", name=" + name + ", phoneNumber=" + phoneNumber + "]";
+    }
 }

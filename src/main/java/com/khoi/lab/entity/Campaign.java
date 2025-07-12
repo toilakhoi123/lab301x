@@ -120,4 +120,10 @@ public class Campaign {
     public void setDonations(List<Donation> donations) {
         this.donations = donations;
     }
+
+    @Override
+    public String toString() {
+        return "Campaign [id=" + id + ", name=" + name + ", receiver=" + receiver + ", status=" + status + ", goal="
+                + goal + "]";
+    }
 }
