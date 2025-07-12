@@ -6,18 +6,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.khoi.lab.dao.AccountDAO;
+import com.khoi.lab.dao.DonationDAO;
 
 @SpringBootApplication
 public class LabApplication {
 	private final AccountDAO accountDAO;
+	private final DonationDAO donationDAO;
 
 	/**
 	 * DAO Initiator
 	 * 
 	 * @param accountDAO
 	 */
-	public LabApplication(AccountDAO accountDAO) {
+	public LabApplication(AccountDAO accountDAO, DonationDAO donationDAO) {
 		this.accountDAO = accountDAO;
+		this.donationDAO = donationDAO;
 	}
 
 	public static void main(String[] args) {
@@ -34,6 +37,7 @@ public class LabApplication {
 		return _ -> {
 			System.out.println("| Application Ready!");
 			accountDAO.initiate();
+			donationDAO.initiate();
 		};
 	}
 }

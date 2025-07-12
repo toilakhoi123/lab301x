@@ -1,6 +1,8 @@
 package com.khoi.lab.entity;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.khoi.lab.service.CryptographyService;
 
@@ -9,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 /**
@@ -52,6 +55,12 @@ public class Account {
     @Column(name = "last_login_date")
     private Date lastLoginDate;
 
+    /**
+     * Donations made by this account
+     */
+    @OneToMany(mappedBy = "account")
+    private List<Donation> donations = new ArrayList<>();
+
     public Account() {
     }
 
@@ -74,6 +83,7 @@ public class Account {
         this.phoneNumber = phoneNumber;
         this.isAdmin = false;
         this.isDisabled = false;
+        this.donations = new ArrayList<>();
         setPassword(password);
     }
 
@@ -155,6 +165,19 @@ public class Account {
 
     public String getFullName() {
         return firstName + " " + lastName;
+    }
+
+    public List<Donation> getDonations() {
+        return donations;
+    }
+
+    public void setDonations(List<Donation> donations) {
+        this.donations = donations;
+    }
+
+    // helper
+    public void addDonation(Donation donation) {
+        this.donations.add(donation);
     }
 
     @Override
