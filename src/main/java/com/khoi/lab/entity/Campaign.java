@@ -24,6 +24,7 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private CampaignStatus status;
 
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     private int goal;
