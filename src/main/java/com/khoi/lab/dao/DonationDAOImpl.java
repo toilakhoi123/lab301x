@@ -63,13 +63,16 @@ public class DonationDAOImpl implements DonationDAO {
     @Transactional
     public DonationReceiver donationReceiverSave(DonationReceiver donationReceiver) {
         em.persist(donationReceiver);
+        System.out.println("| [donationReceiverSave] Saved donation receiver: " + donationReceiver);
         return donationReceiver;
     }
 
     @Override
     @Transactional
     public DonationReceiver donationReceiverUpdate(DonationReceiver donationReceiver) {
-        return em.merge(donationReceiver);
+        donationReceiver = em.merge(donationReceiver);
+        System.out.println("| [donationReceiverUpdate] Updated donation receiver: " + donationReceiver);
+        return donationReceiver;
     }
 
     @Override
@@ -98,14 +101,22 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     public Campaign campaignFindById(Long id) {
-        return em.find(Campaign.class, id);
+        Campaign campaign = em.find(Campaign.class, id);
+        if (campaign == null) {
+            System.out.println("| [campaignFindById] Couldn't find campaign with id: " + id);
+        } else {
+            System.out.println("| [campaignFindById] Found campaign: " + campaign);
+        }
+        return campaign;
     }
 
     @Override
     @Transactional
     public Campaign campaignAddTimeMinutes(Campaign campaign, Long minutes) {
         LocalDateTime endTimeOld = campaign.getEndTime();
-        campaign.setEndTime(endTimeOld.plusMinutes(minutes));
+        LocalDateTime endtimeNew = endTimeOld.plusMinutes(minutes);
+        campaign.setEndTime(endtimeNew);
+        System.out.println("| [campaignAddTimeMinutes] End time modified from " + endTimeOld + " -> " + endtimeNew);
         return campaignSave(campaign);
     }
 
@@ -115,6 +126,7 @@ public class DonationDAOImpl implements DonationDAO {
         for (Donation donation : campaign.getDonations()) {
             amount += donation.getAmount();
         }
+        System.out.println("| [campaignGetDonatedAmount] Total donated amount: " + amount);
         return amount;
     }
 
@@ -134,14 +146,18 @@ public class DonationDAOImpl implements DonationDAO {
                 .multiply(BigDecimal.valueOf(100))
                 .setScale(1, RoundingMode.HALF_UP);
 
+        System.out.println(
+                "| [campaignGetDonatedPercentage] Total donated percentage: " + percentage.doubleValue() + "%");
         return percentage.doubleValue();
     }
 
     @Override
     public List<Donation> campaignGetDonations(Campaign campaign, boolean excludeConfirmed) {
-        return excludeConfirmed
+        List<Donation> donations = excludeConfirmed
                 ? campaign.getDonations().stream().filter(d -> !d.isConfirmed()).toList()
                 : campaign.getDonations();
+        System.out.println("| [campaignGetDonations] Found and returned: " + donations.size() + " donations");
+        return donations;
     }
 
     @Override
@@ -159,6 +175,10 @@ public class DonationDAOImpl implements DonationDAO {
                 map.put(account, donatedAmount);
             }
         }
+
+        System.out.println(
+                "| [campaignGetDonatorsAndDonatedAmount] Found and returned: " + map.size()
+                        + " people and their donations");
 
         return map;
     }
@@ -215,7 +235,9 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     public List<Donation> accountGetDonations(Account account) {
-        return account.getDonations();
+        List<Donation> donations = account.getDonations();
+        System.out.println("| [accountGetDonations] Found and returned: " + donations.size() + " donations");
+        return donations;
     }
 
     @Override
@@ -233,6 +255,9 @@ public class DonationDAOImpl implements DonationDAO {
         if (account != null) {
             account.getDonations().add(donation);
         }
+
+        System.out.println("| [accountDonate] " + account == null ? account.getFullName()
+                : "Anonymous" + " donated " + amount + " to " + campaign);
 
         return donation;
     }
