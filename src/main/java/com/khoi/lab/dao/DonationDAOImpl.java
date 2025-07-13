@@ -13,7 +13,6 @@ import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
-import com.khoi.lab.enums.TimeMinutes;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -21,7 +20,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 /**
- * 
+ * DAO for Donations
  */
 @Repository
 public class DonationDAOImpl implements DonationDAO {
@@ -52,7 +51,7 @@ public class DonationDAOImpl implements DonationDAO {
         Campaign campaign3 = campaignCreate("Giúp bố mẹ nghèo có thêm hy vọng cứu con", dr3, campaign3desc,
                 20000000, LocalDateTime.of(2025, 7, 10, 0, 0), LocalDateTime.of(2025, 7, 30, 0, 0));
 
-        // donate
+        // donations
         Account account1 = em.find(Account.class, 1);
         Account account2 = em.find(Account.class, 2);
         Account account3 = em.find(Account.class, 3);
@@ -63,12 +62,7 @@ public class DonationDAOImpl implements DonationDAO {
         accountDonate(campaign3, account1, 300000);
         accountDonate(campaign1, account2, 500000);
         accountDonate(campaign3, account2, 1000000);
-        Donation donation6 = accountDonate(campaign1, account3, 3500000);
-        donationConfirm(donation6);
-
-        // test methods
-        campaignDeleteById(Long.valueOf(1));
-        // campaignFindById(Long.valueOf(1));
+        accountDonate(campaign1, account3, 3500000);
     }
 
     // TESTED
