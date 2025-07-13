@@ -154,6 +154,21 @@ public interface DonationDAO {
     Campaign campaignUpdate(Campaign campaign);
 
     /**
+     * Return a list of all campaigns
+     * 
+     * @return
+     */
+    List<Campaign> campaignList();
+
+    /**
+     * Confirm a donation manually
+     * 
+     * @param donation
+     * @return
+     */
+    Donation donationConfirm(Donation donation);
+
+    /**
      * Get donations made by an account
      * 
      * @param account

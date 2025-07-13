@@ -13,6 +13,7 @@ import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
+import com.khoi.lab.enums.TimeMinutes;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -60,13 +61,16 @@ public class DonationDAOImpl implements DonationDAO {
         accountDonate(campaign1, account1, 500000);
         accountDonate(campaign2, account1, 250000);
         accountDonate(campaign3, account1, 300000);
-
         accountDonate(campaign1, account2, 500000);
         accountDonate(campaign3, account2, 100000);
-
         accountDonate(campaign1, account3, 350000);
+
+        // test methods
+        campaign3 = campaignFindById(Long.valueOf(3));
+        campaign3 = campaignAddTimeMinutes(campaign3, 2 * TimeMinutes.HOUR.getMinutes() + 30);
     }
 
+    // TESTED
     @Override
     @Transactional
     public DonationReceiver donationReceiverCreate(String name, String phoneNumber) {
@@ -74,6 +78,7 @@ public class DonationDAOImpl implements DonationDAO {
         return donationReceiverSave(donationReceiver);
     }
 
+    // TESTED
     @Override
     @Transactional
     public DonationReceiver donationReceiverSave(DonationReceiver donationReceiver) {
@@ -82,6 +87,7 @@ public class DonationDAOImpl implements DonationDAO {
         return donationReceiver;
     }
 
+    // TESTED
     @Override
     @Transactional
     public DonationReceiver donationReceiverUpdate(DonationReceiver donationReceiver) {
@@ -90,6 +96,7 @@ public class DonationDAOImpl implements DonationDAO {
         return donationReceiver;
     }
 
+    // TESTED
     @Override
     public DonationReceiver donationReceiverFindByPhoneNumber(String phoneNumber) {
         TypedQuery<DonationReceiver> tq = em.createQuery(
@@ -106,6 +113,7 @@ public class DonationDAOImpl implements DonationDAO {
         }
     }
 
+    // TESTED
     @Override
     @Transactional
     public Campaign campaignCreate(String name, DonationReceiver donationReceiver, String description, int goal,
@@ -114,6 +122,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaignSave(campaign);
     }
 
+    // TESTED
     @Override
     public Campaign campaignFindById(Long id) {
         Campaign campaign = em.find(Campaign.class, id);
@@ -249,12 +258,32 @@ public class DonationDAOImpl implements DonationDAO {
     }
 
     @Override
+    public List<Campaign> campaignList() {
+        TypedQuery<Campaign> tq = em.createQuery(
+                "SELECT c FROM Campaign c",
+                Campaign.class);
+        List<Campaign> campaigns = tq.getResultList();
+        System.out.println("| [campaignList] Found and returned: " + campaigns.size() + " campaigns!");
+        return campaigns;
+    }
+
+    @Override
+    @Transactional
+    public Donation donationConfirm(Donation donation) {
+        donation.setConfirmed(true);
+        donation = em.merge(donation);
+        System.out.println("| [donationConfirm] Confirmed donation: " + donation);
+        return donation;
+    }
+
+    @Override
     public List<Donation> accountGetDonations(Account account) {
         List<Donation> donations = account.getDonations();
         System.out.println("| [accountGetDonations] Found and returned: " + donations.size() + " donations");
         return donations;
     }
 
+    @SuppressWarnings("null")
     @Override
     @Transactional
     public Donation accountDonate(Campaign campaign, Account account, int amount) {
@@ -271,8 +300,8 @@ public class DonationDAOImpl implements DonationDAO {
             account.getDonations().add(donation);
         }
 
-        System.out.println("| [accountDonate] " + account == null ? account.getFullName()
-                : "Anonymous" + " donated " + amount + " to " + campaign);
+        System.out.println("| [accountDonate] " + account == null ? "Anonymous"
+                : account.getFullName() + " donated " + amount + " to " + campaign);
 
         return donation;
     }
