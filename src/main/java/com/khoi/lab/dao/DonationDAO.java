@@ -115,6 +115,15 @@ public interface DonationDAO {
     HashMap<Account, Integer> campaignGetDonatorsAndDonatedAmount(Campaign campaign);
 
     /**
+     * Change campaign status
+     * 
+     * @param campaign
+     * @param status
+     * @return
+     */
+    Campaign campaignChangeStatus(Campaign campaign, CampaignStatus status);
+
+    /**
      * Find campaigns by status
      * 
      * @param status
@@ -167,6 +176,19 @@ public interface DonationDAO {
      * @return
      */
     Donation donationConfirm(Donation donation);
+
+    /**
+     * Save a donation
+     * 
+     * @param donation
+     * @return
+     */
+    Donation donationSave(Donation donation);
+
+    /**
+     * Update a donation
+     */
+    Donation donationUpdate(Donation donation);
 
     /**
      * Get donations made by an account

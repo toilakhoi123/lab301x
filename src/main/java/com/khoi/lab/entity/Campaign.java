@@ -33,7 +33,7 @@ public class Campaign {
 
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "campaign")
+    @OneToMany(mappedBy = "campaign", cascade = { CascadeType.ALL })
     private List<Donation> donations = new ArrayList<>();
 
     // Constructors, getters, setters

@@ -57,17 +57,18 @@ public class DonationDAOImpl implements DonationDAO {
         Account account2 = em.find(Account.class, 2);
         Account account3 = em.find(Account.class, 3);
 
-        accountDonate(campaign1, account1, 150000);
+        accountDonate(campaign1, account1, 1500000);
         accountDonate(campaign1, account1, 500000);
-        accountDonate(campaign2, account1, 250000);
+        accountDonate(campaign2, account1, 2500000);
         accountDonate(campaign3, account1, 300000);
         accountDonate(campaign1, account2, 500000);
-        accountDonate(campaign3, account2, 100000);
-        accountDonate(campaign1, account3, 350000);
+        accountDonate(campaign3, account2, 1000000);
+        Donation donation6 = accountDonate(campaign1, account3, 3500000);
+        donationConfirm(donation6);
 
         // test methods
-        campaign3 = campaignFindById(Long.valueOf(3));
-        campaign3 = campaignAddTimeMinutes(campaign3, 2 * TimeMinutes.HOUR.getMinutes() + 30);
+        campaignDeleteById(Long.valueOf(1));
+        // campaignFindById(Long.valueOf(1));
     }
 
     // TESTED
@@ -134,6 +135,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
+    // TESTED
     @Override
     @Transactional
     public Campaign campaignAddTimeMinutes(Campaign campaign, Long minutes) {
@@ -144,6 +146,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaignSave(campaign);
     }
 
+    // TESTED
     @Override
     public int campaignGetDonatedAmount(Campaign campaign) {
         int amount = 0;
@@ -154,6 +157,7 @@ public class DonationDAOImpl implements DonationDAO {
         return amount;
     }
 
+    // TESTED
     @Override
     public double campaignGetDonatedPercentage(Campaign campaign) {
         int amount = campaignGetDonatedAmount(campaign);
@@ -175,6 +179,7 @@ public class DonationDAOImpl implements DonationDAO {
         return percentage.doubleValue();
     }
 
+    // TESTED
     @Override
     public List<Donation> campaignGetDonations(Campaign campaign, boolean excludeConfirmed) {
         List<Donation> donations = excludeConfirmed
@@ -184,6 +189,7 @@ public class DonationDAOImpl implements DonationDAO {
         return donations;
     }
 
+    // TESTED
     @Override
     public HashMap<Account, Integer> campaignGetDonatorsAndDonatedAmount(Campaign campaign) {
         HashMap<Account, Integer> map = new HashMap<>();
@@ -207,6 +213,17 @@ public class DonationDAOImpl implements DonationDAO {
         return map;
     }
 
+    // TESTED
+    @Override
+    @Transactional
+    public Campaign campaignChangeStatus(Campaign campaign, CampaignStatus status) {
+        campaign.setStatus(status);
+        campaign = campaignUpdate(campaign);
+        System.out.println("| [campaignChangeStatus] Modified campaign status to: " + campaign);
+        return campaign;
+    }
+
+    // TESTED
     @Override
     public List<Campaign> campaignFindByStatus(CampaignStatus status) {
         TypedQuery<Campaign> tq = em.createQuery(
@@ -221,6 +238,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaigns;
     }
 
+    // TESTED
     @Override
     public Campaign campaignFindByDonationReceiverPhoneNumber(String phoneNumber) {
         DonationReceiver donationReceiver = donationReceiverFindByPhoneNumber(phoneNumber);
@@ -241,6 +259,7 @@ public class DonationDAOImpl implements DonationDAO {
         }
     }
 
+    // TESTED
     @Override
     @Transactional
     public Campaign campaignSave(Campaign campaign) {
@@ -249,6 +268,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
+    // TESTED
     @Override
     @Transactional
     public Campaign campaignUpdate(Campaign campaign) {
@@ -257,6 +277,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
+    // TESTED
     @Override
     public List<Campaign> campaignList() {
         TypedQuery<Campaign> tq = em.createQuery(
@@ -267,15 +288,7 @@ public class DonationDAOImpl implements DonationDAO {
         return campaigns;
     }
 
-    @Override
-    @Transactional
-    public Donation donationConfirm(Donation donation) {
-        donation.setConfirmed(true);
-        donation = em.merge(donation);
-        System.out.println("| [donationConfirm] Confirmed donation: " + donation);
-        return donation;
-    }
-
+    // TESTED
     @Override
     public List<Donation> accountGetDonations(Account account) {
         List<Donation> donations = account.getDonations();
@@ -283,6 +296,7 @@ public class DonationDAOImpl implements DonationDAO {
         return donations;
     }
 
+    // TESTED
     @Override
     @Transactional
     public Donation accountDonate(Campaign campaign, Account account, int amount) {
@@ -292,16 +306,46 @@ public class DonationDAOImpl implements DonationDAO {
         }
 
         Donation donation = new Donation(account, campaign, amount, LocalDateTime.now());
-        em.persist(donation);
+        donationSave(donation);
 
         campaign.getDonations().add(donation);
+        em.merge(campaign);
         if (account != null) {
             account.getDonations().add(donation);
+            em.merge(account);
         }
 
         System.out.println("| [accountDonate] " + (account == null ? "Anonymous" : account.getFullName()) + " donated "
                 + amount + " to " + campaign);
 
+        return donation;
+    }
+
+    // TESTED
+    @Override
+    @Transactional
+    public Donation donationConfirm(Donation donation) {
+        donation.setConfirmed(true);
+        donation = donationSave(donation);
+        System.out.println("| [donationConfirm] Confirmed donation: " + donation);
+        return donation;
+    }
+
+    // TESTED
+    @Override
+    @Transactional
+    public Donation donationSave(Donation donation) {
+        em.persist(donation);
+        System.out.println("| [donationSave] Saved donation: " + donation);
+        return donation;
+    }
+
+    // TESTED
+    @Override
+    @Transactional
+    public Donation donationUpdate(Donation donation) {
+        donation = em.merge(donation);
+        System.out.println("| [donationUpdate] Updated donation: " + donation);
         return donation;
     }
 
