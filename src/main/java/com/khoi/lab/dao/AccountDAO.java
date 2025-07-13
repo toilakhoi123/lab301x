@@ -3,7 +3,6 @@ package com.khoi.lab.dao;
 import java.util.List;
 
 import com.khoi.lab.entity.Account;
-import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.PasswordResetCode;
 
 /**

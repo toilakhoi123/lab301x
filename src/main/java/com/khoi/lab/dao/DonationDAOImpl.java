@@ -50,6 +50,21 @@ public class DonationDAOImpl implements DonationDAO {
         String campaign3desc = "Bé Y Sáng Buôn Dap (1 tuổi, dân tộc M’nông) bị bệnh tim bẩm sinh. Nhờ sự hỗ trợ của các tổ chức, chi phí phẫu thuật tim sẽ được tài trợ – điều mà gia đình bé Y Sáng không dám mơ tới.";
         Campaign campaign3 = campaignCreate("Giúp bố mẹ nghèo có thêm hy vọng cứu con", dr3, campaign3desc,
                 20000000, LocalDateTime.of(2025, 7, 10, 0, 0), LocalDateTime.of(2025, 7, 30, 0, 0));
+
+        // donate
+        Account account1 = em.find(Account.class, 1);
+        Account account2 = em.find(Account.class, 2);
+        Account account3 = em.find(Account.class, 3);
+
+        accountDonate(campaign1, account1, 150000);
+        accountDonate(campaign1, account1, 500000);
+        accountDonate(campaign2, account1, 250000);
+        accountDonate(campaign3, account1, 300000);
+
+        accountDonate(campaign1, account2, 500000);
+        accountDonate(campaign3, account2, 100000);
+
+        accountDonate(campaign1, account3, 350000);
     }
 
     @Override

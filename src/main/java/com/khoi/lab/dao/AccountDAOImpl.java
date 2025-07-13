@@ -26,6 +26,7 @@ public class AccountDAOImpl implements AccountDAO {
     public void initiate() {
         System.out.println("| [initiate] Initiating test data.");
 
+        // register accounts
         Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
         Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
         Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11");
@@ -58,6 +59,7 @@ public class AccountDAOImpl implements AccountDAO {
         Account acc25 = accountRegister("snoke", "Supreme", "Leader Snoke", "snoke@firstorder.com", "0723456789",
                 "darkforce");
 
+        // set details
         acc1.setAdmin(true);
         acc10.setAdmin(true);
         acc20.setAdmin(true);
