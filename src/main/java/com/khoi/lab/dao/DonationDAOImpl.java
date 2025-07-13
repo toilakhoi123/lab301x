@@ -283,7 +283,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donations;
     }
 
-    @SuppressWarnings("null")
     @Override
     @Transactional
     public Donation accountDonate(Campaign campaign, Account account, int amount) {
@@ -300,8 +299,8 @@ public class DonationDAOImpl implements DonationDAO {
             account.getDonations().add(donation);
         }
 
-        System.out.println("| [accountDonate] " + account == null ? "Anonymous"
-                : account.getFullName() + " donated " + amount + " to " + campaign);
+        System.out.println("| [accountDonate] " + (account == null ? "Anonymous" : account.getFullName()) + " donated "
+                + amount + " to " + campaign);
 
         return donation;
     }
