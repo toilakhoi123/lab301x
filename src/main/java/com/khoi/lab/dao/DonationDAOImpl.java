@@ -13,6 +13,8 @@ import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
+import com.khoi.lab.service.CampaignStatusUpdaterService;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -54,6 +56,8 @@ public class DonationDAOImpl implements DonationDAO {
         Account account1 = em.find(Account.class, 1);
         Account account2 = em.find(Account.class, 2);
         Account account3 = em.find(Account.class, 3);
+
+        (new CampaignStatusUpdaterService(this)).updateCampaignCampaignStatuses();
 
         accountDonate(campaign1, account1, 1500000);
         accountDonate(campaign1, account1, 500000);

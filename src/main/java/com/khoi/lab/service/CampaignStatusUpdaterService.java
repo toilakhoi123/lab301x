@@ -15,14 +15,14 @@ import java.util.List;
  * Campaign status updater service
  */
 @Service
-public class CampaignStatusUpdater {
+public class CampaignStatusUpdaterService {
     private final DonationDAO donationDAO;
 
-    public CampaignStatusUpdater(DonationDAO donationDAO) {
+    public CampaignStatusUpdaterService(DonationDAO donationDAO) {
         this.donationDAO = donationDAO;
     }
 
-    @Scheduled(fixedRate = 60000) // every 60 seconds
+    @Scheduled(fixedRate = 60000)
     @Transactional
     public void updateCampaignCampaignStatuses() {
         LocalDateTime now = LocalDateTime.now();
