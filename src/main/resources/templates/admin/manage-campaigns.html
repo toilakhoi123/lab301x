@@ -162,8 +162,8 @@
                                                 <td th:text="${campaign.getName()}"></td>
                                                 <td th:text="${'[id:' + campaign.getReceiver().getId() + '] ' + campaign.getReceiver().getName() + '/' + campaign.getReceiver().getPhoneNumber()}"></td>
                                                 <td th:text="${campaign.getStatus().name()}"></td>
-                                                <td th:text="${campaign.getDonatedAmount()}"></td>
-                                                <td th:text="${campaign.getGoal()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
+                                                <td th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                                 <td th:text="${campaign.getStartTime()}"></td>
                                                 <td th:text="${campaign.getEndTime()}"></td>
                                                 

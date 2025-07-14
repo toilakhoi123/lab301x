@@ -159,7 +159,7 @@
                                             <tr>
                                                 <td th:text="${'[id:' + donation.getCampaign().getId() + '] ' + donation.getCampaign().getName()}"></td>
                                                 <td th:text="${'[id:' + donation.getAccount().getId() + '] ' + donation.getAccount().getFullName()}"></td>
-                                                <td th:text="${donation.getAmount()}"></td>
+                                                <td th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                                 <td th:text="${donation.getDonateTime()}"></td>
                                                 <td>
                                                     <span th:if="${donation.isConfirmed()}">✔️</span>
