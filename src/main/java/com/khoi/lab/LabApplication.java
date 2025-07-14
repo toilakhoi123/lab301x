@@ -4,11 +4,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
 
 @SpringBootApplication
+@EnableScheduling
 public class LabApplication {
 	private final AccountDAO accountDAO;
 	private final DonationDAO donationDAO;
