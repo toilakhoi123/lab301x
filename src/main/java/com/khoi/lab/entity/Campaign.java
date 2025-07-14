@@ -1,5 +1,7 @@
 package com.khoi.lab.entity;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,9 @@ public class Campaign {
     private CampaignStatus status;
 
     private int goal;
+
+    private int donatedPercentageCapped;
+    private int donatedPercentageUncapped;
 
     private LocalDateTime startTime;
 
@@ -129,6 +134,38 @@ public class Campaign {
             sum += donation.getAmount();
         }
         return sum;
+    }
+
+    public double getDonatedPercentage() {
+        int amount = getDonatedAmount();
+        if (goal == 0) {
+            return 100;
+        }
+
+        BigDecimal amountBD = BigDecimal.valueOf(amount);
+        BigDecimal goalBD = BigDecimal.valueOf(goal);
+        BigDecimal percentage = amountBD
+                .divide(goalBD, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .setScale(1, RoundingMode.HALF_UP);
+
+        return percentage.doubleValue();
+    }
+
+    public int getDonatedPercentageCapped() {
+        return donatedPercentageCapped;
+    }
+
+    public void setDonatedPercentageCapped(int donatedPercentageCapped) {
+        this.donatedPercentageCapped = donatedPercentageCapped;
+    }
+
+    public int getDonatedPercentageUncapped() {
+        return donatedPercentageUncapped;
+    }
+
+    public void setDonatedPercentageUncapped(int donatedPercentageUncapped) {
+        this.donatedPercentageUncapped = donatedPercentageUncapped;
     }
 
     @Override

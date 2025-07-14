@@ -1,7 +1,5 @@
 package com.khoi.lab.dao;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -145,23 +143,10 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     public double campaignGetDonatedPercentage(Campaign campaign) {
-        int amount = campaignGetDonatedAmount(campaign);
-        int goal = campaign.getGoal();
-
-        if (goal == 0) {
-            return 100;
-        }
-
-        BigDecimal amountBD = BigDecimal.valueOf(amount);
-        BigDecimal goalBD = BigDecimal.valueOf(goal);
-        BigDecimal percentage = amountBD
-                .divide(goalBD, 4, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100))
-                .setScale(1, RoundingMode.HALF_UP);
-
+        double percentage = campaign.getDonatedPercentage();
         System.out.println(
-                "| [campaignGetDonatedPercentage] Total donated percentage: " + percentage.doubleValue() + "%");
-        return percentage.doubleValue();
+                "| [campaignGetDonatedPercentage] Total donated percentage: " + percentage + "%");
+        return percentage;
     }
 
     @Override
