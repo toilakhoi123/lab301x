@@ -68,7 +68,6 @@ public class DonationDAOImpl implements DonationDAO {
         accountDonate(campaign1, account3, 3500000);
     }
 
-    // TESTED
     @Override
     @Transactional
     public DonationReceiver donationReceiverCreate(String name, String phoneNumber) {
@@ -76,7 +75,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donationReceiverSave(donationReceiver);
     }
 
-    // TESTED
     @Override
     @Transactional
     public DonationReceiver donationReceiverSave(DonationReceiver donationReceiver) {
@@ -85,7 +83,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donationReceiver;
     }
 
-    // TESTED
     @Override
     @Transactional
     public DonationReceiver donationReceiverUpdate(DonationReceiver donationReceiver) {
@@ -94,7 +91,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donationReceiver;
     }
 
-    // TESTED
     @Override
     public DonationReceiver donationReceiverFindByPhoneNumber(String phoneNumber) {
         TypedQuery<DonationReceiver> tq = em.createQuery(
@@ -111,7 +107,6 @@ public class DonationDAOImpl implements DonationDAO {
         }
     }
 
-    // TESTED
     @Override
     @Transactional
     public Campaign campaignCreate(String name, DonationReceiver donationReceiver, String description, int goal,
@@ -120,7 +115,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaignSave(campaign);
     }
 
-    // TESTED
     @Override
     public Campaign campaignFindById(Long id) {
         Campaign campaign = em.find(Campaign.class, id);
@@ -132,7 +126,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Campaign campaignAddTimeMinutes(Campaign campaign, Long minutes) {
@@ -143,7 +136,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaignSave(campaign);
     }
 
-    // TESTED
     @Override
     public int campaignGetDonatedAmount(Campaign campaign) {
         int amount = campaign.getDonatedAmount();
@@ -151,7 +143,6 @@ public class DonationDAOImpl implements DonationDAO {
         return amount;
     }
 
-    // TESTED
     @Override
     public double campaignGetDonatedPercentage(Campaign campaign) {
         int amount = campaignGetDonatedAmount(campaign);
@@ -173,7 +164,6 @@ public class DonationDAOImpl implements DonationDAO {
         return percentage.doubleValue();
     }
 
-    // TESTED
     @Override
     public List<Donation> campaignGetDonations(Campaign campaign, boolean excludeConfirmed) {
         List<Donation> donations = excludeConfirmed
@@ -183,7 +173,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donations;
     }
 
-    // TESTED
     @Override
     public HashMap<Account, Integer> campaignGetDonatorsAndDonatedAmount(Campaign campaign) {
         HashMap<Account, Integer> map = new HashMap<>();
@@ -210,7 +199,6 @@ public class DonationDAOImpl implements DonationDAO {
         return map;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Campaign campaignChangeStatus(Campaign campaign, CampaignStatus status) {
@@ -220,7 +208,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
-    // TESTED
     @Override
     public List<Campaign> campaignFindByStatus(CampaignStatus status) {
         TypedQuery<Campaign> tq = em.createQuery(
@@ -235,7 +222,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaigns;
     }
 
-    // TESTED
     @Override
     public Campaign campaignFindByDonationReceiverPhoneNumber(String phoneNumber) {
         DonationReceiver donationReceiver = donationReceiverFindByPhoneNumber(phoneNumber);
@@ -256,7 +242,6 @@ public class DonationDAOImpl implements DonationDAO {
         }
     }
 
-    // TESTED
     @Override
     @Transactional
     public Campaign campaignSave(Campaign campaign) {
@@ -265,7 +250,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Campaign campaignUpdate(Campaign campaign) {
@@ -274,7 +258,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaign;
     }
 
-    // TESTED
     @Override
     public List<Campaign> campaignList() {
         TypedQuery<Campaign> tq = em.createQuery(
@@ -285,7 +268,6 @@ public class DonationDAOImpl implements DonationDAO {
         return campaigns;
     }
 
-    // TESTED
     @Override
     public List<Donation> accountGetDonations(Account account) {
         List<Donation> donations = account.getDonations();
@@ -293,7 +275,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donations;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Donation accountDonate(Campaign campaign, Account account, int amount) {
@@ -329,7 +310,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donation;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Donation donationConfirm(Donation donation) {
@@ -340,7 +320,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donation;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Donation donationSave(Donation donation) {
@@ -349,7 +328,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donation;
     }
 
-    // TESTED
     @Override
     @Transactional
     public Donation donationUpdate(Donation donation) {
@@ -358,7 +336,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donation;
     }
 
-    // TESTED
     @Override
     public List<Donation> donationList() {
         TypedQuery<Donation> tq = em.createQuery(
@@ -369,7 +346,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donations;
     }
 
-    // TESTED
     @Override
     public Donation donationFindById(Long id) {
         Donation donation = em.find(Donation.class, id);
@@ -381,7 +357,6 @@ public class DonationDAOImpl implements DonationDAO {
         return donation;
     }
 
-    // TESTED
     @Override
     @Transactional
     public void campaignDeleteById(Long id) {
