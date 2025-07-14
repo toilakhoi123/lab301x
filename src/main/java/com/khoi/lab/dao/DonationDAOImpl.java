@@ -13,7 +13,7 @@ import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
-
+import com.khoi.lab.service.CampaignStatusUpdater;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -24,10 +24,13 @@ import jakarta.transaction.Transactional;
  */
 @Repository
 public class DonationDAOImpl implements DonationDAO {
+
+    private final CampaignStatusUpdater campaignStatusUpdater;
     private EntityManager em;
 
-    public DonationDAOImpl(EntityManager em) {
+    public DonationDAOImpl(EntityManager em, CampaignStatusUpdater campaignStatusUpdater) {
         this.em = em;
+        this.campaignStatusUpdater = campaignStatusUpdater;
     }
 
     @Override
@@ -295,15 +298,26 @@ public class DonationDAOImpl implements DonationDAO {
     @Transactional
     public Donation accountDonate(Campaign campaign, Account account, int amount) {
         campaign = em.find(Campaign.class, campaign.getId());
+
+        // check campaign status
+        if (campaign.getStatus() != CampaignStatus.OPEN
+                && campaign.getStatus() != CampaignStatus.COMPLETE) {
+            System.out.println("| [accountDonate] Unable to donate! Campaign status is: " + campaign.getStatus());
+            return null;
+        }
+
+        // check if anonymous
         if (account != null) {
             account = em.find(Account.class, account.getId());
         }
 
+        // create donation
         Donation donation = new Donation(account, campaign, amount, LocalDateTime.now());
         donationSave(donation);
 
+        // update campaign & account
         campaign.getDonations().add(donation);
-        em.merge(campaign);
+        campaignUpdate(campaign);
         if (account != null) {
             account.getDonations().add(donation);
             em.merge(account);
