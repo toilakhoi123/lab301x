@@ -13,7 +13,7 @@ $(document).ready(function() {
         exportOptions: {
           columns: [0, 1, 2, 3, 4, 5, 6],
           format: {
-            body: function ( data, row, column, node ) {
+            body: function ( data, _, column, _ ) {
               // process data for account status column
               if (column === 6) {
                 if (data.includes('✔️')) {

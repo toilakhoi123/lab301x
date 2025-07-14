@@ -17,15 +17,15 @@ public class Campaign {
 
     private String name;
 
-    @ManyToOne
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_id")
     private DonationReceiver receiver;
 
     @Enumerated(EnumType.STRING)
     private CampaignStatus status;
-
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
 
     private int goal;
 
@@ -33,7 +33,7 @@ public class Campaign {
 
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "campaign", cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "campaign", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private List<Donation> donations = new ArrayList<>();
 
     // Constructors, getters, setters
@@ -119,6 +119,14 @@ public class Campaign {
 
     public void setDonations(List<Donation> donations) {
         this.donations = donations;
+    }
+
+    public int getDonatedAmount() {
+        int sum = 0;
+        for (Donation donation : donations) {
+            sum += donation.getAmount();
+        }
+        return sum;
     }
 
     @Override

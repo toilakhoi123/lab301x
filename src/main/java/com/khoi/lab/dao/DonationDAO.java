@@ -191,6 +191,13 @@ public interface DonationDAO {
     Donation donationUpdate(Donation donation);
 
     /**
+     * Return all donations present
+     * 
+     * @return
+     */
+    List<Donation> donationList();
+
+    /**
      * Get donations made by an account
      * 
      * @param account

@@ -3,6 +3,7 @@ package com.khoi.lab.controller;
 import org.springframework.stereotype.Controller;
 
 import com.khoi.lab.dao.AccountDAO;
+import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.object.AccountEditRequest;
 
@@ -18,14 +19,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/admin")
 public class AdminController {
     private final AccountDAO accountDAO;
+    private final DonationDAO donationDAO;
 
     /**
      * DAO Initiator
      * 
      * @param accountDAO
      */
-    public AdminController(AccountDAO accountDAO) {
+    public AdminController(AccountDAO accountDAO, DonationDAO donationDAO) {
         this.accountDAO = accountDAO;
+        this.donationDAO = donationDAO;
     }
 
     /**
@@ -35,7 +38,7 @@ public class AdminController {
      * @param session
      * @return
      */
-    @GetMapping("/accounts")
+    @GetMapping("/manage-accounts")
     public ModelAndView accountsManage(
             HttpSession session) {
         Account account = (Account) session.getAttribute("account");
@@ -50,7 +53,7 @@ public class AdminController {
             return mav;
         }
 
-        ModelAndView mav = new ModelAndView("admin/accounts");
+        ModelAndView mav = new ModelAndView("admin/manage-accounts");
         mav.addObject("accounts", accountDAO.accountList());
         return mav;
     }
@@ -61,9 +64,9 @@ public class AdminController {
      * @param param
      * @return
      */
-    @GetMapping("/accounts/edit")
+    @GetMapping("/manage-accounts/edit")
     public ModelAndView accountEdit() {
-        ModelAndView mav = new ModelAndView("admin/accounts");
+        ModelAndView mav = new ModelAndView("admin/manage-accounts");
         mav.addObject("accounts", accountDAO.accountList());
         return mav;
     }
@@ -76,7 +79,7 @@ public class AdminController {
      * @param isAdmin
      * @return
      */
-    @PostMapping("/accounts/edit")
+    @PostMapping("/manage-accounts/edit")
     public ModelAndView accountsEditRequest(@RequestBody AccountEditRequest request) {
         Account account = accountDAO.accountFindWithId(request.id);
 
@@ -90,8 +93,61 @@ public class AdminController {
 
         accountDAO.accountUpdate(account);
 
-        ModelAndView mav = new ModelAndView("admin/accounts");
+        ModelAndView mav = new ModelAndView("admin/manage-accounts");
         mav.addObject("accounts", accountDAO.accountList());
+        return mav;
+    }
+
+    /**
+     * Manage campaigns
+     * (notLoggedIn/notAuthorized)
+     * 
+     * @param session
+     * @return
+     */
+    @GetMapping("/manage-campaigns")
+    public ModelAndView campaignsManage(
+            HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!account.isAdmin()) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("admin/manage-campaigns");
+        mav.addObject("campaigns", donationDAO.campaignList());
+        return mav;
+    }
+
+    /**
+     * Manage campaigns' donations
+     * 
+     * @param session
+     * @return
+     */
+    @GetMapping("/manage-donations")
+    public ModelAndView donationsManage(
+            HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!account.isAdmin()) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("admin/manage-donations");
+        mav.addObject("donations", donationDAO.donationList());
         return mav;
     }
 }

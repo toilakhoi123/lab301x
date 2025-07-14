@@ -343,6 +343,18 @@ public class DonationDAOImpl implements DonationDAO {
         return donation;
     }
 
+    // TESTED
+    @Override
+    public List<Donation> donationList() {
+        TypedQuery<Donation> tq = em.createQuery(
+                "SELECT d FROM Donation d",
+                Donation.class);
+        List<Donation> donations = tq.getResultList();
+        System.out.println("| [donationList] Found and returned: " + donations.size() + " donations!");
+        return donations;
+    }
+
+    // TESTED
     @Override
     @Transactional
     public void campaignDeleteById(Long id) {
