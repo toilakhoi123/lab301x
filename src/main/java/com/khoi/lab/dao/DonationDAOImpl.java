@@ -143,10 +143,7 @@ public class DonationDAOImpl implements DonationDAO {
     // TESTED
     @Override
     public int campaignGetDonatedAmount(Campaign campaign) {
-        int amount = 0;
-        for (Donation donation : campaign.getDonations()) {
-            amount += donation.getAmount();
-        }
+        int amount = campaign.getDonatedAmount();
         System.out.println("| [campaignGetDonatedAmount] Total donated amount: " + amount);
         return amount;
     }
@@ -189,6 +186,9 @@ public class DonationDAOImpl implements DonationDAO {
         HashMap<Account, Integer> map = new HashMap<>();
 
         for (Donation donation : campaign.getDonations()) {
+            if (!donation.isConfirmed())
+                continue;
+
             Account account = donation.getAccount();
             Integer donatedAmount = donation.getAmount();
 

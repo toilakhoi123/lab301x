@@ -124,6 +124,8 @@ public class Campaign {
     public int getDonatedAmount() {
         int sum = 0;
         for (Donation donation : donations) {
+            if (!donation.isConfirmed())
+                continue;
             sum += donation.getAmount();
         }
         return sum;
