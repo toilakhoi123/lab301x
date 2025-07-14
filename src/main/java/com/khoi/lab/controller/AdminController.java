@@ -222,8 +222,7 @@ public class AdminController {
     public ModelAndView donationsConfirmDonation(@RequestBody DonationConfirmRequest request) {
         Donation donation = donationDAO.donationFindById(request.id);
 
-        donation.setConfirmed(true);
-        donationDAO.donationUpdate(donation);
+        donationDAO.donationConfirm(donation);
 
         ModelAndView mav = new ModelAndView("admin/manage-donations");
         mav.addObject("donations", donationDAO.donationList());

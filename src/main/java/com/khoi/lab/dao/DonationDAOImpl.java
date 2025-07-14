@@ -61,10 +61,10 @@ public class DonationDAOImpl implements DonationDAO {
 
         accountDonate(campaign1, account1, 1500000);
         accountDonate(campaign1, account1, 500000);
-        accountDonate(campaign2, account1, 2500000);
+        accountDonate(campaign2, account1, 25000000);
         accountDonate(campaign3, account1, 300000);
         accountDonate(campaign1, account2, 500000);
-        accountDonate(campaign3, account2, 1000000);
+        accountDonate(campaign3, account2, 25000000);
         accountDonate(campaign1, account3, 3500000);
     }
 
@@ -336,6 +336,7 @@ public class DonationDAOImpl implements DonationDAO {
         donation.setConfirmed(true);
         donation = donationSave(donation);
         System.out.println("| [donationConfirm] Confirmed donation: " + donation);
+        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
         return donation;
     }
 
