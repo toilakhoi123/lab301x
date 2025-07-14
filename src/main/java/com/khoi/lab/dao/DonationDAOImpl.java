@@ -57,7 +57,7 @@ public class DonationDAOImpl implements DonationDAO {
         Account account2 = em.find(Account.class, 2);
         Account account3 = em.find(Account.class, 3);
 
-        (new CampaignStatusUpdaterService(this)).updateCampaignCampaignStatuses();
+        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
 
         accountDonate(campaign1, account1, 1500000);
         accountDonate(campaign1, account1, 500000);

@@ -22,9 +22,12 @@ public class CampaignStatusUpdaterService {
         this.donationDAO = donationDAO;
     }
 
+    /**
+     * Update campaign
+     */
     @Scheduled(fixedRate = 60000)
     @Transactional
-    public void updateCampaignCampaignStatuses() {
+    public void updateCampaignStatuses() {
         LocalDateTime now = LocalDateTime.now();
         List<Campaign> campaigns = donationDAO.campaignList();
 
