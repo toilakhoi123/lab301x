@@ -13,7 +13,6 @@ import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
-import com.khoi.lab.service.CampaignStatusUpdater;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -24,13 +23,10 @@ import jakarta.transaction.Transactional;
  */
 @Repository
 public class DonationDAOImpl implements DonationDAO {
-
-    private final CampaignStatusUpdater campaignStatusUpdater;
     private EntityManager em;
 
-    public DonationDAOImpl(EntityManager em, CampaignStatusUpdater campaignStatusUpdater) {
+    public DonationDAOImpl(EntityManager em) {
         this.em = em;
-        this.campaignStatusUpdater = campaignStatusUpdater;
     }
 
     @Override
