@@ -171,9 +171,8 @@
                                                 <td>
                                                     <!-- view donations -->
                                                     <a 
-                                                        href="#"
-                                                        th:attr="data-id=${campaign.getId()}"
-                                                        class="btn-sm btn-success btn-icon-split m-1 campaign-action" 
+                                                        th:href="@{/admin/manage-donations(campaign=${campaign.receiver.id})}"
+                                                        class="btn-sm btn-success btn-icon-split m-1" 
                                                     >
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-flag"></i>
@@ -183,8 +182,7 @@
                                                     <!-- edit campaign -->
                                                     <a 
                                                         href="#"
-                                                        th:attr="data-id=${campaign.getId()}"
-                                                        class="btn-sm btn-warning btn-icon-split m-1 campaign-action"
+                                                        class="btn-sm btn-warning btn-icon-split m-1"
                                                     >
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-flag"></i>
@@ -194,8 +192,7 @@
                                                     <!-- extend campaign -->
                                                     <a 
                                                         href="#"
-                                                        th:attr="data-id=${campaign.getId()}"
-                                                        class="btn-sm btn-warning btn-icon-split m-1 campaign-action"
+                                                        class="btn-sm btn-warning btn-icon-split m-1"
                                                     >
                                                         <span class="icon text-white-50">
                                                             <i class="fas fa-flag"></i>

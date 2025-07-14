@@ -29,4 +29,16 @@ $(document).ready(function() {
       }
     ]
   });
+
+  // paramed search
+  const params = new URLSearchParams(window.location.search);
+  const searchCampaign = params.get('campaign');
+  const searchAccount = params.get('account');
+
+  if (searchCampaign) {
+      table.column(0).search(`[id:${searchCampaign}]`).draw();
+  }
+  if (searchAccount) {
+      table.column(1).search(`[id:${searchAccount}]`).draw();
+  }
 });
