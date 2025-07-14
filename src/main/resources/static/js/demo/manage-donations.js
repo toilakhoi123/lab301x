@@ -36,9 +36,9 @@ $(document).ready(function() {
   const searchAccount = params.get('account');
 
   if (searchCampaign) {
-      table.column(0).search(`[id:${searchCampaign}]`).draw();
+      table.column(1).search(`[id:${searchCampaign}]`).draw();
   }
   if (searchAccount) {
-      table.column(1).search(`[id:${searchAccount}]`).draw();
+      table.column(2).search(`[id:${searchAccount}]`).draw();
   }
 });

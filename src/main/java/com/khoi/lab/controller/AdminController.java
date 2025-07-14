@@ -1,11 +1,16 @@
 package com.khoi.lab.controller;
 
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Donation;
+import com.khoi.lab.entity.DonationReceiver;
+import com.khoi.lab.enums.TimeMinutes;
 import com.khoi.lab.object.AccountEditRequest;
 import com.khoi.lab.object.DonationConfirmRequest;
 
@@ -13,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -128,6 +134,59 @@ public class AdminController {
     }
 
     /**
+     * Handles campaign create request
+     * (donationReceiverNotFound, durationTooLong/campaignCreateSuccess)
+     * 
+     * @param name
+     * @param goal
+     * @param description
+     * @return
+     */
+    @PostMapping("/manage-campaigns/create-campaign")
+    public ModelAndView campaignsCreate(@RequestParam String name,
+            @RequestParam int goal,
+            @RequestParam String description,
+            @RequestParam String receiverPhone,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam(defaultValue = "0") int hours,
+            @RequestParam(defaultValue = "0") int days,
+            @RequestParam(defaultValue = "0") int weeks,
+            @RequestParam(defaultValue = "0") int months,
+            @RequestParam(defaultValue = "0") int years) {
+        // check if donation receiver found
+        DonationReceiver donationReceiver = donationDAO.donationReceiverFindByPhoneNumber(receiverPhone);
+        if (donationReceiver == null) {
+            ModelAndView mav = new ModelAndView("admin/manage-campaigns");
+            mav.addObject("campaigns", donationDAO.campaignList());
+            mav.addObject("donationReceiverNotFound", true);
+            return mav;
+        }
+
+        // check if time too long (more than 3 years)
+        Long durationMinutes = TimeMinutes.YEAR.getMinutes() * years
+                + TimeMinutes.MONTH.getMinutes() * months
+                + TimeMinutes.WEEK.getMinutes() * weeks
+                + TimeMinutes.DAY.getMinutes() * days
+                + TimeMinutes.HOUR.getMinutes() * hours;
+        if (durationMinutes > (TimeMinutes.YEAR.getMinutes() * 3)) {
+            ModelAndView mav = new ModelAndView("admin/manage-campaigns");
+            mav.addObject("campaigns", donationDAO.campaignList());
+            mav.addObject("durationTooLong", true);
+            return mav;
+        }
+        LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
+
+        // create campaign
+        donationDAO.campaignCreate(name, donationReceiver, description, goal, startTime, endTime);
+
+        // return view
+        ModelAndView mav = new ModelAndView("admin/manage-campaigns");
+        mav.addObject("campaigns", donationDAO.campaignList());
+        mav.addObject("campaignCreateSuccess", true);
+        return mav;
+    }
+
+    /**
      * Manage campaigns' donations
      * 
      * @param session
@@ -170,5 +229,4 @@ public class AdminController {
         mav.addObject("donations", donationDAO.donationList());
         return mav;
     }
-
 }

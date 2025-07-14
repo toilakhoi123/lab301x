@@ -13,6 +13,14 @@ $(document).ready(function() {
         exportOptions: {
           columns: [0, 1, 2, 3, 4, 5, 6, 7]
         }
+      },
+      {
+        text: 'New Campaign <i class="fas fa-plus"></i>',
+        // text: 'New Campaign',
+        action: function ( e, dt, node, config ) {
+          $('#newCampaignModal').modal('show');
+        },
+        className: 'btn btn-warning'
       }
     ]
   });
