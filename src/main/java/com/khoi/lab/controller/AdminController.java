@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.Donation;
 import com.khoi.lab.object.AccountEditRequest;
+import com.khoi.lab.object.DonationConfirmRequest;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -150,4 +152,23 @@ public class AdminController {
         mav.addObject("donations", donationDAO.donationList());
         return mav;
     }
+
+    /**
+     * Handle donation confirm request
+     * 
+     * @param request
+     * @return
+     */
+    @PostMapping("/manage-donations/confirm")
+    public ModelAndView donationsConfirmDonation(@RequestBody DonationConfirmRequest request) {
+        Donation donation = donationDAO.donationFindById(request.id);
+
+        donation.setConfirmed(true);
+        donationDAO.donationUpdate(donation);
+
+        ModelAndView mav = new ModelAndView("admin/manage-donations");
+        mav.addObject("donations", donationDAO.donationList());
+        return mav;
+    }
+
 }

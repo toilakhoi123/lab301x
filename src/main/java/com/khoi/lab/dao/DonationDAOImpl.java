@@ -356,6 +356,18 @@ public class DonationDAOImpl implements DonationDAO {
 
     // TESTED
     @Override
+    public Donation donationFindById(Long id) {
+        Donation donation = em.find(Donation.class, id);
+        if (donation == null) {
+            System.out.println("| [donationFindById] Couldn't find donation with id: " + id);
+        } else {
+            System.out.println("| [donationFindById] Found donation: " + donation);
+        }
+        return donation;
+    }
+
+    // TESTED
+    @Override
     @Transactional
     public void campaignDeleteById(Long id) {
         Campaign campaign = campaignFindById(id);

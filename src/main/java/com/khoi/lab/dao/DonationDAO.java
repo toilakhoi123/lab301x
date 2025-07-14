@@ -198,6 +198,14 @@ public interface DonationDAO {
     List<Donation> donationList();
 
     /**
+     * Find and return a donation with matching id
+     * 
+     * @param id
+     * @return
+     */
+    Donation donationFindById(Long id);
+
+    /**
      * Get donations made by an account
      * 
      * @param account
