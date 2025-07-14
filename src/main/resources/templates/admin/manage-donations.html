@@ -144,6 +144,7 @@
                                     <!-- headers -->
                                     <thead>
                                         <tr>
+                                            <th class="d-none">ID</th>
                                             <th>Campaign</th>
                                             <th>Account</th>
                                             <th>Amount</th>
@@ -157,6 +158,7 @@
                                         <!-- populate data -->
                                         <div th:each="donation : ${donations}">
                                             <tr>
+                                                <td th:text="${donation.getId()}" class="d-none"></td>
                                                 <td th:text="${'[id:' + donation.getCampaign().getId() + '] ' + donation.getCampaign().getName()}"></td>
                                                 <td th:text="${'[id:' + donation.getAccount().getId() + '] ' + donation.getAccount().getFullName()}"></td>
                                                 <td th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>

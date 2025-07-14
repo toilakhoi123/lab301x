@@ -155,6 +155,7 @@
                                     <!-- headers -->
                                     <thead>
                                         <tr>
+                                            <th class="d-none">ID</th>
                                             <th>Full Name</th>
                                             <th>Username</th>
                                             <th>Email</th>
@@ -170,6 +171,7 @@
                                         <!-- populate data -->
                                         <div th:each="account : ${accounts}">
                                             <tr>
+                                                <td th:text="${account.getId()}" class="d-none"></td>
                                                 <td th:text="${account.getFullName()}"></td>
                                                 <td th:text="${account.getUsername()}"></td>
                                                 <td th:text="${account.getEmail()}"></td>

@@ -11,7 +11,7 @@ $(document).ready(function() {
         text: '<i class="fas fa-file-excel"></i> Export to Excel',
         className: 'btn btn-success',
         exportOptions: {
-          columns: [0, 1, 2, 3, 4, 5, 6],
+          columns: [0, 1, 2, 3, 4, 5, 6, 7],
           format: {
             body: function ( data, _, column, _ ) {
               // process data for account status column

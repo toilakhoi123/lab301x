@@ -144,12 +144,13 @@
                                     <!-- headers -->
                                     <thead>
                                         <tr>
+                                            <th class="d-none">ID</th>
                                             <th>Name</th>
                                             <th>Receiver</th>
                                             <th>Status</th>
                                             <th>Donated Amount</th>
                                             <th>Donation Goal</th>
-                                            <th>Start Time</th>
+                                            <th class="d-none">Start Time</th>
                                             <th>End Time</th>
                                             <th>Actions</th>
                                         </tr>
@@ -159,12 +160,13 @@
                                         <!-- populate data -->
                                         <div th:each="campaign : ${campaigns}">
                                             <tr>
+                                                <td th:text="${campaign.getId()}" class="d-none"></td>
                                                 <td th:text="${campaign.getName()}"></td>
                                                 <td th:text="${'[id:' + campaign.getReceiver().getId() + '] ' + campaign.getReceiver().getName() + '/' + campaign.getReceiver().getPhoneNumber()}"></td>
                                                 <td th:text="${campaign.getStatus().name()}"></td>
                                                 <td th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
                                                 <td th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
-                                                <td th:text="${campaign.getStartTime()}"></td>
+                                                <td th:text="${campaign.getStartTime()}" class="d-none"></td>
                                                 <td th:text="${campaign.getEndTime()}"></td>
                                                 
                                                 <!-- actions -->
