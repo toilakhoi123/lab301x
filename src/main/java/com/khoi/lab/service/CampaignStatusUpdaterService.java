@@ -23,7 +23,7 @@ public class CampaignStatusUpdaterService {
     }
 
     /**
-     * Update campaign
+     * Update campaign statuses
      */
     @Scheduled(fixedRate = 60000)
     @Transactional
