@@ -68,27 +68,34 @@ public class AdminController {
     }
 
     /**
-     * Redirect to admin/accounts page
+     * Redirect to admin/manage-accounts page
      * 
      * @param param
      * @return
      */
-    @GetMapping("/manage-accounts/edit")
-    public ModelAndView accountEdit(HttpSession session) {
+    @GetMapping("/manage-accounts/quickedit")
+    public ModelAndView accountsQuickEdit(HttpSession session) {
         return accountsManage(session);
     }
 
     /**
-     * Handle account edit request
+     * Handle account quick edit request (from manage-accounts action button)
+     * (accountNotFound/accountEditSuccess)
      * 
      * @param id
      * @param isDisabled
      * @param isAdmin
      * @return
      */
-    @PostMapping("/manage-accounts/edit")
-    public ModelAndView accountsEditRequest(HttpSession session, @RequestBody AccountEditRequest request) {
+    @PostMapping("/manage-accounts/quickedit")
+    public ModelAndView accountsQuickEditRequest(HttpSession session, @RequestBody AccountEditRequest request) {
         Account account = accountDAO.accountFindWithId(request.id);
+
+        if (account == null) {
+            ModelAndView mav = accountsManage(session);
+            mav.addObject("accountNotFound", true);
+            return mav;
+        }
 
         if (request.isDisabled != null) {
             account.setDisabled(request.isDisabled.equals("true"));
@@ -100,6 +107,72 @@ public class AdminController {
 
         accountDAO.accountUpdate(account);
         ModelAndView mav = accountsManage(session);
+        mav.addObject("accountEditSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Show account edit page/redirect to manage-accounts page
+     * 
+     * @param session
+     * @return
+     */
+    @GetMapping("/manage-accounts/edit")
+    public ModelAndView accountsEdit(HttpSession session, @RequestParam(required = false) Long id) {
+        if (id == null) {
+            return accountsManage(session);
+        }
+        ModelAndView mav = new ModelAndView("admin/edit-account");
+        mav.addObject("account", accountDAO.accountFindWithId(id));
+        return mav;
+    }
+
+    /**
+     * Handle account edit request
+     * (accountNotFound/accountEditSuccess)
+     * 
+     * @param session
+     * @param id
+     * @param username
+     * @param firstName
+     * @param lastName
+     * @param email
+     * @param phoneNumber
+     * @param isAdmin
+     * @param isDisabled
+     * @return
+     */
+    @PostMapping("/manage-accounts/edit")
+    public ModelAndView accountsEditRequest(
+            HttpSession session,
+            @RequestParam Long id,
+            @RequestParam(required = false) String username,
+            @RequestParam String firstName,
+            @RequestParam String lastName,
+            @RequestParam String email,
+            @RequestParam String phoneNumber,
+            @RequestParam(required = false) String isAdmin,
+            @RequestParam(required = false) String isDisabled) {
+        Account account = accountDAO.accountFindWithId(id);
+
+        if (account == null) {
+            ModelAndView mav = accountsManage(session);
+            mav.addObject("accountNotFound", true);
+            return mav;
+        }
+
+        account.setUsername(username != null ? username : account.getUsername());
+        account.setFirstName(firstName);
+        account.setLastName(lastName);
+        account.setEmail(email);
+        account.setPhoneNumber(phoneNumber);
+        account.setAdmin(isAdmin != null);
+        account.setDisabled(isDisabled != null);
+
+        accountDAO.accountUpdate(account);
+
+        ModelAndView mav = accountsManage(session);
+        mav.addObject("accountEditSuccess", true);
         return mav;
     }
 
@@ -265,6 +338,7 @@ public class AdminController {
 
     /**
      * Manage campaigns' donations
+     * (notLoggedIn/notAuthorized)
      * 
      * @param session
      * @return
@@ -291,6 +365,7 @@ public class AdminController {
 
     /**
      * Handle donation confirm request
+     * (donationConfirmSuccess)
      * 
      * @param request
      * @return
@@ -300,6 +375,7 @@ public class AdminController {
         Donation donation = donationDAO.donationFindById(request.id);
         donationDAO.donationConfirm(donation);
         ModelAndView mav = donationsManage(session);
+        mav.addObject("donationConfirmSuccess", true);
         return mav;
     }
 }

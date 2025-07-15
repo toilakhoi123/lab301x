@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.khoi.lab.dao.DonationDAO;
+import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class GeneralController {
@@ -37,6 +40,19 @@ public class GeneralController {
                 .toList();
 
         mav.addObject("campaigns", campaigns);
+        return mav;
+    }
+
+    /**
+     * See currently logged in account's details
+     * 
+     * @param session
+     * @return
+     */
+    @GetMapping("/edit-account")
+    public ModelAndView sessionAccountEdit(HttpSession session) {
+        ModelAndView mav = new ModelAndView("edit-account");
+        mav.addObject("account", (Account) session.getAttribute("account"));
         return mav;
     }
 }

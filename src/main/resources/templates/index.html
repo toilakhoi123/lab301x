@@ -102,9 +102,9 @@
 
                                                 <!-- account info dropdown -->
                                                 <li th:if="${session.account}">
-                                                    <a href="/account" th:text="${session.account.getFullName()}"></a>
+                                                    <a href="/edit-account" th:text="${session.account.getFullName()}"></a>
                                                     <ul class="submenu">
-                                                        <li><a href="/account">Account Details</a></li>
+                                                        <li><a href="/edit-account">Edit Account</a></li>
                                                         <li><a href="/change-password">Change Password</a></li>
                                                         <li><a href="/logout">Log Out</a></li>
                                                     </ul>

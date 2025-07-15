@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Campaign | Little Hearts, Big Dreams.</title>
+    <title>Edit Account | Little Hearts, Big Dreams.</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
@@ -134,107 +134,74 @@
     </header>
 
     <main>
-        <!--? Hero Start -->
-        <div class="slider-area2">
-            <div class="slider-height2 d-flex align-items-center">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="hero-cap hero-cap2 pt-20 text-center">
-                                <h2 th:text="${campaign.getName()}">Campaign Name</h2>
+        <!-- Account Edit Form Container -->
+        <div style="background-color: #09cc7f; width: 100%; padding-top: 50px; padding-bottom: 50px;">
+            <div class="container d-flex justify-content-center">
+                <div class="p-4 mt-5" style="width: 65%; background-color: #f8f9fa; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+                    <form th:action="@{/admin/manage-accounts/edit}" method="post" style="padding: 15px;">
+                        <input type="hidden" name="id" th:value="${account.getId()}">
+
+                        <!-- Form Header -->
+                        <h3 class="mb-4 text-center">Edit Account</h3>
+
+                        <!-- Username (disabled for normal users) -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                th:value="${account.getUsername()}">
+                        </div>
+
+                        <!-- First Name -->
+                        <div class="mb-3">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName"
+                                th:value="${account.getFirstName()}" required>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="mb-3">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName"
+                                th:value="${account.getLastName()}" required>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                th:value="${account.getEmail()}" required>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Phone Number</label>
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                                th:value="${account.getPhoneNumber()}" required>
+                        </div>
+
+                        <!-- isAdmin & isDisabled checkboxes (inline) -->
+                        <div th:if="${session.account.getId() != account.getId()}">
+                            <div class="mb-3 form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin"
+                                    th:checked="${account.isAdmin()}">
+                                <label class="form-check-label" for="isAdmin">Admin</label>
+                            </div>
+                            <div class="mb-3 form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input" id="isDisabled" name="isDisabled"
+                                    th:checked="${account.isDisabled()}">
+                                <label class="form-check-label" for="isDisabled">Disabled</label>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Campaign Details -->
-        <div class="container my-5">
-            <div class="row">
-                <!-- Campaign Image -->
-                <div class="col-lg-6 mb-4">
-                    <img th:src="${campaign.getImageUrl()}" alt="Campaign Image" class="img-fluid rounded shadow">
-                </div>
-
-                <!-- Campaign Info -->
-                <div class="col-lg-6 d-flex flex-column justify-content-between">
-                    <div>
-                        <h3 th:text="${campaign.getName()}">Campaign Name</h3>
-
-                        <!-- Details -->
-                        <p class="text-muted mb-4">
-                            <strong>Bắt đầu:</strong> <span th:text="${#temporals.format(campaign.getStartTime(), 'dd MMM yyyy HH:mm')}"></span><br>
-                            <strong>Kết thúc:</strong> <span th:text="${#temporals.format(campaign.getEndTime(), 'dd MMM yyyy HH:mm')}"></span><br>
-                            <strong>Người nhận:</strong> <span th:text="${campaign.getReceiver().getName()}"></span> (<span th:text="${campaign.getReceiver().getPhoneNumber()}"></span>)
-                        </p>
-                    </div>
-
-                    <div class="mb-5">
-                        <!-- Progress bar -->
-                        <div class="single-skill mb-3">
-                            <div class="bar-progress">
-                                <div class="barfiller">
-                                    <div class="tipWrap">
-                                        <span class="tip"></span>
-                                    </div>
-                                    <span class="fill" th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}"></span>
-                                </div>
-                            </div>
+                        <div th:if="${session.account.getId() == account.getId()}">
+                            <input type="hidden" name="isAdmin" th:value="false">
                         </div>
 
-                        <!-- Raised vs Goal -->
-                        <div class="prices d-flex justify-content-between mb-3">
-                            <p>Raised:
-                                <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                            </p>
-                            <p>Goal:
-                                <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                            </p>
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/admin/manage-accounts" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-success">Save Changes</button>
                         </div>
-
-                        <!-- Donate button -->
-                        <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-lg mt-3">Donate Now</a>
-                        <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account != null and session.account.isAdmin()==true}" class="btn btn-primary btn-lg mt-3">Edit</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Description -->
-            <hr>
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h3><strong>Mô tả</strong></h3><br>
-                    <p th:text="${campaign.getDescription()}">
-                        This is a detailed description of the campaign. It elaborates on its goals, beneficiaries, and purpose.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Recent Donations -->
-            <hr>
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h3><strong>Quyên góp gần đây</strong></h3><br>
-                    <div th:if="${#lists.isEmpty(campaign.getDonations())}" class="text-muted mt-2">
-                        Hãy là người đầu tiên quyên góp!
-                    </div>
-                    <div th:each="donation : ${campaign.getDonations()}"
-                        th:styleappend="${donation.isConfirmed()} ? 'background-color: #09cc7f; color: white;' : 'background-color: #f8f9fa;'"
-                        class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded"
-                        style="min-height: 50px;">
-
-                        <!-- left -->
-                        <div>
-                            <small class="text-muted" th:text="${donation.getTimeAgo()}"></small><br>
-                            <span th:text="!${donation.isConfirmed()} ? '(chưa xác nhận) ' + ${donation.getAccount().getFullName()} : ${donation.getAccount().getFullName()}">
-                                Người quyên góp
-                            </span>
-                        </div>
-
-                        <!-- right -->
-                        <span th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}">Số tiền</span>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
