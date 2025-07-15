@@ -139,10 +139,73 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <!-- new campaign button -->
-                                <!-- <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newCampaignModal">
-                                    New Campaign
-                                </button> -->
+                                <!-- new campaign form -->
+                                <div class="modal fade" id="newCampaignModal" tabindex="-1" aria-labelledby="newCampaignModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <form th:action="@{/admin/manage-campaigns/create-campaign}" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="newCampaignModalLabel">Create New Campaign</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="campaignName" class="form-label">Campaign Name</label>
+                                                    <input type="text" class="form-control" id="campaignName" name="name" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="campaignDescription" class="form-label">Description</label>
+                                                    <textarea class="form-control" id="campaignDescription" name="description" rows="3" required></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="campaignImageUrl" class="form-label">Image URL</label>
+                                                    <input type="text" class="form-control" id="imageUrl" name="imageUrl">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="campaignGoal" class="form-label">Goal Amount</label>
+                                                    <input type="number" class="form-control" id="campaignGoal" name="goal" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="receiverPhone" class="form-label">Receiver Phone Number</label>
+                                                    <input type="text" class="form-control" id="receiverPhone" name="receiverPhone" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="startTime" class="form-label">Start Time</label>
+                                                    <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Duration</label>
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">Hours</span>
+                                                        <input type="number" class="form-control" name="hours" min="0" value="0">
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">Days</span>
+                                                        <input type="number" class="form-control" name="days" min="0" value="1">
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">Weeks</span>
+                                                        <input type="number" class="form-control" name="weeks" min="0" value="0">
+                                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">Months</span>
+                                                        <input type="number" class="form-control" name="months" min="0" value="0">
+                                                    </div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">Years</span>
+                                                        <input type="number" class="form-control" name="years" min="0" value="0">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success">Create</button>
+                                            </div>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- table -->
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <!-- headers -->
@@ -210,69 +273,6 @@
                                         </div>
                                     </tbody>
                                 </table>
-                                <!-- new campaign form -->
-                                <div class="modal fade" id="newCampaignModal" tabindex="-1" aria-labelledby="newCampaignModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                        <form th:action="@{/admin/manage-campaigns/create-campaign}" method="post">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="newCampaignModalLabel">Create New Campaign</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label for="campaignName" class="form-label">Campaign Name</label>
-                                                    <input type="text" class="form-control" id="campaignName" name="name" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="campaignGoal" class="form-label">Goal Amount</label>
-                                                    <input type="number" class="form-control" id="campaignGoal" name="goal" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="campaignDescription" class="form-label">Description</label>
-                                                    <textarea class="form-control" id="campaignDescription" name="description" rows="3" required></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="receiverPhone" class="form-label">Receiver Phone Number</label>
-                                                    <input type="text" class="form-control" id="receiverPhone" name="receiverPhone" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="startTime" class="form-label">Start Time</label>
-                                                    <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Duration</label>
-                                                    <div class="input-group mb-2">
-                                                        <span class="input-group-text">Hours</span>
-                                                        <input type="number" class="form-control" name="hours" min="0" value="0">
-                                                    </div>
-                                                    <div class="input-group mb-2">
-                                                        <span class="input-group-text">Days</span>
-                                                        <input type="number" class="form-control" name="days" min="0" value="0">
-                                                    </div>
-                                                    <div class="input-group mb-2">
-                                                        <span class="input-group-text">Weeks</span>
-                                                        <input type="number" class="form-control" name="weeks" min="0" value="0">
-                                                    </div>
-                                                    <div class="input-group mb-2">
-                                                        <span class="input-group-text">Months</span>
-                                                        <input type="number" class="form-control" name="months" min="0" value="0">
-                                                    </div>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">Years</span>
-                                                        <input type="number" class="form-control" name="years" min="0" value="0">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-success">Create</button>
-                                            </div>
-                                        </form>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

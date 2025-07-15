@@ -80,7 +80,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="header-bottom  header-sticky">
+                <div class="header-bottom header-sticky">
                     <div class="container-fluid">
                         <div class="row align-items-center">
                             <!-- Logo -->
@@ -257,12 +257,11 @@
                     <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaigns}">
                         <div class="single-cases mb-40">
                             <div class="cases-img">
-                                <img th:src="@{/assets/img/gallery/case1.png}" alt="">
-                                <!-- <img th:src="${campaign.getImageUrl()}" alt=""> -->
+                                <img th:src="${campaign.getImageUrl()}" alt="">
                             </div>
                             <div class="cases-caption">
                                 <!-- redirect to campaign page -->
-                                <h3><a th:href="@{/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
+                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
                                 <!-- progresss bar -->
                                 <div class="single-skill mb-15">
                                     <div id="bar1" class="bar-progress">
@@ -270,7 +269,6 @@
                                             <div class="tipWrap">
                                                 <span class="tip"></span>
                                             </div>
-                                            <!-- <span class="fill" data-percentage="70"></span> -->
                                             <span 
                                                 class="fill"
                                                 th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
@@ -433,6 +431,8 @@
             </div>
         </div>
     </main>
+
+    <!-- Footer -->
     <footer>
         <div class="footer-wrapper" style="background-color: #1f1f1f;">
             <!-- Footer Top-->

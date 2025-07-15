@@ -40,15 +40,15 @@ public class DonationDAOImpl implements DonationDAO {
         // campaigns
         String campaign1desc = "Bé Cháng Thị Hà sinh năm 2012, là con của một gia đình dân tộc H’Mông nghèo khó tại thôn Ea Uôl, xã Cư Pui, huyện Krông Bông, tỉnh Đắk Lắk. Cuộc sống vốn đã khó khăn, lại càng khốn đốn khi bé Hà phát sinh dấu hiệu bất thường ở vùng cổ. Kết quả siêu âm cho thấy bé có tổn thương ở góc hàm trái và hạch cổ hai bên. Khối u ngày càng to dần, gây ảnh hưởng nghiêm trọng đến sức khỏe của bé.";
         Campaign campaign1 = campaignCreate("Xin giúp bé Cháng Thị Hà chữa bệnh hiểm nghèo", dr1, campaign1desc,
-                30000000, LocalDateTime.of(2025, 7, 10, 0, 0), LocalDateTime.of(2025, 7, 30, 0, 0));
+                30000000, LocalDateTime.of(2025, 7, 10, 0, 0), LocalDateTime.of(2025, 7, 30, 0, 0), "");
 
         String campaign2desc = "Xin Quý Ân Nhân hãy cùng góp sức, để bé Minh Đăng có thêm cơ hội được sống, để nụ cười thơ ngây ấy tiếp tục được nở, và những ước mơ nhỏ bé còn dang dở được viết tiếp.";
         Campaign campaign2 = campaignCreate("Xin giữ lấy sợi dây sinh mệnh cho bé Minh Đăng", dr2, campaign2desc,
-                20000000, LocalDateTime.of(2025, 7, 15, 0, 0), LocalDateTime.of(2025, 7, 25, 0, 0));
+                20000000, LocalDateTime.of(2025, 7, 15, 0, 0), LocalDateTime.of(2025, 7, 25, 0, 0), "");
 
         String campaign3desc = "Bé Y Sáng Buôn Dap (1 tuổi, dân tộc M’nông) bị bệnh tim bẩm sinh. Nhờ sự hỗ trợ của các tổ chức, chi phí phẫu thuật tim sẽ được tài trợ – điều mà gia đình bé Y Sáng không dám mơ tới.";
         Campaign campaign3 = campaignCreate("Giúp bố mẹ nghèo có thêm hy vọng cứu con", dr3, campaign3desc,
-                20000000, LocalDateTime.of(2025, 7, 10, 0, 0), LocalDateTime.of(2025, 7, 30, 0, 0));
+                20000000, LocalDateTime.of(2025, 7, 10, 0, 0), LocalDateTime.of(2025, 7, 30, 0, 0), "");
 
         // donations
         Account account1 = em.find(Account.class, 1);
@@ -108,8 +108,8 @@ public class DonationDAOImpl implements DonationDAO {
     @Override
     @Transactional
     public Campaign campaignCreate(String name, DonationReceiver donationReceiver, String description, int goal,
-            LocalDateTime startTime, LocalDateTime endTime) {
-        Campaign campaign = new Campaign(name, donationReceiver, description, goal, startTime, endTime);
+            LocalDateTime startTime, LocalDateTime endTime, String imageUrl) {
+        Campaign campaign = new Campaign(name, donationReceiver, description, imageUrl, goal, startTime, endTime);
         return campaignSave(campaign);
     }
 
@@ -248,7 +248,15 @@ public class DonationDAOImpl implements DonationDAO {
         TypedQuery<Campaign> tq = em.createQuery(
                 "SELECT c FROM Campaign c",
                 Campaign.class);
-        List<Campaign> campaigns = tq.getResultList();
+        List<Campaign> campaigns = tq.getResultList().stream()
+                .map(c -> {
+                    double rawPercentage = c.getDonatedPercentage();
+                    long rounded = Math.round(rawPercentage);
+                    int capped = (int) Math.min(rounded, 100);
+                    c.setDonatedPercentageCapped(capped);
+                    c.setDonatedPercentageUncapped((int) rounded);
+                    return c;
+                }).toList();
         System.out.println("| [campaignList] Found and returned: " + campaigns.size() + " campaigns!");
         return campaigns;
     }

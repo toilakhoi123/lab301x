@@ -22,6 +22,9 @@ public class Campaign {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_id")
     private DonationReceiver receiver;
@@ -41,17 +44,17 @@ public class Campaign {
     @OneToMany(mappedBy = "campaign", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
     private List<Donation> donations = new ArrayList<>();
 
-    // Constructors, getters, setters
-
     public Campaign() {
     }
 
-    public Campaign(String name, DonationReceiver receiver,
-            String description, int goal, LocalDateTime startTime, LocalDateTime endTime) {
+    public Campaign(String name, DonationReceiver receiver, String description,
+            String imageUrl, int goal, LocalDateTime startTime, LocalDateTime endTime) {
         this.name = name;
         this.receiver = receiver;
         this.status = CampaignStatus.CREATED;
         this.description = description;
+        this.imageUrl = imageUrl != "" ? imageUrl
+                : "https://www.shutterstock.com/image-vector/fundraising-giving-heart-symbol-money-600nw-2509445751.jpg";
         this.goal = goal;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -92,6 +95,14 @@ public class Campaign {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public int getGoal() {

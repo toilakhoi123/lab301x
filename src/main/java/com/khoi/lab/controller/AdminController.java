@@ -146,6 +146,7 @@ public class AdminController {
     public ModelAndView campaignsCreate(@RequestParam String name,
             @RequestParam int goal,
             @RequestParam String description,
+            @RequestParam(required = false) String imageUrl,
             @RequestParam String receiverPhone,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
             @RequestParam(defaultValue = "0") int hours,
@@ -177,7 +178,7 @@ public class AdminController {
         LocalDateTime endTime = startTime.plusMinutes(durationMinutes);
 
         // create campaign
-        donationDAO.campaignCreate(name, donationReceiver, description, goal, startTime, endTime);
+        donationDAO.campaignCreate(name, donationReceiver, description, goal, startTime, endTime, imageUrl);
 
         // return view
         ModelAndView mav = new ModelAndView("admin/manage-campaigns");

@@ -33,43 +33,31 @@ public class CampaignStatusUpdaterService {
 
         System.out.println("| [service:CampaignStatusUpdater] Periodic checking campaign statuses...");
 
-        // iterate
         for (Campaign campaign : campaigns) {
-            boolean statusUpdated = false;
-
-            // check status
             switch (campaign.getStatus()) {
                 case CampaignStatus.CREATED:
                     if (now.isAfter(campaign.getStartTime()) || now.isEqual(campaign.getStartTime())) {
-                        campaign.setStatus(CampaignStatus.OPEN);
+                        donationDAO.campaignChangeStatus(campaign, CampaignStatus.OPEN);
                         System.out.println("| [service:CampaignStatusUpdater] Campaign: " + campaign.getId()
                                 + " updated status CREATED -> OPEN");
-                        statusUpdated = true;
                     }
                     break;
                 case CampaignStatus.OPEN:
                     if (campaign.getDonatedAmount() >= campaign.getGoal()) {
-                        campaign.setStatus(CampaignStatus.COMPLETE);
+                        donationDAO.campaignChangeStatus(campaign, CampaignStatus.COMPLETE);
                         System.out.println("| [service:CampaignStatusUpdater] Campaign: " + campaign.getId()
                                 + " updated status OPEN -> COMPLETE");
-                        statusUpdated = true;
                     }
                     break;
                 case CampaignStatus.COMPLETE:
                     if (now.isAfter(campaign.getEndTime()) || now.isEqual(campaign.getEndTime())) {
-                        campaign.setStatus(CampaignStatus.CLOSED);
+                        donationDAO.campaignChangeStatus(campaign, CampaignStatus.CLOSED);
                         System.out.println("| [service:CampaignStatusUpdater] Campaign: " + campaign.getId()
                                 + " updated status COMPLETE -> CLOSED");
-                        statusUpdated = true;
                     }
                     break;
-                default:
+                case CampaignStatus.CLOSED:
                     break;
-            }
-
-            // status updated -> persist
-            if (statusUpdated) {
-                donationDAO.campaignUpdate(campaign);
             }
         }
     }

@@ -64,7 +64,7 @@ public interface DonationDAO {
      * @return
      */
     Campaign campaignCreate(String name, DonationReceiver donationReceiver, String description, int goal,
-            LocalDateTime startTime, LocalDateTime endTime);
+            LocalDateTime startTime, LocalDateTime endTime, String imageUrl);
 
     /**
      * Find campaign by id
