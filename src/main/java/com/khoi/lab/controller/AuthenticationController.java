@@ -220,7 +220,7 @@ public class AuthenticationController {
             return login();
         }
 
-        return changePassword(session);
+        return new ModelAndView("change-password");
     }
 
     /**

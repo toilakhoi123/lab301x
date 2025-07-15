@@ -143,7 +143,7 @@
                                 <div class="modal fade" id="newCampaignModal" tabindex="-1" aria-labelledby="newCampaignModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
-                                        <form th:action="@{/admin/manage-campaigns/create-campaign}" method="post">
+                                        <form th:action="@{/admin/manage-campaigns/create}" method="post">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="newCampaignModalLabel">Create New Campaign</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -250,7 +250,7 @@
                                                     </a>
                                                     <!-- edit campaign -->
                                                     <a 
-                                                        href="#"
+                                                        th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}"
                                                         class="btn-sm btn-warning btn-icon-split m-1"
                                                     >
                                                         <span class="icon text-white-50">

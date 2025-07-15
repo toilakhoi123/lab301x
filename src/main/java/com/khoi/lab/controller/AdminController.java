@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.TimeMinutes;
@@ -138,7 +139,7 @@ public class AdminController {
      * @param description
      * @return
      */
-    @PostMapping("/manage-campaigns/create-campaign")
+    @PostMapping("/manage-campaigns/create")
     public ModelAndView campaignsCreate(
             HttpSession session,
             @RequestParam String name,
@@ -179,6 +180,86 @@ public class AdminController {
         // return view
         ModelAndView mav = campaignsManage(session);
         mav.addObject("campaignCreateSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Handle edit campaign method
+     * (notLoggedIn/notAuthorized)
+     * 
+     * @param session
+     * @param id
+     * @return
+     */
+    @GetMapping("/manage-campaigns/edit")
+    public ModelAndView campaignsEdit(HttpSession session, @RequestParam Long id) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!account.isAdmin()) {
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("admin/edit-campaign");
+        mav.addObject("campaign", donationDAO.campaignFindById(id));
+        return mav;
+    }
+
+    /**
+     * Handle campaign edit request
+     * (campaignNotFound/campaignEditSuccess)
+     * 
+     * @param session
+     * @param id
+     * @param name
+     * @param description
+     * @param imageUrl
+     * @param goal
+     * @param receiverPhone
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @PostMapping("/manage-campaigns/edit")
+    public ModelAndView campaignsEditRequest(
+            HttpSession session,
+            @RequestParam Long id,
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam String imageUrl,
+            @RequestParam int goal,
+            @RequestParam String receiverPhone,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
+        Campaign campaign = donationDAO.campaignFindById(id);
+
+        if (campaign == null) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignNotFound", true);
+            return mav;
+        }
+
+        campaign.setName(name);
+        campaign.setDescription(description);
+        campaign.setImageUrl(imageUrl);
+        campaign.setGoal(goal);
+        campaign.setStartTime(startTime);
+        campaign.setEndTime(endTime);
+
+        DonationReceiver donationReceiver = donationDAO.donationReceiverFindByPhoneNumber(receiverPhone);
+        if (donationReceiver != null) {
+            campaign.setReceiver(donationReceiver);
+        }
+
+        donationDAO.campaignUpdate(campaign);
+
+        ModelAndView mav = campaignsManage(session);
+        mav.addObject("campaignEditSuccess", true);
         return mav;
     }
 
