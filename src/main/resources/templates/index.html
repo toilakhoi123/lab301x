@@ -224,7 +224,7 @@
                             <p>Chúng tôi tin rằng mọi đứa trẻ đều xứng đáng có cơ hội được lớn lên, học hỏi và nuôi dưỡng những ước mơ không giới hạn. Sứ mệnh của chúng tôi là hỗ trợ những trẻ em có hoàn cảnh khó khăn được chăm sóc y tế kịp thời, giáo dục và dinh dưỡng đầy đủ để các em có thể xây dựng một tương lai tươi sáng hơn.</p>
                             <p>Hãy đồng hành cùng chúng tôi để biến những hành động nhỏ của lòng nhân ái thành cơ hội thay đổi cuộc đời cho các em nhỏ trên khắp đất nước.</p>
                         </div>
-                        <a href="about" class="btn">Về Chúng Tôi</a>
+                        <a href="/about" class="btn">Về Chúng Tôi</a>
                     </div>
                     <div class="col-lg-6 col-md-12">
                         <!-- about-img -->
@@ -243,17 +243,17 @@
         <!-- Campaigns -->
         <div class="our-cases-area section-padding30">
             <div class="container">
+                <!-- title -->
                 <div class="row justify-content-center">
                     <div class="col-xl-6 col-lg-7 col-md-10 col-sm-10">
-                        <!-- Section Tittle -->
                         <div class="section-tittle text-center mb-80">
                             <span>Những trường hợp cần giúp đỡ</span>
                             <h2>Khám phá các chiến dịch quyên góp đang diễn ra</h2>
                         </div>
                     </div>
                 </div>
+                <!-- campaigns -->
                 <div class="row">
-                    <!-- single campaign -->
                     <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaigns}">
                         <div class="single-cases mb-40">
                             <div class="cases-img">
@@ -293,6 +293,10 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <!-- see more button -->
+                <div class="row d-flex justify-content-center">
+                    <a href="/campaigns" class="btn">Xem Nhiều Hơn</a>
                 </div>
             </div>
         </div>
