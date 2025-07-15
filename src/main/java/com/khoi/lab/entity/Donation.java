@@ -1,7 +1,10 @@
 package com.khoi.lab.entity;
 
 import jakarta.persistence.*;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "donation")
@@ -23,6 +26,8 @@ public class Donation {
     private LocalDateTime donateTime;
 
     private boolean confirmed;
+
+    private String timeAgo;
 
     public Donation() {
     }
@@ -83,10 +88,34 @@ public class Donation {
         this.confirmed = confirmed;
     }
 
+    public String getTimeAgo() {
+        return timeAgo;
+    }
+
+    public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
+    }
+
     // ===== Helper methods =====
 
     public boolean isAnonymous() {
         return this.account == null;
+    }
+
+    public String getTimeAgo(LocalDateTime dateTime) {
+        Duration duration = Duration.between(dateTime, LocalDateTime.now());
+
+        if (duration.toMinutes() < 1) {
+            return "just now";
+        } else if (duration.toMinutes() < 60) {
+            return duration.toMinutes() + " minute(s) ago";
+        } else if (duration.toHours() < 24) {
+            return duration.toHours() + " hour(s) ago";
+        } else if (duration.toDays() < 7) {
+            return duration.toDays() + " day(s) ago";
+        } else {
+            return dateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
+        }
     }
 
     @Override

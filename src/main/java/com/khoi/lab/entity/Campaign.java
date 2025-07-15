@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.khoi.lab.enums.CampaignStatus;
 
@@ -130,7 +132,9 @@ public class Campaign {
     }
 
     public List<Donation> getDonations() {
-        return donations;
+        return donations.stream()
+                .sorted(Comparator.comparing(Donation::getDonateTime).reversed())
+                .collect(Collectors.toList());
     }
 
     public void setDonations(List<Donation> donations) {

@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Campaign;
+import com.khoi.lab.entity.Donation;
 import com.khoi.lab.enums.CampaignStatus;
 
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,6 +62,10 @@ public class DonationController {
             ModelAndView mav = campaignsPage();
             mav.addObject("campaignNotExist", true);
             return mav;
+        }
+
+        for (Donation donation : campaign.getDonations()) {
+            donation.setTimeAgo(donation.getTimeAgo(donation.getDonateTime()));
         }
 
         ModelAndView mav = new ModelAndView("campaign-details");

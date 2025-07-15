@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.khoi.lab.dao.AccountDAO;
+import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.service.EmailSenderService;
 import com.khoi.lab.service.StringService;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class AuthenticationController {
     private final AccountDAO accountDAO;
+    private final DonationDAO donationDAO;
 
     @Autowired
     private EmailSenderService senderService;
@@ -26,8 +28,9 @@ public class AuthenticationController {
      * 
      * @param accountDAO
      */
-    public AuthenticationController(AccountDAO accountDAO) {
+    public AuthenticationController(AccountDAO accountDAO, DonationDAO donationDAO) {
         this.accountDAO = accountDAO;
+        this.donationDAO = donationDAO;
     }
 
     /**
@@ -62,7 +65,7 @@ public class AuthenticationController {
 
             if (account == null) {
                 // login failure
-                ModelAndView mav = new ModelAndView("login");
+                ModelAndView mav = login();
                 mav.addObject("loginFailure", true);
                 return mav;
             } else {
@@ -71,21 +74,21 @@ public class AuthenticationController {
                     session.setAttribute("account", account);
 
                     // login success
-                    ModelAndView mav = new ModelAndView("index");
+                    ModelAndView mav = (new GeneralController(donationDAO)).index();
                     mav.addObject("loginSuccess", true);
                     return mav;
                 } else {
                     System.out.println("| Account is disabled by admins!!!");
 
                     // account disabled
-                    ModelAndView mav = new ModelAndView("login");
+                    ModelAndView mav = login();
                     mav.addObject("loginDisabled", true);
                     return mav;
                 }
             }
         } else {
             System.out.println("| Already logged in!");
-            ModelAndView mav = new ModelAndView("index");
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
             mav.addObject("loginAlready", true);
             return mav;
         }
@@ -128,7 +131,7 @@ public class AuthenticationController {
         // check password confirm
         if (!password.equals(passwordConfirm)) {
             System.out.println("| Password mismatch: " + password + " vs " + passwordConfirm);
-            ModelAndView mav = new ModelAndView("register");
+            ModelAndView mav = register();
             mav.addObject("passwordMismatch", true);
             return mav;
         }
@@ -136,7 +139,7 @@ public class AuthenticationController {
         // check account username exist
         if (accountDAO.accountFindWithUsername(username) != null) {
             System.out.println("| Username exists!");
-            ModelAndView mav = new ModelAndView("register");
+            ModelAndView mav = register();
             mav.addObject("registerUsernameExists", true);
             return mav;
         }
@@ -144,7 +147,7 @@ public class AuthenticationController {
         // check account username exist
         if (accountDAO.accountFindWithEmail(email) != null) {
             System.out.println("| Email exists!");
-            ModelAndView mav = new ModelAndView("register");
+            ModelAndView mav = register();
             mav.addObject("registerEmailExists", true);
             return mav;
         }
@@ -152,14 +155,14 @@ public class AuthenticationController {
         // check account phone number exist
         if (accountDAO.accountFindWithPhoneNumber(phoneNumber) != null) {
             System.out.println("| Phone number exists!");
-            ModelAndView mav = new ModelAndView("register");
+            ModelAndView mav = register();
             mav.addObject("registerPhoneNumberExists", true);
             return mav;
         }
 
         // register successful
         accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password);
-        ModelAndView mav = new ModelAndView("login");
+        ModelAndView mav = login();
         mav.addObject("registerSuccess", true);
         return mav;
     }
@@ -187,7 +190,7 @@ public class AuthenticationController {
 
         // check if email associates with an account
         if (account == null) {
-            ModelAndView mav = new ModelAndView("forgot-password");
+            ModelAndView mav = forgotPassword();
             mav.addObject("accountNotFound", true);
             return mav;
         }
@@ -202,7 +205,7 @@ public class AuthenticationController {
         }).start();
 
         // forward to verify-code view
-        ModelAndView mav = new ModelAndView("verify-code");
+        ModelAndView mav = verifyCode();
         mav.addObject("emailSent", true);
         mav.addObject("accountId", account.getId());
         mav.addObject("code", code);
@@ -214,10 +217,10 @@ public class AuthenticationController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            return new ModelAndView("login");
+            return login();
         }
 
-        return new ModelAndView("change-password");
+        return changePassword(session);
     }
 
     /**
@@ -240,14 +243,14 @@ public class AuthenticationController {
 
         // check if correct old password
         if (!account.getPassword().equals(oldPassword)) {
-            ModelAndView mav = new ModelAndView("change-password");
+            ModelAndView mav = changePassword(session);
             mav.addObject("wrongPassword", true);
             return mav;
         }
 
         // check if password confirmation is right
         if (!password.equals(passwordConfirm)) {
-            ModelAndView mav = new ModelAndView("change-password");
+            ModelAndView mav = changePassword(session);
             mav.addObject("passwordMismatch", true);
             return mav;
         }
@@ -257,7 +260,7 @@ public class AuthenticationController {
         account = accountDAO.accountUpdate(account);
         session.setAttribute("account", account);
 
-        ModelAndView mav = new ModelAndView("index");
+        ModelAndView mav = (new GeneralController(donationDAO)).index();
         mav.addObject("passwordChangeSuccess", true);
         return mav;
     }
@@ -270,9 +273,8 @@ public class AuthenticationController {
      * @return
      */
     @GetMapping("/verify-code")
-    public ModelAndView verifyCode(@RequestParam String param) {
-        ModelAndView mav = new ModelAndView("/forgot-password");
-        return mav;
+    public ModelAndView verifyCode() {
+        return forgotPassword();
     }
 
     /**
@@ -292,7 +294,7 @@ public class AuthenticationController {
         if (code.equals(codeEntered)) {
             // correct code
             System.out.println("| Valid code entered!");
-            ModelAndView mav = new ModelAndView("reset-password");
+            ModelAndView mav = resetPassword();
             mav.addObject("validCode", true);
             mav.addObject("accountId", accountId);
             return mav;
@@ -300,7 +302,7 @@ public class AuthenticationController {
 
         // incorrect code
         System.out.println("| Invalid code entered!");
-        ModelAndView mav = new ModelAndView("verify-code");
+        ModelAndView mav = verifyCode();
         mav.addObject("invalidCode", true);
         mav.addObject("accountId", accountId);
         mav.addObject("code", code);
@@ -315,8 +317,7 @@ public class AuthenticationController {
      */
     @GetMapping("/reset-password")
     public ModelAndView resetPassword() {
-        ModelAndView mav = new ModelAndView("/forgot-password");
-        return mav;
+        return forgotPassword();
     }
 
     /**
@@ -335,7 +336,7 @@ public class AuthenticationController {
             @RequestParam String passwordConfirm) {
         if (!password.equals(passwordConfirm)) {
             // confirmation does not match
-            ModelAndView mav = new ModelAndView("reset-password");
+            ModelAndView mav = resetPassword();
             mav.addObject("passwordMismatch", true);
             mav.addObject("accountId", accountId);
             return mav;
@@ -343,7 +344,7 @@ public class AuthenticationController {
 
         // confirmation valid, set new password
         accountDAO.accountChangePassword(accountId, password);
-        ModelAndView mav = new ModelAndView("login");
+        ModelAndView mav = login();
         mav.addObject("passwordResetSuccess", true);
         return mav;
     }
@@ -358,6 +359,6 @@ public class AuthenticationController {
     public ModelAndView logout(HttpSession session) {
         session.removeAttribute("account");
         System.out.println("| Logged the current user out!");
-        return new ModelAndView("index");
+        return (new GeneralController(donationDAO)).index();
     }
 }
