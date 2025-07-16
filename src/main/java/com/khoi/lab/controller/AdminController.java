@@ -286,7 +286,7 @@ public class AdminController {
 
     /**
      * Handle campaign edit request
-     * (campaignNotFound/campaignEditSuccess)
+     * (campaignNotFound/campaignEditSuccess/campaignCannotBeEdited)
      * 
      * @param session
      * @param id
@@ -318,12 +318,21 @@ public class AdminController {
             return mav;
         }
 
-        campaign.setName(name);
-        campaign.setDescription(description);
         campaign.setImageUrl(imageUrl);
-        campaign.setGoal(goal);
         campaign.setStartTime(startTime);
         campaign.setEndTime(endTime);
+
+        // certain fields cannot be changed after opening
+        if (campaign.getStatus() != CampaignStatus.CREATED) {
+            donationDAO.campaignUpdate(campaign);
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignCannotBeEdited", true);
+            return mav;
+        }
+
+        campaign.setName(name);
+        campaign.setDescription(description);
+        campaign.setGoal(goal);
 
         DonationReceiver donationReceiver = donationDAO.donationReceiverFindByPhoneNumber(receiverPhone);
         if (donationReceiver != null) {
