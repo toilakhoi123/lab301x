@@ -337,6 +337,54 @@ public class AdminController {
     }
 
     /**
+     * Handle campaign endDate extension
+     * (campaignNotFound/extensionTooLong/campaignExtendSuccess)
+     * 
+     * @param session
+     * @param id
+     * @param hours
+     * @param days
+     * @param weeks
+     * @param months
+     * @param years
+     * @return
+     */
+    @PostMapping("/manage-campaigns/extend")
+    public ModelAndView campaignsExtendRequest(
+            HttpSession session,
+            @RequestParam Long id,
+            @RequestParam(defaultValue = "0") int hours,
+            @RequestParam(defaultValue = "0") int days,
+            @RequestParam(defaultValue = "0") int weeks,
+            @RequestParam(defaultValue = "0") int months,
+            @RequestParam(defaultValue = "0") int years) {
+        Campaign campaign = donationDAO.campaignFindById(id);
+        if (campaign == null) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignNotFound", true);
+            return mav;
+        }
+
+        // check if extension too long (more than 3 years)
+        Long extensionMinutes = TimeMinutes.YEAR.getMinutes() * years
+                + TimeMinutes.MONTH.getMinutes() * months
+                + TimeMinutes.WEEK.getMinutes() * weeks
+                + TimeMinutes.DAY.getMinutes() * days
+                + TimeMinutes.HOUR.getMinutes() * hours;
+        if (extensionMinutes > (TimeMinutes.YEAR.getMinutes() * 3)) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("extensionTooLong", true);
+            return mav;
+        }
+        donationDAO.campaignAddTimeMinutes(campaign, extensionMinutes);
+
+        // view
+        ModelAndView mav = campaignsManage(session);
+        mav.addObject("campaignExtendSuccess", true);
+        return mav;
+    }
+
+    /**
      * Manage campaigns' donations
      * (notLoggedIn/notAuthorized)
      * 

@@ -80,7 +80,7 @@ public interface DonationDAO {
      * @param minutes
      * @return
      */
-    public Campaign campaignAddTimeMinutes(Campaign campaign, Long minutes);
+    Campaign campaignAddTimeMinutes(Campaign campaign, Long minutes);
 
     /**
      * Get donated amount of cash

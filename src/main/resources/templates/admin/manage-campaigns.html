@@ -220,58 +220,89 @@
                                             <th class="d-none">Start Time</th>
                                             <th>End Time</th>
                                             <th>Actions</th>
+                                            <th>Extend</th>
                                         </tr>
                                     </thead>
                                     <!-- data -->
                                     <tbody>
                                         <!-- populate data -->
-                                        <div th:each="campaign : ${campaigns}">
-                                            <tr>
-                                                <td th:text="${campaign.getId()}" class="d-none"></td>
-                                                <td th:text="${campaign.getName()}"></td>
-                                                <td th:text="${'[id:' + campaign.getReceiver().getId() + '] ' + campaign.getReceiver().getName() + '/' + campaign.getReceiver().getPhoneNumber()}"></td>
-                                                <td th:text="${campaign.getStatus().name()}"></td>
-                                                <td th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
-                                                <td th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
-                                                <td th:text="${campaign.getStartTime()}" class="d-none"></td>
-                                                <td th:text="${campaign.getEndTime()}"></td>
-                                                
-                                                <!-- actions -->
-                                                <td>
-                                                    <!-- view donations -->
-                                                    <a 
-                                                        th:href="@{/admin/manage-donations(campaign=${campaign.getId()})}"
-                                                        class="btn-sm btn-success btn-icon-split m-1" 
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Donations</span>
-                                                    </a>
-                                                    <!-- edit campaign -->
-                                                    <a 
-                                                        th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}"
-                                                        class="btn-sm btn-warning btn-icon-split m-1"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Edit</span>
-                                                    </a>
-                                                    <!-- extend campaign -->
-                                                    <a 
-                                                        href="#"
-                                                        class="btn-sm btn-warning btn-icon-split m-1"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Extend</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </div>
+                                        <tr th:each="campaign : ${campaigns}">
+                                            <td th:text="${campaign.getId()}" class="d-none"></td>
+                                            <td th:text="${campaign.getName()}"></td>
+                                            <td th:text="${'[id:' + campaign.getReceiver().getId() + '] ' + campaign.getReceiver().getName() + '/' + campaign.getReceiver().getPhoneNumber()}"></td>
+                                            <td th:text="${campaign.getStatus().name()}"></td>
+                                            <td th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
+                                            <td th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
+                                            <td th:text="${#temporals.format(campaign.getStartTime(), 'dd MMM yyyy HH:mm')}" class="d-none"></td>
+                                            <td th:text="${#temporals.format(campaign.getEndTime(), 'dd MMM yyyy HH:mm')}"></td>        
+                                            
+                                            <!-- actions -->
+                                            <td>
+                                                <!-- view donations -->
+                                                <a 
+                                                    th:href="@{/admin/manage-donations(campaign=${campaign.getId()})}"
+                                                    class="btn-sm btn-success btn-icon-split m-1" 
+                                                >
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-flag"></i>
+                                                    </span>
+                                                    <span class="text">Donations</span>
+                                                </a>
+                                                <!-- edit campaign -->
+                                                <a 
+                                                    th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}"
+                                                    class="btn-sm btn-warning btn-icon-split m-1"
+                                                >
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-flag"></i>
+                                                    </span>
+                                                    <span class="text">Edit</span>
+                                                </a>
+                                            </td>
+
+                                            <!-- extend campaign -->
+                                            <td>
+                                                <form th:action="@{/admin/manage-campaigns/extend}" method="post">
+                                                    <input type="hidden" name="id" th:value="${campaign.getId()}">
+
+                                                    <!-- duration inputs -->
+                                                    <div class="input-group input-group-sm mb-1">
+                                                        <span class="input-group-text">Hours</span>
+                                                        <input type="number" class="form-control form-control-sm" name="hours" min="0" value="1">
+                                                    </div>
+
+                                                    <div class="input-group input-group-sm mb-1">
+                                                        <span class="input-group-text">Days</span>
+                                                        <input type="number" class="form-control form-control-sm" name="days" min="0" value="0">
+                                                    </div>
+
+                                                    <div class="input-group input-group-sm mb-1">
+                                                        <span class="input-group-text">Weeks</span>
+                                                        <input type="number" class="form-control form-control-sm" name="weeks" min="0" value="0">
+                                                    </div>
+
+                                                    <div class="input-group input-group-sm mb-1">
+                                                        <span class="input-group-text">Months</span>
+                                                        <input type="number" class="form-control form-control-sm" name="months" min="0" value="0">
+                                                    </div>
+
+                                                    <div class="input-group input-group-sm mb-2">
+                                                        <span class="input-group-text">Years</span>
+                                                        <input type="number" class="form-control form-control-sm" name="years" min="0" value="0">
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-success btn-sm">Extend</button>
+                                                </form>
+                                            </td>
+                                        </tr>
                                     </tbody>
+                                    <!-- css extend fixes -->
+                                    <style>
+                                        .input-group-sm .input-group-text {
+                                            font-size: 0.8rem;
+                                            padding: 0.25rem 0.5rem;
+                                        }
+                                    </style>
                                 </table>
                             </div>
                         </div>
