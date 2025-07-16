@@ -288,7 +288,7 @@
                                 <!-- Details and Donate buttons -->
                                 <div class="mb-3 d-flex justify-content-between px-3">
                                     <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm">Donate</a>
+                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm" th:if="${campaign.getStatus().name()=='OPEN' and campaign.getStatus().name()=='COMPLETE'}">Donate</a>
                                 </div>
                             </div>
                         </div>
@@ -481,7 +481,7 @@
                                     <ul>
                                         <li><a href="/about">About Us</a></li>
                                         <li><a href="/contact">Contact Us</a></li>
-                                        <li><a href="#testimonial">Testimonial</a></li>
+                                        <li><a href="/index#testimonial">Testimonial</a></li>
                                         <li><a href="/campaigns">Campaigns</a></li>
                                     </ul>
                                 </div>

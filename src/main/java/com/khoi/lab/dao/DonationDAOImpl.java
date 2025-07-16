@@ -45,7 +45,7 @@ public class DonationDAOImpl implements DonationDAO {
 
         String campaign2desc = "Xin Quý Ân Nhân hãy cùng góp sức, để bé Minh Đăng có thêm cơ hội được sống, để nụ cười thơ ngây ấy tiếp tục được nở, và những ước mơ nhỏ bé còn dang dở được viết tiếp.";
         Campaign campaign2 = campaignCreate("Xin giữ lấy sợi dây sinh mệnh cho bé Minh Đăng", dr2, campaign2desc,
-                20000000, LocalDateTime.of(2025, 7, 15, 0, 0), LocalDateTime.of(2025, 7, 25, 0, 0),
+                20000000, LocalDateTime.of(2025, 7, 20, 0, 0), LocalDateTime.of(2025, 7, 25, 0, 0),
                 "https://givenow.vn/wp-content/uploads/2025/06/Be-Nguyen-Minh-Dang-800x600.jpg");
 
         String campaign3desc = "Bé Y Sáng Buôn Dap (1 tuổi, dân tộc M’nông) bị bệnh tim bẩm sinh. Nhờ sự hỗ trợ của các tổ chức, chi phí phẫu thuật tim sẽ được tài trợ – điều mà gia đình bé Y Sáng không dám mơ tới.";

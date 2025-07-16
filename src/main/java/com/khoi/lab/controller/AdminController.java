@@ -11,6 +11,7 @@ import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
+import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.TimeMinutes;
 import com.khoi.lab.object.AccountEditRequest;
 import com.khoi.lab.object.DonationConfirmRequest;
@@ -381,6 +382,92 @@ public class AdminController {
         // view
         ModelAndView mav = campaignsManage(session);
         mav.addObject("campaignExtendSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Close campaign handler
+     * (notLoggedIn/notAuthorized/campaignNotFound/campaignAlreadyClosed/campaignCloseSuccess)
+     * 
+     * @param session
+     * @param id
+     * @return
+     */
+    @GetMapping("/manage-campaigns/close")
+    public ModelAndView campaignsCloseRequest(HttpSession session, @RequestParam Long id) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!account.isAdmin()) {
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        Campaign campaign = donationDAO.campaignFindById(id);
+
+        if (campaign == null) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignNotFound", true);
+            return mav;
+        }
+
+        if (campaign.getStatus() == CampaignStatus.CLOSED) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignAlreadyClosed", true);
+            return mav;
+        }
+
+        donationDAO.campaignChangeStatus(campaign, CampaignStatus.CLOSED);
+
+        ModelAndView mav = campaignsManage(session);
+        mav.addObject("campaignCloseSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Delete campaign handler
+     * (notLoggedIn/notAuthorized/campaignNotFound/campaignCannotBeDeleted/campaignDeleteSuccess)
+     * 
+     * @param session
+     * @param id
+     * @return
+     */
+    @GetMapping("/manage-campaigns/delete")
+    public ModelAndView campaignsDeleteRequest(HttpSession session, @RequestParam Long id) {
+        Account account = (Account) session.getAttribute("account");
+
+        if (account == null) {
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!account.isAdmin()) {
+            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        Campaign campaign = donationDAO.campaignFindById(id);
+
+        if (campaign == null) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignNotFound", true);
+            return mav;
+        }
+
+        if (campaign.getStatus() != CampaignStatus.CREATED) {
+            ModelAndView mav = campaignsManage(session);
+            mav.addObject("campaignCannotBeDeleted", true);
+            return mav;
+        }
+
+        donationDAO.campaignDeleteById(id);
+
+        ModelAndView mav = campaignsManage(session);
+        mav.addObject("campaignDeleteSuccess", true);
         return mav;
     }
 

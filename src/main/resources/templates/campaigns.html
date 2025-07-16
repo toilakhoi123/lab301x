@@ -173,7 +173,6 @@
                 <div th:if="${#lists.isEmpty(campaignsCreated)}" class="col-12 text-center my-4">
                     <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
                 </div>
-                
                 <!-- upcoming campaigns -->
                 <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsCreated}">
                     <div class="single-cases mb-40">
@@ -181,7 +180,7 @@
                             <img th:src="${campaign.getImageUrl()}" alt="">
                         </div>
                         <div class="cases-caption">
-                            <!-- redirect to campaign page -->
+                            <!-- title, redirect -->
                             <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
                             <!-- progresss bar -->
                             <div class="single-skill mb-15">
@@ -279,7 +278,7 @@
                             <img th:src="${campaign.getImageUrl()}" alt="">
                         </div>
                         <div class="cases-caption">
-                            <!-- redirect to campaign page -->
+                            <!-- title, redirect -->
                             <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
                             <!-- progresss bar -->
                             <div class="single-skill mb-15">
@@ -304,6 +303,11 @@
                                     <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
                                 </p>
                             </div>
+                            <!-- Details and Donate buttons -->
+                            <div class="mb-3 d-flex justify-content-between px-3">
+                                <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
+                                <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm">Donate</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -325,7 +329,7 @@
                             <img th:src="${campaign.getImageUrl()}" alt="">
                         </div>
                         <div class="cases-caption">
-                            <!-- redirect to campaign page -->
+                            <!-- title, redirect -->
                             <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
                             <!-- progresss bar -->
                             <div class="single-skill mb-15">
@@ -400,7 +404,7 @@
                                     <ul>
                                         <li><a href="/about">About Us</a></li>
                                         <li><a href="/contact">Contact Us</a></li>
-                                        <li><a href="#testimonial">Testimonial</a></li>
+                                        <li><a href="/index#testimonial">Testimonial</a></li>
                                         <li><a href="/campaigns">Campaigns</a></li>
                                     </ul>
                                 </div>

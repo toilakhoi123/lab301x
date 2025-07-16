@@ -258,6 +258,28 @@
                                                     </span>
                                                     <span class="text">Edit</span>
                                                 </a>
+                                                <!-- close campaign -->
+                                                <a 
+                                                    th:href="@{/admin/manage-campaigns/close(id=${campaign.getId()})}"
+                                                    th:if="${campaign.getStatus().name()!='CLOSED'}"
+                                                    class="btn-sm btn-danger btn-icon-split m-1"
+                                                >
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-flag"></i>
+                                                    </span>
+                                                    <span class="text">Close</span>
+                                                </a>
+                                                <!-- delete campaign -->
+                                                <a 
+                                                    th:href="@{/admin/manage-campaigns/delete(id=${campaign.getId()})}"
+                                                    th:if="${campaign.getStatus().name()=='CREATED'}"
+                                                    class="btn-sm btn-danger btn-icon-split m-1"
+                                                >
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-flag"></i>
+                                                    </span>
+                                                    <span class="text">Delete</span>
+                                                </a>
                                             </td>
 
                                             <!-- extend campaign -->
