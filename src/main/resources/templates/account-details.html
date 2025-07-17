@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Campaigns | Little Hearts, Big Dreams.</title>
+    <title>Account | Little Hearts, Big Dreams.</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
     <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
 
-	<!-- CSS here -->
+    <!-- CSS here -->
 	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
 	<link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
 	<link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
@@ -40,7 +40,7 @@
     <!-- Header Start -->
     <header>
         <div class="header-area">
-            <div class="main-header">
+            <div class="main-header ">
                 <div class="header-top d-none d-lg-block">
                     <div class="container-fluid">
                         <div class="col-xl-12">
@@ -132,266 +132,75 @@
             </div>
         </div>
     </header>
-    
+
     <main>
-    <!--? Hero Start -->
-    <div class="slider-area2">
-        <div class="slider-height2 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap hero-cap2 pt-20 text-center">
-                            <h2>Campaigns</h2>
-                        </div>
-                        <!-- Selection dropdown -->
-                        <div class="d-flex justify-content-center mt-4 mb-50">
-                            <select id="campaignFilter" class="form-select w-auto d-inline">
-                                <option value="all">All</option>
-                                <option value="upcoming">Upcoming</option>
-                                <option value="ongoing">Ongoing</option>
-                                <option value="complete">Complete</option>
-                                <option value="past">Past</option>
-                            </select>
+        <!-- Hero Start -->
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-20 text-center">
+                                <h2 th:text="${account.getFullName()} + '’s Profile'">Account Details</h2>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Campaigns -->
-    <div class="our-cases-area section-padding30">
-        <!-- campaign displays -->
-        <div class="container">
-            <!-- css fixes -->
-            <style>
-                .cases-img {
-                    height: 259px;
-                    overflow: hidden;
-                }
-
-                .cases-img img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover; /* ensures images cover the div while preserving aspect ratio */
-                }
-
-                select#campaignFilter {
-                    display: none !important;
-                }
-
-                #campaignFilter + .nice-select {
-                    margin-top: 30px;
-                }
-            </style>
-
-            <!-- upcoming campaigns -->
-            <div id="upcoming-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Upcoming</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsCreated)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- upcoming campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsCreated}">
-                        <div class="single-cases mb-40">
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                            </div>
+        <!-- Account Details -->
+        <div class="container my-5">
+            <div class="row">
+                <!-- Left: Account Image + Info -->
+                <div class="col-lg-6 mb-4">
+                    <div>
+                        <h3 class="mb-5"><strong>Thông tin tài khoản</strong></h3>
+                        <p><strong>Họ tên:</strong> <span th:text="${account.getFullName()}">Full Name</span></p>
+                        <p><strong>Email:</strong> <span th:text="${account.getEmail()}">email@example.com</span></p>
+                        <p><strong>Số điện thoại:</strong> <span th:text="${account.getPhoneNumber()}">0123456789</span></p>
+                        <p><strong>Quyền admin:</strong> <span th:text="${account.isAdmin()} ? 'Có' : 'Không'">No</span></p>
+                        <p><strong>Lần đăng nhập gần nhất:</strong> <span th:text="${#dates.format(account.getLastLoginDate(), 'dd MMM yyyy')}">01 Jan 2025 12:00</span></p>
+                        <!-- Buttons -->
+                        <div 
+                            class="d-flex justify-content-between mt-4"
+                            th:if="${session.account != null and session.account.getId() == account.getId()}"
+                        >
+                            <a href="/edit-account" class="btn btn-success">Edit</a>
                         </div>
                     </div>
                 </div>
-                <hr class="my-4">
-            </div>
-            
-            <!-- ongoing campaigns -->
-            <div id="ongoing-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Ongoing</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsOpen)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- ongoing campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsOpen}">
-                        <div class="single-cases mb-40">
-                            <!-- image -->
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                                <!-- Details and Donate buttons -->
-                                <div class="mb-3 d-flex justify-content-between px-3">
-                                    <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm">Donate</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
 
-            <!-- complete campaigns -->
-            <div id="complete-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Completed</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsComplete)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
+                <!-- Right: Donations -->
+                <div class="col-lg-6 mb-4">
+                    <h3><strong>Quyên góp gần đây</strong></h3><br>
+                    <div th:if="${#lists.isEmpty(account.getDonations())}" class="text-muted mt-2">
+                        Tài khoản này chưa có quyên góp nào.
                     </div>
-                    <!-- complete campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsComplete}">
-                        <div class="single-cases mb-40">
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                                <!-- Details and Donate buttons -->
-                                <div class="mb-3 d-flex justify-content-between px-3">
-                                    <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm">Donate</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-
-            <!-- past campaigns -->
-            <div id="past-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Past Campaigns</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsClosed)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- past campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsClosed}">
-                        <div class="single-cases mb-40">
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-        </div>
-    </div>
-    <!-- Our Cases End -->
-    </main>
+                    <div th:each="donation : ${account.getDonations()}">
+                        <a 
+                            th:href="@{/campaigns/campaign(id=${donation.getCampaign().getId()})}"
+                            th:styleappend="${donation.isConfirmed()} ? 'background-color: #09cc7f; color: white;' : 'background-color: #f8f9fa;'"
+                            class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded"
+                            style="min-height: 50px;">
     
+                            <!-- left -->
+                            <div>
+                                <small class="text-muted" th:text="${donation.getTimeAgo()}">Thời gian</small><br>
+                                <span th:text="!${donation.isConfirmed()} ? '(chưa xác nhận) ' + ${donation.getCampaign().getName()} : ${donation.getCampaign().getName()}" style="color: #1f1f1f;">
+                                    Đợt quyên góp
+                                </span>
+                            </div>
+    
+                            <!-- right -->
+                            <span th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">Số tiền</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <!-- Footer -->
     <footer>
         <div class="footer-wrapper" style="background-color: #1f1f1f;">
@@ -541,32 +350,5 @@
     <script th:src="@{/assets/js/plugins.js}"></script>
     <script th:src="@{/assets/js/main.js}"></script>
 
-    <!-- Campaign selection script -->
-    <script>
-        $('#campaignFilter').on('change', function () {
-            const value = $(this).val();
-
-            const sections = {
-                upcoming: $('#upcoming-campaigns'),
-                ongoing: $('#ongoing-campaigns'),
-                complete: $('#complete-campaigns'),
-                past: $('#past-campaigns'),
-            };
-
-            if (value === 'all') {
-                $.each(sections, function(_, section) {
-                    section.show();
-                });
-            } else {
-                $.each(sections, function(key, section) {
-                    if (key === value) {
-                        section.show();
-                    } else {
-                        section.hide();
-                    }
-                });
-            }
-        });
-    </script>
-    </body>
+</body>
 </html>

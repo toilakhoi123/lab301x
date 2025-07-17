@@ -54,11 +54,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -190,11 +190,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -270,11 +270,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -407,11 +407,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -450,11 +450,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -493,11 +493,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }

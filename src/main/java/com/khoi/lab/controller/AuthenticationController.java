@@ -74,7 +74,7 @@ public class AuthenticationController {
                     session.setAttribute("account", account);
 
                     // login success
-                    ModelAndView mav = (new GeneralController(donationDAO)).index();
+                    ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
                     mav.addObject("loginSuccess", true);
                     return mav;
                 } else {
@@ -88,7 +88,7 @@ public class AuthenticationController {
             }
         } else {
             System.out.println("| Already logged in!");
-            ModelAndView mav = (new GeneralController(donationDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
             mav.addObject("loginAlready", true);
             return mav;
         }
@@ -260,7 +260,7 @@ public class AuthenticationController {
         account = accountDAO.accountUpdate(account);
         session.setAttribute("account", account);
 
-        ModelAndView mav = (new GeneralController(donationDAO)).index();
+        ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
         mav.addObject("passwordChangeSuccess", true);
         return mav;
     }
@@ -359,6 +359,6 @@ public class AuthenticationController {
     public ModelAndView logout(HttpSession session) {
         session.removeAttribute("account");
         System.out.println("| Logged the current user out!");
-        return (new GeneralController(donationDAO)).index();
+        return (new GeneralController(donationDAO, accountDAO)).index();
     }
 }
