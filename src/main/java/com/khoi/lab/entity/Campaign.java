@@ -134,6 +134,7 @@ public class Campaign {
     public List<Donation> getDonations() {
         return donations.stream()
                 .sorted(Comparator.comparing(Donation::getDonateTime).reversed())
+                .filter(d -> !d.isRefused())
                 .collect(Collectors.toList());
     }
 

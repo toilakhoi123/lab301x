@@ -2,7 +2,9 @@ package com.khoi.lab.entity;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.khoi.lab.service.CryptographyService;
 
@@ -168,7 +170,10 @@ public class Account {
     }
 
     public List<Donation> getDonations() {
-        return donations;
+        return donations.stream()
+                .sorted(Comparator.comparing(Donation::getDonateTime).reversed())
+                .filter(d -> !d.isRefused())
+                .collect(Collectors.toList());
     }
 
     public void setDonations(List<Donation> donations) {

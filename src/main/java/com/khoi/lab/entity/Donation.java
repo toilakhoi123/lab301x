@@ -26,6 +26,7 @@ public class Donation {
     private LocalDateTime donateTime;
 
     private boolean confirmed;
+    private boolean refused;
 
     private String timeAgo;
 
@@ -38,6 +39,7 @@ public class Donation {
         this.amount = amount;
         this.donateTime = donateTime;
         this.confirmed = false;
+        this.refused = false;
     }
 
     public Long getId() {
@@ -94,6 +96,14 @@ public class Donation {
 
     public void setTimeAgo(String timeAgo) {
         this.timeAgo = timeAgo;
+    }
+
+    public boolean isRefused() {
+        return refused;
+    }
+
+    public void setRefused(boolean refused) {
+        this.refused = refused;
     }
 
     // ===== Helper methods =====

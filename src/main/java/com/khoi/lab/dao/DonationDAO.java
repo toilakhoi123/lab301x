@@ -178,6 +178,14 @@ public interface DonationDAO {
     Donation donationConfirm(Donation donation);
 
     /**
+     * Refuse a donation manually
+     * 
+     * @param donation
+     * @return
+     */
+    void donationRefuse(Donation donation);
+
+    /**
      * Save a donation
      * 
      * @param donation

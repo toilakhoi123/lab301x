@@ -522,4 +522,21 @@ public class AdminController {
         mav.addObject("donationConfirmSuccess", true);
         return mav;
     }
+
+    /**
+     * Handle donation refuse request
+     * (donationRefuseSuccess)
+     * 
+     * @param session
+     * @param request
+     * @return
+     */
+    @PostMapping("/manage-donations/refuse")
+    public ModelAndView donationsRefuseDonation(HttpSession session, @RequestBody DonationConfirmRequest request) {
+        Donation donation = donationDAO.donationFindById(request.id);
+        donationDAO.donationRefuse(donation);
+        ModelAndView mav = donationsManage(session);
+        mav.addObject("donationRefuseSuccess", true);
+        return mav;
+    }
 }

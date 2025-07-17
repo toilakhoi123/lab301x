@@ -3,6 +3,7 @@ package com.khoi.lab.dao;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -155,7 +156,7 @@ public class DonationDAOImpl implements DonationDAO {
     @Override
     public List<Donation> campaignGetDonations(Campaign campaign, boolean excludeConfirmed) {
         List<Donation> donations = excludeConfirmed
-                ? campaign.getDonations().stream().filter(d -> !d.isConfirmed()).toList()
+                ? campaign.getDonations().stream().filter(d -> !d.isConfirmed()).collect(Collectors.toList())
                 : campaign.getDonations();
         System.out.println("| [campaignGetDonations] Found and returned: " + donations.size() + " donations");
         return donations;
@@ -259,7 +260,7 @@ public class DonationDAOImpl implements DonationDAO {
                     c.setDonatedPercentageCapped(capped);
                     c.setDonatedPercentageUncapped((int) rounded);
                     return c;
-                }).toList();
+                }).collect(Collectors.toList());
         System.out.println("| [campaignList] Found and returned: " + campaigns.size() + " campaigns!");
         return campaigns;
     }
@@ -318,6 +319,16 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     @Transactional
+    public void donationRefuse(Donation donation) {
+        Long id = donation.getId();
+        donation = donationFindById(id);
+        donation.setRefused(true);
+        donationUpdate(donation);
+        System.out.println("| [donationRefuse] Refused donation with id: " + id);
+    }
+
+    @Override
+    @Transactional
     public Donation donationSave(Donation donation) {
         em.persist(donation);
         System.out.println("| [donationSave] Saved donation: " + donation);
@@ -337,7 +348,8 @@ public class DonationDAOImpl implements DonationDAO {
         TypedQuery<Donation> tq = em.createQuery(
                 "SELECT d FROM Donation d",
                 Donation.class);
-        List<Donation> donations = tq.getResultList();
+        List<Donation> donations = tq.getResultList().stream().filter(a -> !a.isRefused()).collect(Collectors.toList());
+
         System.out.println("| [donationList] Found and returned: " + donations.size() + " donations!");
         return donations;
     }
@@ -345,7 +357,7 @@ public class DonationDAOImpl implements DonationDAO {
     @Override
     public Donation donationFindById(Long id) {
         Donation donation = em.find(Donation.class, id);
-        if (donation == null) {
+        if (donation == null || donation.isRefused()) {
             System.out.println("| [donationFindById] Couldn't find donation with id: " + id);
         } else {
             System.out.println("| [donationFindById] Found donation: " + donation);
