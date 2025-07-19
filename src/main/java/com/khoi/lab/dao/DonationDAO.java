@@ -7,6 +7,7 @@ import java.util.List;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
+import com.khoi.lab.entity.DonationPaymentCode;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
 
@@ -212,6 +213,45 @@ public interface DonationDAO {
      * @return
      */
     Donation donationFindById(Long id);
+
+    /**
+     * Create a payment code
+     * 
+     * @param code
+     * @return
+     */
+    DonationPaymentCode paymentCodeCreate(String code);
+
+    /**
+     * Find payment code by its code
+     * 
+     * @param code
+     * @return
+     */
+    DonationPaymentCode paymentCodeFindByCode(String code);
+
+    /**
+     * Find payment code by its id
+     * 
+     * @param id
+     * @return
+     */
+    DonationPaymentCode paymentCodeFindById(Long id);
+
+    /**
+     * Save the payment code to the database
+     * 
+     * @param donationPaymentCode
+     * @return
+     */
+    DonationPaymentCode paymentCodeSave(DonationPaymentCode donationPaymentCode);
+
+    /**
+     * Delete payment code by ID
+     * 
+     * @param id
+     */
+    void paymentCodeDeleteById(Long id);
 
     /**
      * Get donations made by an account

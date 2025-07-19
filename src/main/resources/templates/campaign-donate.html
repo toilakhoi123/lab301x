@@ -1,0 +1,397 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Campaign | Little Hearts, Big Dreams.</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+    <!-- CSS here -->
+	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+	<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+</head>
+<body>
+    <!-- Loader -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img th:src="@{/assets/img/logo/loder.png}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header Start -->
+    <header>
+        <div class="header-area">
+            <div class="main-header ">
+                <div class="header-top d-none d-lg-block">
+                    <div class="container-fluid">
+                        <div class="col-xl-12">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div class="header-info-left d-flex">
+                                    <ul>     
+                                        <li>Phone: +84 (0) 793 300 359</li>
+                                        <li>Email: leqwoi@protonmail.com</li>
+                                    </ul>
+                                    <div class="header-social">    
+                                        <ul>
+                                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                            <li><a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li><a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a></li>
+                                            <li><a href="https://github.com/fuwu99"><i class="fab fa-github"></i></a></li>
+                                            <li><a href="https://leqwoi2.vercel.app/"><i class="fab fa-globe"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="header-info-right d-flex align-items-center">
+                                    <div class="select-this">
+                                        <form action="#">
+                                            <div class="select-itms">
+                                                <select name="select" id="select1">
+                                                    <option value="">English</option>
+                                                    <option value="">Vietnamese</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <ul class="contact-now">     
+                                        <li><a href="/register">Register Now!</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-bottom header-sticky">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <!-- Logo -->
+                            <div class="col-xl-2 col-lg-2">
+                                <div class="logo">
+                                    <a href="/index"><img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-xl-10 col-lg-10">
+                                <div class="menu-wrapper  d-flex align-items-center justify-content-end">
+                                    <!-- Main-menu -->
+                                    <div class="main-menu d-none d-lg-block">
+                                        <nav>
+                                            <ul id="navigation">                                                                                          
+                                                <li><a href="/index">Home</a></li>
+                                                <li><a href="/about">About</a></li>
+                                                <li><a href="/campaigns">Campaigns</a></li>
+                                                <li><a href="/contact">Contact</a></li>
+
+                                                <!-- account info dropdown -->
+                                                <li th:if="${session.account}">
+                                                    <a href="/account" th:text="${session.account.getFullName()}"></a>
+                                                    <ul class="submenu">
+                                                        <li><a href="/account">Edit Account</a></li>
+                                                        <li><a href="/change-password">Change Password</a></li>
+                                                        <li><a href="/logout">Log Out</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <!-- Header-btn -->
+                                    <div class="header-right-btn d-none d-lg-block ml-20">
+                                        <div th:if="${session.account==null}">
+                                            <a href="/login" class="btn header-btn">Log In</a>
+                                        </div>
+                                        <div th:if="${session.account!=null and session.account.isAdmin()}">
+                                            <a href="/admin/manage-accounts" class="btn header-btn">Management</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Mobile Menu -->
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!--? Hero Start -->
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-20 text-center">
+                                <h2 th:text="${campaign.getName()}">Campaign Name</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campaign Details -->
+        <div class="container my-5">
+            <div class="row">
+                <!-- Campaign Image -->
+                <div class="col-lg-6 mb-4">
+                    <img th:src="${campaign.getImageUrl()}" alt="Campaign Image" class="img-fluid rounded shadow">
+                </div>
+
+                <!-- Campaign Info -->
+                <div class="col-lg-6 d-flex flex-column justify-content-between">
+                    <div class="mt-5">
+                        <h3 th:text="${campaign.getName()}">Campaign Name</h3>
+
+                        <!-- Details -->
+                        <p class="text-muted mb-4">
+                            <strong>Bắt đầu:</strong> <span th:text="${#temporals.format(campaign.getStartTime(), 'dd MMM yyyy HH:mm')}"></span><br>
+                            <strong>Kết thúc:</strong> <span th:text="${#temporals.format(campaign.getEndTime(), 'dd MMM yyyy HH:mm')}"></span><br>
+                            <strong>Người nhận:</strong> <span th:text="${campaign.getReceiver().getName()}"></span> (<span th:text="${campaign.getReceiver().getPhoneNumber()}"></span>)
+                        </p>
+                    </div>
+
+                    <div class="mb-5">
+                        <form th:action="@{/campaigns/donate/payment}" method="get">
+                            <!-- Hidden input for campaign id -->
+                            <input type="hidden" name="campaignId" th:value="${campaign.getId()}">
+
+                            <!-- Amount input -->
+                            <div class="form-group">
+                                <label for="amount">Số tiền (₫)</label>
+                                <input type="number" class="form-control" id="amount" name="amount" placeholder="Nhập số tiền bạn muốn quyên góp" required min="10000">
+                            </div>
+
+                            <!-- Payment method select -->
+                            <div class="form-group mt-3">
+                                <label for="paymentMethod">Phương thức thanh toán</label><br>
+                                <select class="form-control" id="paymentMethod" name="paymentMethod" required>
+                                    <option value="" disabled selected>Chọn phương thức</option>
+                                    <option value="BANK">Ngân hàng</option>
+                                    <option value="MOMO">MoMo</option>
+                                    <option value="PAYPAL">PayPal</option>
+                                    <option value="VNPAY">VNPay</option>
+                                </select>
+                            </div>
+                            <br><br>
+
+                            <!-- Submit button -->
+                            <button type="submit" class="btn btn-success btn-lg mt-3">Donate</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <hr>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3><strong>Mô tả</strong></h3><br>
+                    <p th:text="${campaign.getDescription()}">
+                        This is a detailed description of the campaign. It elaborates on its goals, beneficiaries, and purpose.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Recent Donations -->
+            <hr>           
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h3><strong>Quyên góp gần đây</strong></h3><br>
+                    <div th:if="${#lists.isEmpty(campaign.getDonations())}" class="text-muted mt-2">
+                        Hãy là người đầu tiên quyên góp!
+                    </div>
+                    <div th:each="donation : ${campaign.getDonations()}">
+                        <a 
+                            th:href="@{/account(id=${donation.getAccount().getId()})}"
+                            th:styleappend="${donation.isConfirmed()} ? 'background-color: #09cc7f; color: white;' : 'background-color: #f8f9fa;'"
+                            class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded"
+                            style="min-height: 50px;">
+
+                            <!-- left -->
+                            <div>
+                                <small class="text-muted" th:text="${donation.getTimeAgo()}"></small><br>
+                                <span th:text="!${donation.isConfirmed()} ? '(chưa xác nhận) ' + ${donation.getAccount().getFullName()} : ${donation.getAccount().getFullName()}" style="color: #1f1f1f;">
+                                    Người quyên góp
+                                </span>
+                            </div>
+
+                            <!-- right -->
+                            <span th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">Số tiền</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-wrapper" style="background-color: #1f1f1f;">
+            <!-- Footer Top-->
+            <div class="footer-area footer-padding">
+                <div class="container">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="single-footer-caption mb-30">
+                                <div class="footer-tittle">
+                                    <div class="footer-logo mb-20">
+                                        <a href="index"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt=""></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="single-footer-caption mb-50">
+                                <div class="footer-tittle">
+                                    <h4>Contact Info</h4>
+                                    <ul>
+                                        <li>
+                                            <p>Address: Gia Lam, Ha Noi, Viet Nam</p>
+                                        </li>
+                                        <li><a href="tel:+84793300359">Phone: +84 793 300 359</a></li>
+                                        <li><a href="mailto:leqwoi@protonmail.com">Email: leqwoi@protonmail.com</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="single-footer-caption mb-50">
+                                <div class="footer-tittle">
+                                    <h4>Important Links</h4>
+                                    <ul>
+                                        <li><a href="/about">About Us</a></li>
+                                        <li><a href="/contact">Contact Us</a></li>
+                                        <li><a href="/index#testimonial">Testimonial</a></li>
+                                        <li><a href="/campaigns">Campaigns</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="single-footer-caption mb-50">
+                                <div class="footer-tittle">
+                                    <h4>Newsletter</h4>
+                                    <div class="footer-pera footer-pera2">
+                                    <p>Subscribe to our newsletter to receive campaign updates!</p>
+                                </div>
+                                <!-- Form -->
+                                <div class="footer-form" >
+                                    <div id="mc_embed_signup">
+                                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                        method="get" class="subscribe_form relative mail_part">
+                                            <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                            class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                            onblur="this.placeholder = ' Email Address '">
+                                            <div class="form-icon">
+                                                <button type="submit" name="submit" id="newsletter-submit"
+                                                class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt=""></button>
+                                            </div>
+                                            <div class="mt-10 info"></div>
+                                        </form>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- footer-bottom -->
+            <div class="footer-bottom-area">
+                <div class="container">
+                    <div class="footer-border">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-xl-10 col-lg-9 ">
+                                <div class="footer-copy-right">
+                                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3">
+                                <div class="footer-social f-right">
+                                    <a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="https://leqwoi2.vercel.app/"><i class="fas fa-globe"></i></a>
+                                    <a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- To top button -->
+    <div id="back-top" >
+        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS here -->
+
+    <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script th:src="@{/assets/js/vendor/jquery-1.12.4.min.js}"></script>
+    <script th:src="@{/assets/js/popper.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <!-- Jquery Mobile Menu -->
+    <script th:src="@{/assets/js/jquery.slicknav.min.js}"></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script th:src="@{/assets/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/assets/js/slick.min.js}"></script>
+    <!-- One Page, Animated-HeadLin -->
+    <script th:src="@{/assets/js/wow.min.js}"></script>
+    <script th:src="@{/assets/js/animated.headline.js}"></script>
+    <script th:src="@{/assets/js/jquery.magnific-popup.js}"></script>
+
+    <!-- Date Picker -->
+    <script th:src="@{/assets/js/gijgo.min.js}"></script>
+    <!-- Nice-select, sticky -->
+    <script th:src="@{/assets/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.sticky.js}"></script>
+    <!-- Progress -->
+    <script th:src="@{/assets/js/jquery.barfiller.js}"></script>
+    
+    <!-- counter , waypoint,Hover Direction -->
+    <script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
+    <script th:src="@{/assets/js/waypoints.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.countdown.min.js}"></script>
+    <script th:src="@{/assets/js/hover-direction-snake.min.js}"></script>
+
+    <!-- contact js -->
+    <script th:src="@{/assets/js/contact.js}"></script>
+    <script th:src="@{/assets/js/jquery.form.js}"></script>
+    <script th:src="@{/assets/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/js/mail-script.js}"></script>
+    <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
+    
+    <!-- Jquery Plugins, main Jquery -->	
+    <script th:src="@{/assets/js/plugins.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+
+</body>
+</html>

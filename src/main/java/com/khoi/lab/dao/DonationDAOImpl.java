@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
+import com.khoi.lab.entity.DonationPaymentCode;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.service.CampaignStatusUpdaterService;
@@ -371,5 +372,64 @@ public class DonationDAOImpl implements DonationDAO {
         Campaign campaign = campaignFindById(id);
         em.remove(campaign);
         System.out.println("| [campaignDeleteById] Deleted campaign with id: " + id);
+    }
+
+    @Override
+    @Transactional
+    public DonationPaymentCode paymentCodeCreate(String code) {
+        DonationPaymentCode donationPaymentCode = new DonationPaymentCode(code);
+        donationPaymentCode = paymentCodeSave(donationPaymentCode);
+        System.out
+                .println("| [paymentCodeCreate] Created donation payment code with id: " + donationPaymentCode.getId());
+        return donationPaymentCode;
+    }
+
+    @Override
+    public DonationPaymentCode paymentCodeFindByCode(String code) {
+        TypedQuery<DonationPaymentCode> tq = em.createQuery(
+                "SELECT c FROM DonationPaymentCode c WHERE c.code=:code",
+                DonationPaymentCode.class);
+        tq.setParameter("code", code);
+        try {
+            DonationPaymentCode donationPaymentCode = tq.getSingleResult();
+            System.out.println(
+                    "| [paymentCodeFindByCode] Code found: " + donationPaymentCode);
+            return donationPaymentCode;
+        } catch (NoResultException e) {
+            System.out.println("| [paymentCodeFindByCode] Code not found with code: " + code);
+            return null;
+        }
+    }
+
+    @Override
+    public DonationPaymentCode paymentCodeFindById(Long id) {
+        DonationPaymentCode donationPaymentCode = em.find(DonationPaymentCode.class, id);
+        if (donationPaymentCode != null) {
+            System.out.println("| [paymentCodeFindById] Code exists: " + donationPaymentCode);
+        } else {
+            System.out.println("| [paymentCodeFindById] Code doesn't exist with id: " + id);
+        }
+        return donationPaymentCode;
+    }
+
+    @Override
+    @Transactional
+    public DonationPaymentCode paymentCodeSave(DonationPaymentCode donationPaymentCode) {
+        em.persist(donationPaymentCode);
+        System.out.println("| [paymentCodeSave] Saved payment code: " + donationPaymentCode);
+        return donationPaymentCode;
+    }
+
+    @Override
+    @Transactional
+    public void paymentCodeDeleteById(Long id) {
+        DonationPaymentCode paymentCode = paymentCodeFindById(id);
+        if (paymentCode != null) {
+            String code = paymentCode.getCode();
+            System.out.println("| [paymentCodeDeleteById] Deleted payment code: " + code);
+            em.remove(paymentCode);
+        } else {
+            System.out.println("| [paymentCodeDeleteById] Payment code doesn't exist with id: " + id);
+        }
     }
 }
