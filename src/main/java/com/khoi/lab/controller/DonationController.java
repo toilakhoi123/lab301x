@@ -158,8 +158,8 @@ public class DonationController {
         }
 
         // commit donation & exhaust payment code
-        donationDAO.accountDonate(campaign, account, amount);
         donationDAO.paymentCodeDeleteById(donationPaymentCode.getId());
+        donationDAO.accountDonate(campaign, account, amount);
 
         // view
         ModelAndView mav = campaignsViewDetail(campaignId);
