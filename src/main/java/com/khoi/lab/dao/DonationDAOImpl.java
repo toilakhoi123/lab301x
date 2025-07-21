@@ -290,6 +290,12 @@ public class DonationDAOImpl implements DonationDAO {
             account = em.find(Account.class, account.getId());
         }
 
+        // check if admin
+        if (account != null && account.isAdmin()) {
+            System.out.println("| [accountDonate] Unable to donate! Account: " + account + " is an admin!");
+            return null;
+        }
+
         // create donation
         Donation donation = new Donation(account, campaign, amount, LocalDateTime.now());
         donationSave(donation);
