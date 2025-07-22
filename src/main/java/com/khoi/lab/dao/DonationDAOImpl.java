@@ -1,8 +1,12 @@
 package com.khoi.lab.dao;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -485,5 +489,46 @@ public class DonationDAOImpl implements DonationDAO {
     @Override
     public int donationGetUnconfirmed() {
         return donationList().stream().filter(d -> !d.isConfirmed()).toList().size();
+    }
+
+    @Override
+    public int donationGetAmountOnDay(LocalDate date) {
+        int total = 0;
+        for (Donation donation : donationList()) {
+            if (donation.getDonateTime().toLocalDate().equals(date)) {
+                total += donation.getAmount();
+            }
+        }
+        return total;
+    }
+
+    @Override
+    public List<LocalDate> getLast30Days() {
+        List<LocalDate> dates = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (int i = 29; i >= 0; i--) { // oldest first
+            dates.add(today.minusDays(i));
+        }
+        return dates;
+    }
+
+    @Override
+    public List<Integer> getDonationAmountsLast30Days() {
+        List<Integer> amounts = new ArrayList<>();
+        List<LocalDate> dates = getLast30Days();
+        for (LocalDate date : dates) {
+            amounts.add(donationGetAmountOnDay(date));
+        }
+        return amounts;
+    }
+
+    @Override
+    public Map<LocalDate, Integer> getDonationChartDataLast30Days() {
+        Map<LocalDate, Integer> data = new LinkedHashMap<>();
+        List<LocalDate> dates = getLast30Days();
+        for (LocalDate date : dates) {
+            data.put(date, donationGetAmountOnDay(date));
+        }
+        return data;
     }
 }

@@ -1,8 +1,10 @@
 package com.khoi.lab.dao;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
@@ -292,4 +294,12 @@ public interface DonationDAO {
      * @return
      */
     int donationGetUnconfirmed();
+
+    int donationGetAmountOnDay(LocalDate date);
+
+    List<LocalDate> getLast30Days();
+
+    List<Integer> getDonationAmountsLast30Days();
+
+    Map<LocalDate, Integer> getDonationChartDataLast30Days();
 }

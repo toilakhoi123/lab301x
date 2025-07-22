@@ -1,7 +1,10 @@
 package com.khoi.lab.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -62,6 +65,11 @@ public class AdminController {
         int donationsMonthly = donationDAO.donationGetTotalRecent(TimeMinutes.DAY.getMinutes() * 3);
         int campaignCompletedPercentage = donationDAO.campaignCompletedPercentage();
         int donationsPending = donationDAO.donationGetUnconfirmed();
+        List<LocalDate> dates = donationDAO.getLast30Days(); // or your DAO instance reference
+        List<String> dateLabels = dates.stream()
+                .map(d -> d.toString()) // outputs "2025-07-06" style strings
+                .collect(Collectors.toList());
+        List<Integer> donationAmounts = donationDAO.getDonationAmountsLast30Days();
 
         // view
         ModelAndView mav = new ModelAndView("admin/dashboard");
@@ -69,10 +77,8 @@ public class AdminController {
         mav.addObject("donationsMonthly", donationsMonthly);
         mav.addObject("campaignCompletedPercentage", campaignCompletedPercentage);
         mav.addObject("donationsPending", donationsPending);
-        mav.addObject("labels",
-                Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
-        mav.addObject("donations",
-                Arrays.asList(0, 18500, 5050, 15000, 10000, 27000, 5500, 22000, 20000, 31000, 27500, 42000));
+        mav.addObject("labels", dateLabels);
+        mav.addObject("donations", donationAmounts);
         return mav;
     }
 
