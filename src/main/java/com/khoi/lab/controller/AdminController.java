@@ -1,6 +1,7 @@
 package com.khoi.lab.controller;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,40 @@ public class AdminController {
     public AdminController(AccountDAO accountDAO, DonationDAO donationDAO) {
         this.accountDAO = accountDAO;
         this.donationDAO = donationDAO;
+    }
+
+    @GetMapping("/dashboard")
+    public ModelAndView dashboardPage(HttpSession session) {
+        Account account = (Account) session.getAttribute("account");
+
+        // checks
+        if (account == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!account.isAdmin()) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        // add datas
+        int donationsWeekly = donationDAO.donationGetTotalRecent(TimeMinutes.WEEK.getMinutes());
+        int donationsMonthly = donationDAO.donationGetTotalRecent(TimeMinutes.DAY.getMinutes() * 3);
+        int campaignCompletedPercentage = donationDAO.campaignCompletedPercentage();
+        int donationsPending = donationDAO.donationGetUnconfirmed();
+
+        // view
+        ModelAndView mav = new ModelAndView("admin/dashboard");
+        mav.addObject("donationsWeekly", donationsWeekly);
+        mav.addObject("donationsMonthly", donationsMonthly);
+        mav.addObject("campaignCompletedPercentage", campaignCompletedPercentage);
+        mav.addObject("donationsPending", donationsPending);
+        mav.addObject("labels",
+                Arrays.asList("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"));
+        mav.addObject("donations",
+                Arrays.asList(0, 18500, 5050, 15000, 10000, 27000, 5500, 22000, 20000, 31000, 27500, 42000));
+        return mav;
     }
 
     /**

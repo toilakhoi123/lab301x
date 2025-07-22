@@ -438,4 +438,52 @@ public class DonationDAOImpl implements DonationDAO {
             System.out.println("| [paymentCodeDeleteById] Payment code doesn't exist with id: " + id);
         }
     }
+
+    @Override
+    public int donationGetTotalRecent(Long timeMinutes) {
+        // Get current time and calculate lower boundary
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime lowerBoundary = now.minusMinutes(timeMinutes);
+
+        int total = 0;
+
+        // Retrieve all donations
+        List<Donation> donations = donationList();
+
+        // Loop through each donation and accumulate if in time range
+        for (Donation donation : donations) {
+            if (!donation.isConfirmed())
+                continue;
+
+            LocalDateTime donationTime = donation.getDonateTime(); // Adjust if your getter name differs
+
+            if (donationTime != null && (donationTime.isEqual(lowerBoundary) || donationTime.isAfter(lowerBoundary))
+                    && donationTime.isBefore(now.plusSeconds(1))) {
+                total += donation.getAmount();
+            }
+        }
+
+        return total;
+    }
+
+    @Override
+    public int campaignCompletedPercentage() {
+        List<Campaign> campaigns = campaignList();
+        int campaignsCount = campaigns.size();
+        int campaignsCompletedCount = 0;
+
+        for (Campaign campaign : campaigns) {
+            if (campaign.getStatus() == CampaignStatus.COMPLETE
+                    || campaign.getStatus() == CampaignStatus.CLOSED) {
+                campaignsCompletedCount++;
+            }
+        }
+
+        return campaignsCount == 0 ? 0 : Math.round(campaignsCompletedCount / campaignsCount);
+    }
+
+    @Override
+    public int donationGetUnconfirmed() {
+        return donationList().stream().filter(d -> !d.isConfirmed()).toList().size();
+    }
 }

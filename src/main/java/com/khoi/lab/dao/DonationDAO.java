@@ -270,4 +270,26 @@ public interface DonationDAO {
      * @return
      */
     Donation accountDonate(Campaign campaign, Account account, int amount);
+
+    /**
+     * Get the amount of cash donated in the last X minutes (for weekly/monthly)
+     * 
+     * @param timeMinutes
+     * @return
+     */
+    int donationGetTotalRecent(Long timeMinutes);
+
+    /**
+     * Get the percentage of completed/closed campaigns
+     * 
+     * @return
+     */
+    int campaignCompletedPercentage();
+
+    /**
+     * Get the amount of unconfirmed donations
+     * 
+     * @return
+     */
+    int donationGetUnconfirmed();
 }
