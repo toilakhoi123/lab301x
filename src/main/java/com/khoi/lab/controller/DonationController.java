@@ -1,6 +1,8 @@
 package com.khoi.lab.controller;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,8 +82,13 @@ public class DonationController {
             donation.setTimeAgo(donation.getTimeAgo(donation.getDonateTime()));
         }
 
+        // Simply retrieve the already sorted list from DAO
+        List<AbstractMap.SimpleEntry<Account, Integer>> sortedList = donationDAO
+                .campaignGetDonatorsAndDonatedAmount(campaign);
+
         ModelAndView mav = new ModelAndView("campaign-details");
         mav.addObject("campaign", campaign);
+        mav.addObject("leaderboardList", sortedList);
         return mav;
     }
 

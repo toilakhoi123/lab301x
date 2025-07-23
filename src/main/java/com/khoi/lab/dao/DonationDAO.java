@@ -2,7 +2,7 @@ package com.khoi.lab.dao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
@@ -115,7 +115,7 @@ public interface DonationDAO {
      * @param campaign
      * @return
      */
-    HashMap<Account, Integer> campaignGetDonatorsAndDonatedAmount(Campaign campaign);
+    List<AbstractMap.SimpleEntry<Account, Integer>> campaignGetDonatorsAndDonatedAmount(Campaign campaign);
 
     /**
      * Change campaign status

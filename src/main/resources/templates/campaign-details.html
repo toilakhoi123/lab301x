@@ -211,17 +211,38 @@
                 </div>
             </div>
 
-            <!-- Recent Donations -->
-            <hr>           
+            <hr>
             <div class="row mt-5">
-                <div class="col-12">
+                <!-- Top Donators -->
+                <div class="col-md-6">
+                    <h3><strong>Nhà hảo tâm hàng đầu</strong></h3><br>
+
+                    <div th:if="${#lists.isEmpty(leaderboardList)}" class="text-muted mt-2">
+                        Chưa có dữ liệu được xác nhận!
+                    </div>
+
+                    <div th:each="entry : ${leaderboardList}">
+                        <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded" style="background-color: #f8f9fa; min-height: 50px;">
+                            <!-- Left: Donator Name -->
+                            <div>
+                                <span th:text="${entry.key != null ? entry.key.fullName : 'Ẩn Danh'}" style="color: #1f1f1f;">Donator Name</span>
+                            </div>
+
+                            <!-- Right: Total Donated Amount -->
+                            <span th:text="${#numbers.formatDecimal(entry.value, 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">Amount</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Donations -->
+                <div class="col-md-6">
                     <h3><strong>Quyên góp gần đây</strong></h3><br>
                     <div th:if="${#lists.isEmpty(campaign.getDonations())}" class="text-muted mt-2">
                         Hãy là người đầu tiên quyên góp!
                     </div>
                     <div th:each="donation : ${campaign.getDonations()}">
                         <a 
-                            th:href="@{/account(id=${donation.getAccount().getId()})}"
+                            th:href="@{/account(id=${donation.getAccount() != null ? donation.getAccount().getId() : -1 })}"
                             th:styleappend="${donation.isConfirmed()} ? 'background-color: #09cc7f; color: white;' : 'background-color: #f8f9fa;'"
                             class="d-flex justify-content-between align-items-center mb-2 px-3 py-2 rounded"
                             style="min-height: 50px;">
@@ -229,7 +250,7 @@
                             <!-- left -->
                             <div>
                                 <small class="text-muted" th:text="${donation.getTimeAgo()}"></small><br>
-                                <span th:text="!${donation.isConfirmed()} ? '(chưa xác nhận) ' + ${donation.getAccount().getFullName()} : ${donation.getAccount().getFullName()}" style="color: #1f1f1f;">
+                                <span th:text="|${donation.isConfirmed() ? '' : '(chưa xác nhận) '}${donation.getAccount() != null ? donation.getAccount().getFullName() : 'Ẩn Danh'}|" style="color: #1f1f1f;">
                                     Người quyên góp
                                 </span>
                             </div>

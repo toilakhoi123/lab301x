@@ -2,8 +2,8 @@ package com.khoi.lab.dao;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,8 +171,8 @@ public class DonationDAOImpl implements DonationDAO {
     }
 
     @Override
-    public HashMap<Account, Integer> campaignGetDonatorsAndDonatedAmount(Campaign campaign) {
-        HashMap<Account, Integer> map = new HashMap<>();
+    public List<AbstractMap.SimpleEntry<Account, Integer>> campaignGetDonatorsAndDonatedAmount(Campaign campaign) {
+        List<AbstractMap.SimpleEntry<Account, Integer>> list = new ArrayList<>();
 
         for (Donation donation : campaign.getDonations()) {
             if (!donation.isConfirmed())
@@ -181,19 +181,14 @@ public class DonationDAOImpl implements DonationDAO {
             Account account = donation.getAccount();
             Integer donatedAmount = donation.getAmount();
 
-            if (map.containsKey(account)) {
-                Integer amountOld = map.get(account);
-                map.put(account, amountOld + donatedAmount);
-            } else {
-                map.put(account, donatedAmount);
-            }
+            list.add(new AbstractMap.SimpleEntry<>(account, donatedAmount));
         }
 
         System.out.println(
-                "| [campaignGetDonatorsAndDonatedAmount] Found and returned: " + map.size()
-                        + " people and their donations");
-
-        return map;
+                "| [campaignGetDonatorsAndDonatedAmount] Returning " + list.size() + " individual donation entries");
+        return list.stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .collect(Collectors.toList());
     }
 
     @Override
