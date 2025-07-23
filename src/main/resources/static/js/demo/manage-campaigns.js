@@ -21,6 +21,14 @@ $(document).ready(function() {
           $('#newCampaignModal').modal('show');
         },
         className: 'btn btn-warning'
+      },
+      {
+        text: 'New Receiver <i class="fas fa-plus"></i>',
+        // text: 'New Campaign',
+        action: function ( e, dt, node, config ) {
+          $('#newDonationReceiverModal').modal('show');
+        },
+        className: 'btn btn-secondary'
       }
     ]
   });

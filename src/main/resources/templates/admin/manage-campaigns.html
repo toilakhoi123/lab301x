@@ -156,7 +156,7 @@
                                         <form th:action="@{/admin/manage-campaigns/create}" method="post">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="newCampaignModalLabel">Create New Campaign</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                                             </div>
 
                                             <div class="modal-body">
@@ -209,13 +209,43 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                 <button type="submit" class="btn btn-success">Create</button>
                                             </div>
                                         </form>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- new donation reciever form -->
+                                <div class="modal fade" id="newDonationReceiverModal" tabindex="-1" aria-labelledby="newDonationReceiverModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <form th:action="@{/admin/manage-donations/create-receiver}" method="post">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="newDonationReceiverModalLabel">Add New Donation Receiver</h5>
+                                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Receiver Name</label>
+                                                    <input type="text" class="form-control" id="name" name="name" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-success">Create</button>
+                                            </div>
+                                        </form>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- table -->
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <!-- headers -->

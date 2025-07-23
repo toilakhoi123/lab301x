@@ -586,4 +586,26 @@ public class AdminController {
         mav.addObject("donationRefuseSuccess", true);
         return mav;
     }
+
+    /**
+     * Handle create new donation receiver request
+     * (donationReceiverPhoneNumberExists/donationReceiverCreateSuccess)
+     * 
+     * @param session
+     * @param name
+     * @param phoneNumber
+     * @return
+     */
+    @PostMapping("/manage-donations/create-receiver")
+    public ModelAndView donationReceiverCreate(
+            HttpSession session,
+            @RequestParam String name,
+            @RequestParam String phoneNumber) {
+        DonationReceiver donationReceiver = donationDAO.donationReceiverFindByPhoneNumber(phoneNumber);
+        if (donationReceiver != null) {
+            return campaignsManage(session).addObject("donationReceiverPhoneNumberExists", true);
+        }
+        donationDAO.donationReceiverCreate(name, phoneNumber);
+        return campaignsManage(session).addObject("donationReceiverCreateSuccess", true);
+    }
 }
