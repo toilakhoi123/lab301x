@@ -79,7 +79,7 @@ public class AdminController {
         mav.addObject("donationsMonthly", donationsMonthly);
         mav.addObject("campaignCompletedPercentage", campaignCompletedPercentage);
         mav.addObject("donationsPending", donationsPending);
-        mav.addObject("labels1", dateLabels);
+        mav.addObject("labels", dateLabels);
         mav.addObject("donations", donationAmounts);
         mav.addObject("groups", Arrays.asList(anonymousDonations, nonAnonymousDonations));
         return mav;

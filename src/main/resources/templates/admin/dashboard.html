@@ -360,13 +360,13 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         // Line chart
-        const labels1 = /*[[${labels}]]*/ [];
+        const labels = /*[[${labels}]]*/ [];
         const donations = /*[[${donations}]]*/ [];
         var ctx1 = document.getElementById("myAreaChart");
         var myLineChart = new Chart(ctx1, {
             type: 'line',
             data: {
-                labels: labels1,
+                labels: labels,
                 datasets: [{
                     label: "Donations",
                     lineTension: 0.3,
