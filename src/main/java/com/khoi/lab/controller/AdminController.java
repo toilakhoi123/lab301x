@@ -65,11 +65,13 @@ public class AdminController {
         int donationsMonthly = donationDAO.donationGetTotalRecent(TimeMinutes.DAY.getMinutes() * 3);
         int campaignCompletedPercentage = donationDAO.campaignCompletedPercentage();
         int donationsPending = donationDAO.donationGetUnconfirmed();
-        List<LocalDate> dates = donationDAO.getLast30Days(); // or your DAO instance reference
+        List<LocalDate> dates = donationDAO.getLast30Days();
         List<String> dateLabels = dates.stream()
-                .map(d -> d.toString()) // outputs "2025-07-06" style strings
+                .map(d -> d.toString())
                 .collect(Collectors.toList());
         List<Integer> donationAmounts = donationDAO.getDonationAmountsLast30Days();
+        int anonymousDonations = donationDAO.donationGetAnonymous();
+        int nonAnonymousDonations = donationDAO.donationGetNonAnonymous();
 
         // view
         ModelAndView mav = new ModelAndView("admin/dashboard");
@@ -77,8 +79,9 @@ public class AdminController {
         mav.addObject("donationsMonthly", donationsMonthly);
         mav.addObject("campaignCompletedPercentage", campaignCompletedPercentage);
         mav.addObject("donationsPending", donationsPending);
-        mav.addObject("labels", dateLabels);
+        mav.addObject("labels1", dateLabels);
         mav.addObject("donations", donationAmounts);
+        mav.addObject("groups", Arrays.asList(anonymousDonations, nonAnonymousDonations));
         return mav;
     }
 

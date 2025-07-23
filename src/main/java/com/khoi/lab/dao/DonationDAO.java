@@ -295,11 +295,46 @@ public interface DonationDAO {
      */
     int donationGetUnconfirmed();
 
+    /**
+     * Get the amount donated on day [date]
+     * 
+     * @param date
+     * @return
+     */
     int donationGetAmountOnDay(LocalDate date);
 
+    /**
+     * Get x-axis of bar chart donations for the last 30 days
+     * 
+     * @return
+     */
     List<LocalDate> getLast30Days();
 
+    /**
+     * Get y-axis of bar chart donations (amount donated) for the last 30 days
+     * 
+     * @return
+     */
     List<Integer> getDonationAmountsLast30Days();
 
+    /**
+     * An utility to get both x and y axes of donation chart last 30 days
+     * 
+     * @return
+     */
     Map<LocalDate, Integer> getDonationChartDataLast30Days();
+
+    /**
+     * Get the amount of anonymous donations
+     * 
+     * @return
+     */
+    int donationGetAnonymous();
+
+    /**
+     * Get the amount of non-anonymous donations
+     * 
+     * @return
+     */
+    int donationGetNonAnonymous();
 }

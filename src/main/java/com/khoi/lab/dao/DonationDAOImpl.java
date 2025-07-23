@@ -73,6 +73,9 @@ public class DonationDAOImpl implements DonationDAO {
         accountDonate(campaign1, account2, 500000);
         accountDonate(campaign3, account2, 25000000);
         accountDonate(campaign1, account3, 3500000);
+        accountDonate(campaign1, null, 3000000);
+        accountDonate(campaign2, null, 3250000);
+        accountDonate(campaign2, null, 1000000);
     }
 
     @Override
@@ -483,7 +486,10 @@ public class DonationDAOImpl implements DonationDAO {
             }
         }
 
-        return campaignsCount == 0 ? 0 : Math.round(campaignsCompletedCount / campaignsCount);
+        int res = campaignsCount == 0
+                ? campaignsCount
+                : (int) (((double) campaignsCompletedCount / campaignsCount) * 100);
+        return res;
     }
 
     @Override
@@ -495,7 +501,8 @@ public class DonationDAOImpl implements DonationDAO {
     public int donationGetAmountOnDay(LocalDate date) {
         int total = 0;
         for (Donation donation : donationList()) {
-            if (donation.getDonateTime().toLocalDate().equals(date)) {
+            if (donation.getDonateTime().toLocalDate().equals(date)
+                    && donation.isConfirmed()) {
                 total += donation.getAmount();
             }
         }
@@ -530,5 +537,15 @@ public class DonationDAOImpl implements DonationDAO {
             data.put(date, donationGetAmountOnDay(date));
         }
         return data;
+    }
+
+    @Override
+    public int donationGetAnonymous() {
+        return donationList().stream().filter(d -> d.isAnonymous() && d.isConfirmed()).toList().size();
+    }
+
+    @Override
+    public int donationGetNonAnonymous() {
+        return donationList().stream().filter(d -> !d.isAnonymous() && d.isConfirmed()).toList().size();
     }
 }

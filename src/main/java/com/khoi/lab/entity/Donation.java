@@ -106,7 +106,7 @@ public class Donation {
         this.refused = refused;
     }
 
-    // ===== Helper methods =====
+    // ===== Helper methods ===== //
 
     public boolean isAnonymous() {
         return this.account == null;
