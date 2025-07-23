@@ -15,6 +15,9 @@ import com.khoi.lab.entity.Donation;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controller for general mappings
+ */
 @Controller
 public class GeneralController {
     private final DonationDAO donationDAO;

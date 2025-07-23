@@ -15,6 +15,9 @@ import com.khoi.lab.service.StringService;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * Controller for authentication mappings
+ */
 @Controller
 public class AuthenticationController {
     private final AccountDAO accountDAO;

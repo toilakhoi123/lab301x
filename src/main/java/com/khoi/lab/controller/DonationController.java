@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.json.JSONObject;
 
+/**
+ * Controller for donation mappings
+ */
 @Controller
 public class DonationController {
     private final DonationDAO donationDAO;
