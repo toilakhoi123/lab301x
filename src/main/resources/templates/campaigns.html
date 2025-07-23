@@ -278,7 +278,7 @@
                                 <!-- Details and Donate buttons -->
                                 <div class="mb-3 d-flex justify-content-between px-3">
                                     <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm">Donate</a>
+                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm" th:if="${session.account==null or !session.account.isAdmin()}">Donate</a>
                                 </div>
                             </div>
                         </div>
@@ -331,7 +331,7 @@
                                 <!-- Details and Donate buttons -->
                                 <div class="mb-3 d-flex justify-content-between px-3">
                                     <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm">Donate</a>
+                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm" th:if="${session.account==null or !session.account.isAdmin()}">Donate</a>
                                 </div>
                             </div>
                         </div>
@@ -390,7 +390,7 @@
         </div>
     </div>
     <!-- Our Cases End -->
-    </main>
+    </main> 
     
     <!-- Footer -->
     <footer>
