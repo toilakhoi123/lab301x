@@ -194,7 +194,7 @@
                         </div>
 
                         <!-- Donate button -->
-                        <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" th:if="${session.account!=null and !session.account.isAdmin()}" class="btn btn-success btn-lg mt-3">Donate Now</a>
+                        <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" th:if="${session.account==null or (session.account!=null and !session.account.isAdmin())}" class="btn btn-success btn-lg mt-3">Donate Now</a>
                         <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and session.account.isAdmin()}" class="btn btn-primary btn-lg mt-3">Edit</a>
                     </div>
                 </div>
