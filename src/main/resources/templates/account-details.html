@@ -164,7 +164,7 @@
                         <!-- Buttons -->
                         <div 
                             class="d-flex justify-content-between mt-4"
-                            th:if="${session.account != null and session.account.getId() == account.getId()}"
+                            th:if="${session.account != null and (session.account.getId() == account.getId() or session.account.isAdmin())}"
                         >
                             <a href="/edit-account" class="btn btn-success">Edit</a>
                         </div>
