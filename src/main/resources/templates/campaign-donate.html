@@ -222,24 +222,28 @@
                     <div th:if="${#lists.isEmpty(leaderboardList)}" class="text-muted mt-2">
                         Chưa có dữ liệu được xác nhận!
                     </div>
-
+                    
                     <div th:each="entry : ${leaderboardList}">
-                        <div class="d-flex align-items-center mb-2 py-0 rounded" style="background-color: #f8f9fa; height: 50px; margin-left: 0;">
-                            <!-- Profile image (fills top-bottom) -->
-                            <div class="d-flex align-items-center justify-content-center"
-                                style="width: 50px; height: 100%; background-color: #333333; color: white; font-weight: bold; margin-left: 0;">
-                                <span th:text="${entry.key != null ? #strings.substring(entry.key.fullName,0,1) + (#strings.contains(entry.key.fullName, ' ') ? #strings.substring(entry.key.fullName, entry.key.fullName.lastIndexOf(' ') + 1, entry.key.fullName.lastIndexOf(' ') + 2) : '') : '?'}">AB</span>
-                            </div>
+                        <a th:href="${entry.key != null} ? @{/account(id=${entry.key.id})} : '#'" style="text-decoration: none;">
+                            <div class="d-flex align-items-center mb-2 py-0 rounded"
+                                style="background-color: #f8f9fa; height: 50px; margin-left: 0;">
 
-                            <!-- Name and amount -->
-                            <div class="flex-grow-1 px-3">
-                                <span th:text="${entry.key != null ? entry.key.fullName : 'Ẩn Danh'}" style="color: #1f1f1f;">Donator Name</span>
-                            </div>
+                                <!-- Profile image (fills top-bottom) -->
+                                <div class="d-flex align-items-center justify-content-center"
+                                    style="width: 50px; height: 100%; background-color: #333333; color: white; font-weight: bold; margin-left: 0;">
+                                    <span th:text="${entry.key != null ? #strings.substring(entry.key.fullName,0,1) + (#strings.contains(entry.key.fullName, ' ') ? #strings.substring(entry.key.fullName, entry.key.fullName.lastIndexOf(' ') + 1, entry.key.fullName.lastIndexOf(' ') + 2) : '') : '?'}">AB</span>
+                                </div>
 
-                            <div class="pr-3">
-                                <span th:text="${#numbers.formatDecimal(entry.value, 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">Amount</span>
+                                <!-- Name and amount -->
+                                <div class="flex-grow-1 px-3">
+                                    <span th:text="${entry.key != null ? entry.key.fullName : 'Ẩn Danh'}" style="color: #1f1f1f;">Donator Name</span>
+                                </div>
+
+                                <div class="pr-3">
+                                    <span th:text="${#numbers.formatDecimal(entry.value, 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">Amount</span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
@@ -250,29 +254,38 @@
                         Hãy là người đầu tiên quyên góp!
                     </div>
                     <div th:each="donation : ${campaign.getDonations()}">
-                        <div th:styleappend="${donation.isConfirmed()} ? 'background-color: #09cc7f; color: white;' : 'background-color: #f8f9fa;'"
-                            class="d-flex align-items-center mb-2 py-0 rounded"
-                            style="height: 50px; margin-left: 0;">
+                        <a th:href="${donation.account != null} ? @{/account(id=${donation.account.id})} : '#'"
+                        style="text-decoration: none; display: block;">
+                        
+                            <div th:styleappend="${donation.isConfirmed()} ? 'background-color: #09cc7f; color: white;' : 'background-color: #f8f9fa;'"
+                                class="d-flex align-items-center mb-2 py-0 rounded"
+                                style="height: 50px; margin-left: 0;">
 
-                            <!-- Profile image -->
-                            <div class="d-flex align-items-center justify-content-center"
-                                style="width: 50px; height: 100%; background-color: #333333; color: white; font-weight: bold; margin-left: 0;">
-                                <span th:text="${donation.getAccount() != null ? #strings.substring(donation.getAccount().getFullName(),0,1) + (#strings.contains(donation.getAccount().getFullName(), ' ') ? #strings.substring(donation.getAccount().getFullName(), donation.getAccount().getFullName().lastIndexOf(' ') + 1, donation.getAccount().getFullName().lastIndexOf(' ') + 2) : '') : '?'}">AB</span>
-                            </div>
+                                <!-- Profile image -->
+                                <div class="d-flex align-items-center justify-content-center"
+                                    style="width: 50px; height: 100%; background-color: #333333; color: white; font-weight: bold; margin-left: 0;">
+                                    <span th:text="${donation.getAccount() != null ? #strings.substring(donation.getAccount().getFullName(),0,1) + (#strings.contains(donation.getAccount().getFullName(), ' ') ? #strings.substring(donation.getAccount().getFullName(), donation.getAccount().getFullName().lastIndexOf(' ') + 1, donation.getAccount().getFullName().lastIndexOf(' ') + 2) : '') : '?'}">
+                                        AB
+                                    </span>
+                                </div>
 
-                            <!-- Name and time -->
-                            <div class="flex-grow-1 px-3">
-                                <small class="text-muted" th:text="${donation.getTimeAgo()}"></small><br>
-                                <span th:text="|${donation.isConfirmed() ? '' : '(chưa xác nhận) '}${donation.getAccount() != null ? donation.getAccount().getFullName() : 'Ẩn Danh'}|" style="color: #1f1f1f;">
-                                    Người quyên góp
-                                </span>
-                            </div>
+                                <!-- Name and time -->
+                                <div class="flex-grow-1 px-3">
+                                    <small class="text-muted" th:text="${donation.getTimeAgo()}"></small><br>
+                                    <span th:text="|${donation.isConfirmed() ? '' : '(chưa xác nhận) '}${donation.getAccount() != null ? donation.getAccount().getFullName() : 'Ẩn Danh'}|" style="color: #1f1f1f;">
+                                        Người quyên góp
+                                    </span>
+                                </div>
 
-                            <!-- Amount -->
-                            <div class="pr-3">
-                                <span th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">Số tiền</span>
+                                <!-- Amount -->
+                                <div class="pr-3">
+                                    <span th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}" style="color: #1f1f1f;">
+                                        Số tiền
+                                    </span>
+                                </div>
+
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>

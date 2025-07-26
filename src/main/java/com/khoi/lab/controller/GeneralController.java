@@ -100,5 +100,4 @@ public class GeneralController {
         mav.addObject("notLoggedIn", account);
         return mav;
     }
-
 }
