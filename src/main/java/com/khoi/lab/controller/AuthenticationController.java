@@ -277,7 +277,7 @@ public class AuthenticationController {
      */
     @GetMapping("/verify-code")
     public ModelAndView verifyCode() {
-        return forgotPassword();
+        return new ModelAndView("verify-code");
     }
 
     /**
@@ -320,7 +320,7 @@ public class AuthenticationController {
      */
     @GetMapping("/reset-password")
     public ModelAndView resetPassword() {
-        return forgotPassword();
+        return new ModelAndView("reset-password");
     }
 
     /**

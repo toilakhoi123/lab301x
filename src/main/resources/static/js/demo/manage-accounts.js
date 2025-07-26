@@ -39,7 +39,7 @@ $(document).ready(function() {
       }
 
       // get 6th column
-      var lastLogin = data[5];
+      var lastLogin = data[6];
 
       // never logged in -> always show
       if (lastLogin === "Never") {
