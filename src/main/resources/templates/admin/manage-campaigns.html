@@ -315,6 +315,7 @@
                                                     th:href="@{/admin/manage-campaigns/close(id=${campaign.getId()})}"
                                                     th:if="${campaign.getStatus().name()!='CLOSED'}"
                                                     class="btn-sm btn-danger btn-icon-split m-1"
+                                                    onclick="if (confirm('Close this campaign?')) {return true;} return false;"  
                                                 >
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-flag"></i>
@@ -326,6 +327,7 @@
                                                     th:href="@{/admin/manage-campaigns/delete(id=${campaign.getId()})}"
                                                     th:if="${campaign.getStatus().name()=='CREATED'}"
                                                     class="btn-sm btn-danger btn-icon-split m-1"
+                                                    onclick="if (confirm('Delete this campaign?')) {return true;} return false;"   
                                                 >
                                                     <span class="icon text-white-50">
                                                         <i class="fas fa-flag"></i>
@@ -365,7 +367,7 @@
                                                         <input type="number" class="form-control form-control-sm" name="years" min="0" value="0">
                                                     </div>
 
-                                                    <button type="submit" class="btn btn-success btn-sm">Extend</button>
+                                                    <button type="submit" class="btn btn-success btn-sm" onclick="if (confirm('Extend this campaign?')) {return true;} return false;">Extend</button>
                                                 </form>
                                             </td>
                                         </tr>
