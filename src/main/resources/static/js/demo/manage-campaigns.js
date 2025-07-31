@@ -32,4 +32,24 @@ $(document).ready(function() {
       }
     ]
   });
+
+  // Thêm custom filter cho ID
+  $.fn.dataTable.ext.search.push(
+    function(settings, data, dataIndex) {
+      const searchInput = document.querySelector('#campaignId');
+      const searchStr = searchInput.value;
+
+      const searchId = parseInt(searchStr, 10);
+      const rowId = parseInt(data[0], 10); // Giả sử ID nằm ở cột 0
+
+      if (isNaN(searchId) || isNaN(rowId)) return true;
+
+      return searchId === rowId;
+    }
+  );
+
+  // Gọi lại filter mỗi khi người dùng thay đổi ID
+  document.querySelector('#campaignId').addEventListener('input', function () {
+    table.draw();
+  });
 });
