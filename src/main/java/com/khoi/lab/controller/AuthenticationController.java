@@ -48,7 +48,7 @@ public class AuthenticationController {
 
     /**
      * Handles login request
-     * (loginSuccess/loginFailure/loginAlready/loginDisabled)
+     * (loginSuccess/loginFailure/loginAlready/loginDisabled/loginForbiddenMethod)
      * 
      * @param session
      * @param usernameOrEmailOrPhone
@@ -72,6 +72,12 @@ public class AuthenticationController {
                 mav.addObject("loginFailure", true);
                 return mav;
             } else {
+                if ("".equals(account.getPassword())) {
+                    ModelAndView mav = login();
+                    mav.addObject("loginForbiddenMethod", true);
+                    return mav;
+                }
+
                 // check if account is disabled
                 if (!account.isDisabled()) {
                     session.setAttribute("account", account);
@@ -129,8 +135,6 @@ public class AuthenticationController {
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam String passwordConfirm) {
-        System.out.println("registering..");
-
         // check password confirm
         if (!password.equals(passwordConfirm)) {
             System.out.println("| Password mismatch: " + password + " vs " + passwordConfirm);

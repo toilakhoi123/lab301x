@@ -192,7 +192,7 @@
                                                 </td>
                                                 <td>
                                                     <span th:if="${account.getLastLoginDate() == null}">Never</span>
-                                                    <span th:if="${account.getLastLoginDate() != null}" th:text="${#dates.format(account.getLastLoginDate(), 'dd/MM/yyyy')}"></span>
+                                                    <span th:if="${account.getLastLoginDate() != null}" th:text="${#dates.format(account.getLastLoginDate(), 'dd/MM/yyyy')}"></span>    
                                                 </td>
                                                 <td>
                                                     <span th:if="${account.isDisabled()}">✔️</span>

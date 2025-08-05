@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "google.client.id",
+    "type": "java.lang.String",
+    "description": "Google Client ID"
+  },
+  {
+    "name": "google.client.secret",
+    "type": "java.lang.String",
+    "description": "Google Client Secret"
+  },
+  {
+    "name": "google.redirect.uri",
+    "type": "java.lang.String",
+    "description": "Google Oauth2 redirect URI"
+  },
+  {
+    "name": "facebook.client.id",
+    "type": "java.lang.String",
+    "description": "Facebook Client ID"
+  },
+  {
+    "name": "facebook.client.secret",
+    "type": "java.lang.String",
+    "description": "Facebook Client Secret"
+  },
+  {
+    "name": "facebook.redirect.uri",
+    "type": "java.lang.String",
+    "description": "Facebook Oauth2 redirect URI"
+  }
+]}
