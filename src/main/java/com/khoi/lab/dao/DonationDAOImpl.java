@@ -18,6 +18,7 @@ import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationPaymentCode;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
+import com.khoi.lab.enums.DonationStatus;
 import com.khoi.lab.service.CampaignStatusUpdaterService;
 
 import jakarta.persistence.EntityManager;
@@ -335,8 +336,8 @@ public class DonationDAOImpl implements DonationDAO {
     @Override
     @Transactional
     public Donation donationConfirm(Donation donation) {
-        donation.setConfirmed(true);
-        donation = donationSave(donation);
+        donation.setStatus(DonationStatus.CONFIRMED);
+        donation = donationUpdate(donation);
         System.out.println("| [donationConfirm] Confirmed donation: " + donation);
         (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
         return donation;
@@ -344,12 +345,22 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     @Transactional
-    public void donationRefuse(Donation donation) {
-        Long id = donation.getId();
-        donation = donationFindById(id);
-        donation.setRefused(true);
-        donationUpdate(donation);
-        System.out.println("| [donationRefuse] Refused donation with id: " + id);
+    public Donation donationRefuse(Donation donation) {
+        donation.setStatus(DonationStatus.REFUSED);
+        donation = donationUpdate(donation);
+        System.out.println("| [donationRefuse] Refused donation: " + donation);
+        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
+        return donation;
+    }
+
+    @Override
+    @Transactional
+    public Donation donationReset(Donation donation) {
+        donation.setStatus(DonationStatus.PENDING);
+        donation = donationUpdate(donation);
+        System.out.println("| [donationRefuse] Resetted donation: " + donation);
+        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
+        return donation;
     }
 
     @Override
@@ -369,11 +380,15 @@ public class DonationDAOImpl implements DonationDAO {
     }
 
     @Override
-    public List<Donation> donationList() {
+    public List<Donation> donationList(boolean includeRefused) {
         TypedQuery<Donation> tq = em.createQuery(
                 "SELECT d FROM Donation d",
                 Donation.class);
-        List<Donation> donations = tq.getResultList().stream().filter(a -> !a.isRefused()).collect(Collectors.toList());
+        List<Donation> donations = tq.getResultList();
+
+        if (!includeRefused) {
+            donations = donations.stream().filter(a -> !a.isRefused()).collect(Collectors.toList());
+        }
 
         System.out.println("| [donationList] Found and returned: " + donations.size() + " donations!");
         return donations;
@@ -465,8 +480,8 @@ public class DonationDAOImpl implements DonationDAO {
 
         int total = 0;
 
-        // Retrieve all donations
-        List<Donation> donations = donationList();
+        // Retrieve all non-refused donations
+        List<Donation> donations = donationList(false);
 
         // Loop through each donation and accumulate if in time range
         for (Donation donation : donations) {
@@ -505,13 +520,13 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     public int donationGetUnconfirmed() {
-        return donationList().stream().filter(d -> !d.isConfirmed()).toList().size();
+        return donationList(false).stream().filter(d -> !d.isConfirmed()).toList().size();
     }
 
     @Override
     public int donationGetAmountOnDay(LocalDate date) {
         int total = 0;
-        for (Donation donation : donationList()) {
+        for (Donation donation : donationList(false)) {
             if (donation.getDonateTime().toLocalDate().equals(date)
                     && donation.isConfirmed()) {
                 total += donation.getAmount();
@@ -552,11 +567,11 @@ public class DonationDAOImpl implements DonationDAO {
 
     @Override
     public int donationGetAnonymous() {
-        return donationList().stream().filter(d -> d.isAnonymous() && d.isConfirmed()).toList().size();
+        return donationList(false).stream().filter(d -> d.isAnonymous() && d.isConfirmed()).toList().size();
     }
 
     @Override
     public int donationGetNonAnonymous() {
-        return donationList().stream().filter(d -> !d.isAnonymous() && d.isConfirmed()).toList().size();
+        return donationList(false).stream().filter(d -> !d.isAnonymous() && d.isConfirmed()).toList().size();
     }
 }

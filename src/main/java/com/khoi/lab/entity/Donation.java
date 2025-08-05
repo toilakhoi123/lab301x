@@ -6,6 +6,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.khoi.lab.enums.DonationStatus;
+
 @Entity
 @Table(name = "donation")
 public class Donation {
@@ -25,8 +27,8 @@ public class Donation {
 
     private LocalDateTime donateTime;
 
-    private boolean confirmed;
-    private boolean refused;
+    @Enumerated(EnumType.STRING)
+    private DonationStatus status;
 
     private String timeAgo;
 
@@ -38,8 +40,8 @@ public class Donation {
         this.campaign = campaign;
         this.amount = amount;
         this.donateTime = donateTime;
-        this.confirmed = false;
-        this.refused = false;
+
+        this.status = DonationStatus.PENDING;
     }
 
     public Long getId() {
@@ -82,14 +84,6 @@ public class Donation {
         this.id = id;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
-    }
-
     public String getTimeAgo() {
         return timeAgo;
     }
@@ -98,18 +92,30 @@ public class Donation {
         this.timeAgo = timeAgo;
     }
 
-    public boolean isRefused() {
-        return refused;
+    public DonationStatus getStatus() {
+        return status;
     }
 
-    public void setRefused(boolean refused) {
-        this.refused = refused;
+    public void setStatus(DonationStatus status) {
+        this.status = status;
     }
 
     // ===== Helper methods ===== //
 
     public boolean isAnonymous() {
         return this.account == null;
+    }
+
+    public boolean isPending() {
+        return this.status == DonationStatus.PENDING;
+    }
+
+    public boolean isConfirmed() {
+        return this.status == DonationStatus.CONFIRMED;
+    }
+
+    public boolean isRefused() {
+        return this.status == DonationStatus.REFUSED;
     }
 
     public String getTimeAgo(LocalDateTime dateTime) {
@@ -130,7 +136,7 @@ public class Donation {
 
     @Override
     public String toString() {
-        return "Donation [account=" + account + ", campaign=" + campaign + ", amount=" + amount + ", confirmed="
-                + confirmed + "]";
+        return "Donation [account=" + account + ", campaign=" + campaign + ", amount=" + amount + ", status="
+                + status + "]";
     }
 }

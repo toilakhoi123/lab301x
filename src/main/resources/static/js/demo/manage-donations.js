@@ -15,13 +15,13 @@ $(document).ready(function() {
           format: {
             body: function ( data, _, column, _ ) {
               // process data for account status column
-              if (column === 4) {
-                if (data.includes('✔️')) {
-                  return 'true';
-                } else if (data.includes('❌')) {
-                  return 'false';
-                }
-              }
+              // if (column === 4) {
+              //   if (data.includes('✔️')) {
+              //     return 'true';
+              //   } else if (data.includes('❌')) {
+              //     return 'false';
+              //   }
+              // }
               return data.replaceAll("<span>", "").replaceAll("</span>", "");
             }
           }

@@ -550,7 +550,7 @@ public class AdminController {
         }
 
         ModelAndView mav = new ModelAndView("admin/manage-donations");
-        mav.addObject("donations", donationDAO.donationList());
+        mav.addObject("donations", donationDAO.donationList(true));
         return mav;
     }
 
@@ -582,6 +582,23 @@ public class AdminController {
     public ModelAndView donationsRefuseDonation(HttpSession session, @RequestBody DonationConfirmRequest request) {
         Donation donation = donationDAO.donationFindById(request.id);
         donationDAO.donationRefuse(donation);
+        ModelAndView mav = donationsManage(session);
+        mav.addObject("donationRefuseSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Handle donation status reset request
+     * (donationResetSuccess)
+     * 
+     * @param session
+     * @param request
+     * @return
+     */
+    @PostMapping("/manage-donations/reset")
+    public ModelAndView donationsResetDonation(HttpSession session, @RequestBody DonationConfirmRequest request) {
+        Donation donation = donationDAO.donationFindById(request.id);
+        donationDAO.donationReset(donation);
         ModelAndView mav = donationsManage(session);
         mav.addObject("donationRefuseSuccess", true);
         return mav;

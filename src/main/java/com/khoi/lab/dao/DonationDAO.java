@@ -186,7 +186,15 @@ public interface DonationDAO {
      * @param donation
      * @return
      */
-    void donationRefuse(Donation donation);
+    Donation donationRefuse(Donation donation);
+
+    /**
+     * Reset donation status manually
+     * 
+     * @param donation
+     * @return
+     */
+    Donation donationReset(Donation donation);
 
     /**
      * Save a donation
@@ -206,7 +214,7 @@ public interface DonationDAO {
      * 
      * @return
      */
-    List<Donation> donationList();
+    List<Donation> donationList(boolean includeRefused);
 
     /**
      * Find and return a donation with matching id

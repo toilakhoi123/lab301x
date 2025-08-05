@@ -159,7 +159,7 @@
                                             <th>Account</th>
                                             <th>Amount</th>
                                             <th>Donate Time</th>
-                                            <th>Confirmed</th>
+                                            <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -174,17 +174,14 @@
                                                 <td th:if="${donation.getAccount()==null}">[id:-1] Anonymous</td>
                                                 <td th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
                                                 <td th:text="${donation.getDonateTime()}"></td>
-                                                <td>
-                                                    <span th:if="${donation.isConfirmed()}">✔️</span>
-                                                    <span th:if="${!donation.isConfirmed()}">❌</span>
-                                                </td>
+                                                <td th:text="${donation.getStatus().name()}"></td>
                                                 
                                                 <!-- actions -->
                                                 <td>
                                                     <!-- confirm donation -->
                                                     <a 
                                                         href="#"
-                                                        th:if="${!donation.isConfirmed()}"
+                                                        th:if="${donation.isPending()}"
                                                         th:attr="data-id=${donation.getId()}"
                                                         data-action="confirm"
                                                         class="btn-sm btn-success btn-icon-split m-1 donation-action"
@@ -197,7 +194,7 @@
                                                     <!-- refuse donation -->
                                                     <a 
                                                         href="#"
-                                                        th:if="${!donation.isConfirmed()}"
+                                                        th:if="${donation.isPending()}"
                                                         th:attr="data-id=${donation.getId()}"
                                                         data-action="refuse"
                                                         class="btn-sm btn-warning btn-icon-split m-1 donation-action"
@@ -206,6 +203,19 @@
                                                             <i class="fas fa-flag"></i>
                                                         </span>
                                                         <span class="text">Refuse</span>
+                                                    </a>
+                                                    <!-- reset donation status -->
+                                                    <a 
+                                                        href="#"
+                                                        th:if="${!donation.isPending()}"
+                                                        th:attr="data-id=${donation.getId()}"
+                                                        data-action="reset"
+                                                        class="btn-sm btn-danger btn-icon-split m-1 donation-action"
+                                                    >
+                                                        <span class="icon text-white-50">
+                                                            <i class="fas fa-flag"></i>
+                                                        </span>
+                                                        <span class="text">Reset</span>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -220,10 +230,24 @@
                                                         
                                                         const id = button.dataset.id;
                                                         const action = button.dataset.action;
-                                                        const url = action == 'confirm' ? "/admin/manage-donations/confirm" : "/admin/manage-donations/refuse";
+                                                        let url;
+
+                                                        switch (action) {
+                                                            case 'confirm':
+                                                                url = '/admin/manage-donations/confirm';
+                                                                break;
+                                                            case 'refuse':
+                                                                url = '/admin/manage-donations/refuse';
+                                                                break;
+                                                            case 'reset':
+                                                                url = '/admin/manage-donations/reset';
+                                                                break;
+                                                        }
+
+                                                        console.log(action, url);
 
                                                         if (
-                                                            !confirm('Are you sure you want to carry out this action?')
+                                                            !confirm('Are you sure you want to carry out this action? ' + url)
                                                         ) {
                                                             return;
                                                         }
