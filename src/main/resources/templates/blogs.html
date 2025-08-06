@@ -1,28 +1,28 @@
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Blog | Little Hearts, Big Dreams.</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.ico}">
 
     <!-- CSS here -->
     <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
     <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
     <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
     <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
     <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
     <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/slick.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
 </head>
 <body>
     <!--? Preloader Start -->
@@ -31,7 +31,7 @@
             <div class="preloader-inner position-relative">
                 <div class="preloader-circle"></div>
                 <div class="preloader-img pere-text">
-                    <img src="assets/img/logo/loder.png" alt="">
+                    <img th:src="@{/assets/img/logo/loder.png}" alt="Loading...">
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
                         <div class="col-xl-12">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="header-info-left d-flex">
-                                    <ul>     
+                                    <ul>    
                                         <li>Phone: +84 (0) 793 300 359</li>
                                         <li>Email: leqwoi@protonmail.com</li>
                                     </ul>
@@ -71,8 +71,8 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <ul class="contact-now">     
-                                        <li><a href="/register">Register Now!</a></li>
+                                    <ul class="contact-now">    
+                                        <li><a th:href="@{/register}">Register Now!</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                             <!-- Logo -->
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="/index"><img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
+                                    <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo.png}" alt="Little Hearts, Big Dreams Logo"></a>
                                 </div>
                             </div>
                             <div class="col-xl-10 col-lg-10">
@@ -93,20 +93,20 @@
                                     <!-- Main-menu -->
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
-                                            <ul id="navigation">                                                                                          
-                                                <li><a href="/index">Home</a></li>
-                                                <li><a href="/about">About</a></li>
-                                                <li><a href="/campaigns">Campaigns</a></li>
-                                                <li><a href="/blogs">Blogs</a></li>
-                                                <li><a href="/contact">Contact</a></li>
+                                            <ul id="navigation">                                                                                                                                     
+                                                <li><a th:href="@{/index}">Home</a></li>
+                                                <li><a th:href="@{/about}">About</a></li>
+                                                <li><a th:href="@{/campaigns}">Campaigns</a></li>
+                                                <li><a th:href="@{/blogs}">Blogs</a></li>
+                                                <li><a th:href="@{/contact}">Contact</a></li>
 
                                                 <!-- account info dropdown -->
                                                 <li th:if="${session.account}">
-                                                    <a href="/account" th:text="${session.account.getFullName()}"></a>
+                                                    <a th:href="@{/account}" th:text="${session.account.getFullName()}"></a>
                                                     <ul class="submenu">
-                                                        <li><a href="/account">Edit Account</a></li>
-                                                        <li><a href="/change-password">Change Password</a></li>
-                                                        <li><a href="/logout">Log Out</a></li>
+                                                        <li><a th:href="@{/account}">Edit Account</a></li>
+                                                        <li><a th:href="@{/change-password}">Change Password</a></li>
+                                                        <li><a th:href="@{/logout}">Log Out</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -115,10 +115,10 @@
                                     <!-- Header-btn -->
                                     <div class="header-right-btn d-none d-lg-block ml-20">
                                         <div th:if="${session.account==null}">
-                                            <a href="/login" class="btn header-btn">Log In</a>
+                                            <a th:href="@{/login}" class="btn header-btn">Log In</a>
                                         </div>
                                         <div th:if="${session.account!=null and session.account.isAdmin()}">
-                                            <a href="/admin/manage-accounts" class="btn header-btn">Management</a>
+                                            <a th:href="@{/admin/manage-accounts}" class="btn header-btn">Management</a>
                                         </div>
                                     </div>
                                 </div>
@@ -158,14 +158,14 @@
                     <div class="col-lg-8 mb-5 mb-lg-0">
                         <div class="blog_left_sidebar">
                             <!-- query & filter display -->
-                            <div th:if="${currentQuery != null or currentFilter != null}">
+                            <div th:if="${currentQuery != null or currentFilterDisplay != null}">
                                 <p>
                                     Displaying results for
                                     <span th:if="${currentQuery != null and !#strings.isEmpty(currentQuery)}">
                                         <strong>"<span th:text="${currentQuery}"></span>"</strong>
                                     </span>
-                                    <span th:if="${currentFilter != null and !#strings.isEmpty(currentFilter)}">
-                                        filtered by <strong><span th:text="${currentFilter}"></span></strong>
+                                    <span th:if="${currentFilterDisplay != null and !#strings.isEmpty(currentFilterDisplay)}">
+                                        filtered by <strong><span th:text="${currentFilterDisplay}"></span></strong>
                                     </span>
                                 </p>
                             </div>
@@ -178,11 +178,11 @@
                             <!-- populate -->
                             <article class="blog_item" th:each="blogPost : ${blogPosts}">
                                 <div class="blog_item_img">
-                                    <img class="card-img rounded-0" th:src="${blogPost.imageUrl}" alt="">
+                                    <img class="card-img rounded-0" th:src="${blogPost.imageUrl}" alt="Blog Post Image">
                                     <!-- Blog date -->
                                     <a class="blog_item_date">
-                                        <h3 th:text="${#dates.format(blogPost.date, 'dd')}"></h3>
-                                        <p th:text="${#dates.format(blogPost.date, 'MMMM')}"></p>
+                                        <h3 th:text="${#temporals.format(blogPost.date, 'dd')}"></h3>
+                                        <p th:text="${#temporals.format(blogPost.date, 'MMMM')}"></p>
                                     </a>
                                 </div>
                                 <div class="blog_details">
@@ -192,7 +192,7 @@
                                     <p th:text="${#strings.length(blogPost.description) > 150} ? ${#strings.substring(blogPost.description, 0, 150)} + '...' : ${blogPost.description}"></p>
                                     <ul class="blog-info-link">
                                         <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}"><i class="fa fa-user"></i>Campaign</a></li>
-                                        <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}+'#comments'"><i class="fa fa-comments"></i><span th:text="${#lists.size(blogPost.comments) + ' Comments'}"></span></a></li>
+                                        <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}+'#comments'"><i class="fa fa-comments"></i><span th:text="${blogPost.getCommentsCount() + ' Comments'}"></span></a></li>
                                     </ul>
                                 </div>
                             </article>
@@ -202,15 +202,15 @@
                                 <ul class="pagination">
                                     <!-- previous page -->
                                     <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                                        <a class="page-link" th:href="@{|?page=${currentPage - 1}|}" aria-label="Previous">
+                                        <a class="page-link" th:href="@{/blogs(page=${currentPage - 1}, query=${currentQuery}, filter=${currentFilter})}" aria-label="Previous">
                                             <i class="ti-angle-left"></i>
                                         </a>
                                     </li>
 
                                     <!-- page numbers -->
                                     <!-- First page -->
-                                    <li class="page-item" th:if="${maxPage > 5 and currentPage > 3}">
-                                        <a class="page-link" th:href="@{'?page=1'}">1</a>
+                                    <li class="page-item" th:if="${maxPage > 5 and currentPage > 3}" th:classappend="${1 == currentPage} ? 'active'">
+                                        <a class="page-link" th:href="@{/blogs(page=1, query=${currentQuery}, filter=${currentFilter})}">1</a>
                                     </li>
 
                                     <!-- Ellipsis before current range -->
@@ -223,7 +223,7 @@
                                         th:each="pageNumber : ${#numbers.sequence(1, maxPage)}"
                                         th:if="${(maxPage <= 5) or (pageNumber >= currentPage - 2 and pageNumber <= currentPage + 2)}"
                                         th:classappend="${pageNumber == currentPage} ? 'active'">
-                                        <a class="page-link" th:href="@{'?page=' + ${pageNumber}}"
+                                        <a class="page-link" th:href="@{/blogs(page=${pageNumber}, query=${currentQuery}, filter=${currentFilter})}"
                                         th:text="${pageNumber}"></a>
                                     </li>
 
@@ -233,14 +233,14 @@
                                     </li>
 
                                     <!-- Last page -->
-                                    <li class="page-item" th:if="${maxPage > 5 and currentPage < maxPage - 2}">
-                                        <a class="page-link" th:href="@{'?page=' + ${maxPage}}"
+                                    <li class="page-item" th:if="${maxPage > 5 and currentPage < maxPage - 2}" th:classappend="${maxPage == currentPage} ? 'active'">
+                                        <a class="page-link" th:href="@{/blogs(page=${maxPage}, query=${currentQuery}, filter=${currentFilter})}"
                                         th:text="${maxPage}"></a>
                                     </li>
 
                                     <!-- next page -->
                                     <li class="page-item" th:classappend="${currentPage == maxPage} ? 'disabled'">
-                                        <a class="page-link" th:href="@{|?page=${currentPage + 1}|}" aria-label="Next">
+                                        <a class="page-link" th:href="@{/blogs(page=${currentPage + 1}, query=${currentQuery}, filter=${currentFilter})}" aria-label="Next">
                                             <i class="ti-angle-right"></i>
                                         </a>
                                     </li>
@@ -254,7 +254,7 @@
                         <div class="blog_right_sidebar">
                             <!-- search -->
                             <aside class="single_sidebar_widget search_widget">
-                                <form action="/blogs" method="GET">
+                                <form th:action="@{/blogs}" method="GET">
                                     <div class="form-group">
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" placeholder="Search Keyword"
@@ -277,12 +277,12 @@
                                     <li>
                                         <a th:href="@{/blogs(query=${currentQuery}, filter='')}" class="d-flex">
                                             <p>All</p>
-                                            </a>
+                                        </a>
                                     </li>
                                     <li>
                                         <a th:href="@{/blogs(query=${currentQuery}, filter='newest')}" class="d-flex">
                                             <p>Newest First</p>
-                                            </a>
+                                        </a>
                                     </li>
                                     <li>
                                         <a th:href="@{/blogs(query=${currentQuery}, filter='oldest')}" class="d-flex">
@@ -311,7 +311,7 @@
                                     </li>
                                 </ul>
                             </aside>
-                            <!-- recent posts -->                            
+                            <!-- recent posts -->                                
                             <aside class="single_sidebar_widget popular_post_widget">
                                 <h3 class="widget_title" style="color: #2d2d2d;">Recent Posts</h3>
                                 <div class="media post_item" th:each="recentPost : ${recentPosts}">
@@ -320,7 +320,7 @@
                                         <a th:href="@{/blogs/blog(id=${recentPost.getId()})}">
                                             <h3 style="color: #2d2d2d;" th:text="${recentPost.title}"></h3>
                                         </a>
-                                        <p th:text="${recentPost.timeAgo}"></p>
+                                        <p th:text="${recentPost.getTimeAgo()}"></p>
                                     </div>
                                 </div>
                             </aside>
@@ -343,7 +343,7 @@
                             <div class="single-footer-caption mb-30">
                                 <div class="footer-tittle">
                                     <div class="footer-logo mb-20">
-                                        <a href="index"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt=""></a>
+                                        <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt="Footer Logo"></a>
                                     </div>
                                 </div>
                             </div>
@@ -369,10 +369,10 @@
                                 <div class="footer-tittle">
                                     <h4>Important Links</h4>
                                     <ul>
-                                        <li><a href="/about">About Us</a></li>
-                                        <li><a href="/contact">Contact Us</a></li>
-                                        <li><a href="/index#testimonial">Testimonial</a></li>
-                                        <li><a href="/campaigns">Campaigns</a></li>
+                                        <li><a th:href="@{/about}">About Us</a></li>
+                                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                                        <li><a th:href="@{/index#testimonial}">Testimonial</a></li>
+                                        <li><a th:href="@{/campaigns}">Campaigns</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -382,24 +382,24 @@
                                 <div class="footer-tittle">
                                     <h4>Newsletter</h4>
                                     <div class="footer-pera footer-pera2">
-                                    <p>Subscribe to our newsletter to receive campaign updates!</p>
-                                </div>
-                                <!-- Form -->
-                                <div class="footer-form" >
-                                    <div id="mc_embed_signup">
-                                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                        method="get" class="subscribe_form relative mail_part">
-                                            <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                            class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                            onblur="this.placeholder = ' Email Address '">
-                                            <div class="form-icon">
-                                                <button type="submit" name="submit" id="newsletter-submit"
-                                                class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt=""></button>
-                                            </div>
-                                            <div class="mt-10 info"></div>
-                                        </form>
+                                        <p>Subscribe to our newsletter to receive campaign updates!</p>
                                     </div>
-                                </div>
+                                    <!-- Form -->
+                                    <div class="footer-form" >
+                                        <div id="mc_embed_signup">
+                                            <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                            method="get" class="subscribe_form relative mail_part">
+                                                <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                                class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = ' Email Address '">
+                                                <div class="form-icon">
+                                                    <button type="submit" name="submit" id="newsletter-submit"
+                                                    class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt="Subscribe"></button>
+                                                </div>
+                                                <div class="mt-10 info"></div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -414,8 +414,9 @@
                             <div class="col-xl-10 col-lg-9 ">
                                 <div class="footer-copy-right">
                                     <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                                        Copyright &copy;<span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'yyyy')}"></span> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-lg-3">
@@ -474,8 +475,8 @@
     <script th:src="@{/assets/js/mail-script.js}"></script>
     <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
     
-    <!-- Jquery Plugins, main Jquery -->	
+    <!-- Jquery Plugins, main Jquery -->    
     <script th:src="@{/assets/js/plugins.js}"></script>
     <script th:src="@{/assets/js/main.js}"></script>
-    </body>
+</body>
 </html>

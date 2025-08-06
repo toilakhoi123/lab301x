@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -7,23 +7,23 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="site.webmanifest">
-    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.ico}">
 
-	<!-- CSS here -->
-	<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
+    <!-- CSS here -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
     <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
     <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
     <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
     <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
     <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/slick.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
 </head>
 <body>
     <!-- Loader -->
@@ -32,7 +32,7 @@
             <div class="preloader-inner position-relative">
                 <div class="preloader-circle"></div>
                 <div class="preloader-img pere-text">
-                    <img th:src="@{/assets/img/logo/loder.png}" alt="">
+                    <img th:src="@{/assets/img/logo/loder.png}" alt="Loading...">
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
                         <div class="col-xl-12">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="header-info-left d-flex">
-                                    <ul>     
+                                    <ul>    
                                         <li>Phone: +84 (0) 793 300 359</li>
                                         <li>Email: leqwoi@protonmail.com</li>
                                     </ul>
@@ -72,8 +72,8 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <ul class="contact-now">     
-                                        <li><a href="/register">Register Now!</a></li>
+                                    <ul class="contact-now">    
+                                        <li><a th:href="@{/register}">Register Now!</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@
                             <!-- Logo -->
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="/index"><img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
+                                    <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo.png}" alt="Little Hearts, Big Dreams Logo"></a>
                                 </div>
                             </div>
                             <div class="col-xl-10 col-lg-10">
@@ -94,20 +94,20 @@
                                     <!-- Main-menu -->
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
-                                            <ul id="navigation">                                                                                          
-                                                <li><a href="/index">Home</a></li>
-                                                <li><a href="/about">About</a></li>
-                                                <li><a href="/campaigns">Campaigns</a></li>
-                                                <li><a href="/blogs">Blogs</a></li>
-                                                <li><a href="/contact">Contact</a></li>
+                                            <ul id="navigation">                                                                                                                                     
+                                                <li><a th:href="@{/index}">Home</a></li>
+                                                <li><a th:href="@{/about}">About</a></li>
+                                                <li><a th:href="@{/campaigns}">Campaigns</a></li>
+                                                <li><a th:href="@{/blogs}">Blogs</a></li>
+                                                <li><a th:href="@{/contact}">Contact</a></li>
 
                                                 <!-- account info dropdown -->
                                                 <li th:if="${session.account}">
-                                                    <a href="/account" th:text="${session.account.getFullName()}"></a>
+                                                    <a th:href="@{/account}" th:text="${session.account.getFullName()}"></a>
                                                     <ul class="submenu">
-                                                        <li><a href="/account">Edit Account</a></li>
-                                                        <li><a href="/change-password">Change Password</a></li>
-                                                        <li><a href="/logout">Log Out</a></li>
+                                                        <li><a th:href="@{/account}">Edit Account</a></li>
+                                                        <li><a th:href="@{/change-password}">Change Password</a></li>
+                                                        <li><a th:href="@{/logout}">Log Out</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -116,14 +116,14 @@
                                     <!-- Header-btn -->
                                     <div class="header-right-btn d-none d-lg-block ml-20">
                                         <div th:if="${session.account==null}">
-                                            <a href="/login" class="btn header-btn">Log In</a>
+                                            <a th:href="@{/login}" class="btn header-btn">Log In</a>
                                         </div>
                                         <div th:if="${session.account!=null and session.account.isAdmin()}">
-                                            <a href="/admin/manage-accounts" class="btn header-btn">Management</a>
+                                            <a th:href="@{/admin/manage-accounts}" class="btn header-btn">Management</a>
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <!-- Mobile Menu -->
                             <div class="col-12">
                                 <div class="mobile_menu d-block d-lg-none"></div>
@@ -149,7 +149,7 @@
                                     <P data-animation="fadeInUp" data-delay=".8s" >Lòng hảo tâm của bạn hôm nay sẽ xây dựng tương lai cho các em. Hãy cùng chúng tôi trao cho các em cơ hội để trưởng thành và phát triển.</P>
                                     <!-- Hero-btn -->
                                     <div class="hero__btn">
-                                        <a href="/campaigns" class="btn hero-btn mb-10"  data-animation="fadeInLeft" data-delay=".8s">Donate</a>
+                                        <a th:href="@{/campaigns}" class="btn hero-btn mb-10"  data-animation="fadeInLeft" data-delay=".8s">Donate</a>
                                         <a href="tel:+84793300359" class="cal-btn ml-15" data-animation="fadeInRight" data-delay="1.0s">
                                             <i class="flaticon-null"></i>
                                             <p>+84 793 300 359</p>
@@ -181,7 +181,7 @@
                                 <span class="flaticon-null-1"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services">Hỗ trợ y tế</a></h5>
+                                <h5><a th:href="@{/services}">Hỗ trợ y tế</a></h5>
                                 <p>Giúp trẻ em nhận được sự điều trị y tế khẩn cấp và dịch vụ chăm sóc cứu sống mà các em và gia đình không thể tự chi trả.</p>
                             </div>
                         </div>
@@ -192,7 +192,7 @@
                                 <span class="flaticon-think"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services">Tiếp cận giáo dục</a></h5>
+                                <h5><a th:href="@{/services}">Tiếp cận giáo dục</a></h5>
                                 <p>Tạo cơ hội cho trẻ em được học tập, phát triển và tạo dựng tương lai tốt đẹp hơn cho bản thân và gia đình.</p>
                             </div>
                         </div>
@@ -203,7 +203,7 @@
                                 <span class="flaticon-gear"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a href="services">Dinh dưỡng & Bữa ăn</a></h5>
+                                <h5><a th:href="@{/services}">Dinh dưỡng & Bữa ăn</a></h5>
                                 <p>Đảm bảo mọi trẻ em đều được tiếp cận với thực phẩm bổ dưỡng để trẻ có thể khỏe mạnh và phát triển mỗi ngày.</p>
                             </div>
                         </div>
@@ -225,16 +225,16 @@
                             <p>Chúng tôi tin rằng mọi đứa trẻ đều xứng đáng có cơ hội được lớn lên, học hỏi và nuôi dưỡng những ước mơ không giới hạn. Sứ mệnh của chúng tôi là hỗ trợ những trẻ em có hoàn cảnh khó khăn được chăm sóc y tế kịp thời, giáo dục và dinh dưỡng đầy đủ để các em có thể xây dựng một tương lai tươi sáng hơn.</p>
                             <p>Hãy đồng hành cùng chúng tôi để biến những hành động nhỏ của lòng nhân ái thành cơ hội thay đổi cuộc đời cho các em nhỏ trên khắp đất nước.</p>
                         </div>
-                        <a href="/about" class="btn">Về Chúng Tôi</a>
+                        <a th:href="@{/about}" class="btn">Về Chúng Tôi</a>
                     </div>
                     <div class="col-lg-6 col-md-12">
                         <!-- about-img -->
                         <div class="about-img ">
                             <div class="about-font-img d-none d-lg-block">
-                                <img th:src="@{/assets/img/gallery/about2.png}" alt="">
+                                <img th:src="@{/assets/img/gallery/about2.png}" alt="About Us Image 2">
                             </div>
                             <div class="about-back-img">
-                                <img th:src="@{/assets/img/gallery/about1.png}" alt="">
+                                <img th:src="@{/assets/img/gallery/about1.png}" alt="About Us Image 1">
                             </div>
                         </div>
                     </div>
@@ -258,7 +258,7 @@
                     <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaigns}">
                         <div class="single-cases mb-40">
                             <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
+                                <img th:src="${campaign.getImageUrl()}" alt="Campaign Image">
                             </div>
                             <div class="cases-caption">
                                 <!-- redirect to campaign page -->
@@ -298,7 +298,7 @@
                 </div>
                 <!-- see more button -->
                 <div class="row d-flex justify-content-center">
-                    <a href="/campaigns" class="btn">Xem Nhiều Hơn</a>
+                    <a th:href="@{/campaigns}" class="btn">Xem Nhiều Hơn</a>
                 </div>
             </div>
         </div>
@@ -321,13 +321,13 @@
                                 <div class="blog-img">
                                     <img 
                                         th:src="${blogPost.getImageUrl()}" 
-                                        alt=""
+                                        alt="Blog Post Image"
                                         style="height: 330px; width: 100%; object-fit: cover; display: block;"
                                     >
                                     <!-- Blog date -->
                                     <div class="blog-date text-center">
-                                        <span th:text="${#dates.format(blogPost.date, 'dd')}"></span>
-                                        <p th:text="${#dates.format(blogPost.date, 'MMMM')}"></p>
+                                        <span th:text="${#temporals.format(blogPost.date, 'dd')}"></span>
+                                        <p th:text="${#temporals.format(blogPost.date, 'MMMM')}"></p>
                                     </div>
                                 </div>
                                 <div class="blog-cap">
@@ -340,7 +340,7 @@
                 </div>
                 <!-- see more button -->
                 <div class="row d-flex justify-content-center">
-                    <a href="/blogs" class="btn">Xem Nhiều Hơn</a>
+                    <a th:href="@{/blogs}" class="btn">Xem Nhiều Hơn</a>
                 </div>
             </div>
         </section>
@@ -360,7 +360,7 @@
                     <div class="col-lg-3 col-md-6 col-sm-6 mx-auto">
                         <div class="single-team mb-30">
                             <div class="team-img">
-                                <img th:src="@{/assets/img/gallery/khoi1.png}" alt="">
+                                <img th:src="@{/assets/img/gallery/khoi1.png}" alt="Team Member Image">
                                 <!-- Blog Social -->
                                 <ul class="team-social">
                                     <li><a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a></li>
@@ -370,7 +370,7 @@
                                 </ul>
                             </div>
                             <div class="team-caption">
-                                <h3><a href="instructor">Le Minh Khoi</a></h3>
+                                <h3><a th:href="@{/instructor}">Le Minh Khoi</a></h3>
                                 <p>Volunteer leader, Web Maintainer</p>
                             </div>
                         </div>
@@ -437,7 +437,7 @@
                             <div class="single-footer-caption mb-30">
                                 <div class="footer-tittle">
                                     <div class="footer-logo mb-20">
-                                        <a href="index"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt=""></a>
+                                        <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt="Footer Logo"></a>
                                     </div>
                                 </div>
                             </div>
@@ -463,10 +463,10 @@
                                 <div class="footer-tittle">
                                     <h4>Important Links</h4>
                                     <ul>
-                                        <li><a href="/about">About Us</a></li>
-                                        <li><a href="/contact">Contact Us</a></li>
-                                        <li><a href="/index#testimonial">Testimonial</a></li>
-                                        <li><a href="/campaigns">Campaigns</a></li>
+                                        <li><a th:href="@{/about}">About Us</a></li>
+                                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                                        <li><a th:href="@{/index#testimonial}">Testimonial</a></li>
+                                        <li><a th:href="@{/campaigns}">Campaigns</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -476,24 +476,24 @@
                                 <div class="footer-tittle">
                                     <h4>Newsletter</h4>
                                     <div class="footer-pera footer-pera2">
-                                    <p>Subscribe to our newsletter to receive campaign updates!</p>
-                                </div>
-                                <!-- Form -->
-                                <div class="footer-form" >
-                                    <div id="mc_embed_signup">
-                                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                        method="get" class="subscribe_form relative mail_part">
-                                            <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                            class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                            onblur="this.placeholder = ' Email Address '">
-                                            <div class="form-icon">
-                                                <button type="submit" name="submit" id="newsletter-submit"
-                                                class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt=""></button>
-                                            </div>
-                                            <div class="mt-10 info"></div>
-                                        </form>
+                                        <p>Subscribe to our newsletter to receive campaign updates!</p>
                                     </div>
-                                </div>
+                                    <!-- Form -->
+                                    <div class="footer-form" >
+                                        <div id="mc_embed_signup">
+                                            <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                            method="get" class="subscribe_form relative mail_part">
+                                                <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                                class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = ' Email Address '">
+                                                <div class="form-icon">
+                                                    <button type="submit" name="submit" id="newsletter-submit"
+                                                    class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt="Subscribe"></button>
+                                                </div>
+                                                <div class="mt-10 info"></div>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -508,8 +508,9 @@
                             <div class="col-xl-10 col-lg-9 ">
                                 <div class="footer-copy-right">
                                     <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                                        Copyright &copy;<span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'yyyy')}"></span> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    </p>
                                 </div>
                             </div>
                             <div class="col-xl-2 col-lg-3">
@@ -554,8 +555,6 @@
     <!-- Nice-select, sticky -->
     <script th:src="@{/assets/js/jquery.nice-select.min.js}"></script>
     <script th:src="@{/assets/js/jquery.sticky.js}"></script>
-    <!-- Progress -->
-    <script th:src="@{/assets/js/jquery.barfiller.js}"></script>
     
     <!-- counter , waypoint,Hover Direction -->
     <script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
@@ -570,8 +569,8 @@
     <script th:src="@{/assets/js/mail-script.js}"></script>
     <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
     
-    <!-- Jquery Plugins, main Jquery -->	
+    <!-- Jquery Plugins, main Jquery -->    
     <script th:src="@{/assets/js/plugins.js}"></script>
     <script th:src="@{/assets/js/main.js}"></script>
-    </body>
+</body>
 </html>

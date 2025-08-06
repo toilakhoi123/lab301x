@@ -1,445 +1,446 @@
 <!doctype html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-   <meta charset="utf-8">
-   <meta http-equiv="x-ua-compatible" content="ie=edge">
-   <title> Post | Little Hearts, Big Dreams.</title>
-   <meta name="description" content="">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Post | Little Hearts, Big Dreams.</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-xicon" th:href="@{/assets/img/favicon.ico}">
 
-   <!-- CSS here -->
-   <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
-   <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/slick.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
-	<link rel="stylesheet" th:href="@{/assets/css/style.css}">
+    <!-- CSS here -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
 </head>
 
 <body>
-   <!--? Preloader Start -->
-   <div id="preloader-active">
-      <div class="preloader d-flex align-items-center justify-content-center">
-          <div class="preloader-inner position-relative">
-              <div class="preloader-circle"></div>
-              <div class="preloader-img pere-text">
-                  <img src="assets/img/logo/loder.png" alt="">
-              </div>
-          </div>
-      </div>
-   </div>
-   
-   <!-- header -->
-   <header>
-      <div class="header-area">
-         <div class="main-header">
-               <div class="header-top d-none d-lg-block">
-                  <div class="container-fluid">
-                     <div class="col-xl-12">
-                           <div class="row d-flex justify-content-between align-items-center">
-                              <div class="header-info-left d-flex">
-                                 <ul>     
-                                       <li>Phone: +84 (0) 793 300 359</li>
-                                       <li>Email: leqwoi@protonmail.com</li>
-                                 </ul>
-                                 <div class="header-social">    
-                                       <ul>
-                                          <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                          <li><a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a></li>
-                                          <li><a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a></li>
-                                          <li><a href="https://github.com/fuwu99"><i class="fab fa-github"></i></a></li>
-                                          <li><a href="https://leqwoi2.vercel.app/"><i class="fab fa-globe"></i></a></li>
-                                       </ul>
-                                 </div>
-                              </div>
-                              <div class="header-info-right d-flex align-items-center">
-                                 <div class="select-this">
-                                       <form action="#">
-                                          <div class="select-itms">
-                                             <select name="select" id="select1">
-                                                   <option value="">English</option>
-                                                   <option value="">Vietnamese</option>
-                                             </select>
-                                          </div>
-                                       </form>
-                                 </div>
-                                 <ul class="contact-now">     
-                                       <li><a href="/register">Register Now!</a></li>
-                                 </ul>
-                              </div>
-                           </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="header-bottom header-sticky">
-                  <div class="container-fluid">
-                     <div class="row align-items-center">
-                           <!-- Logo -->
-                           <div class="col-xl-2 col-lg-2">
-                              <div class="logo">
-                                 <a href="/index"><img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
-                              </div>
-                           </div>
-                           <div class="col-xl-10 col-lg-10">
-                              <div class="menu-wrapper  d-flex align-items-center justify-content-end">
-                                 <!-- Main-menu -->
-                                 <div class="main-menu d-none d-lg-block">
-                                       <nav>
-                                          <ul id="navigation">                                                                                          
-                                             <li><a href="/index">Home</a></li>
-                                             <li><a href="/about">About</a></li>
-                                             <li><a href="/campaigns">Campaigns</a></li>
-                                             <li><a href="/blogs">Blogs</a></li>
-                                             <li><a href="/contact">Contact</a></li>
-
-                                             <!-- account info dropdown -->
-                                             <li th:if="${session.account}">
-                                                   <a href="/account" th:text="${session.account.getFullName()}"></a>
-                                                   <ul class="submenu">
-                                                      <li><a href="/account">Edit Account</a></li>
-                                                      <li><a href="/change-password">Change Password</a></li>
-                                                      <li><a href="/logout">Log Out</a></li>
-                                                   </ul>
-                                             </li>
-                                          </ul>
-                                       </nav>
-                                 </div>
-                                 <!-- Header-btn -->
-                                 <div class="header-right-btn d-none d-lg-block ml-20">
-                                       <div th:if="${session.account==null}">
-                                          <a href="/login" class="btn header-btn">Log In</a>
-                                       </div>
-                                       <div th:if="${session.account!=null and session.account.isAdmin()}">
-                                          <a href="/admin/manage-accounts" class="btn header-btn">Management</a>
-                                       </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <!-- Mobile Menu -->
-                           <div class="col-12">
-                              <div class="mobile_menu d-block d-lg-none"></div>
-                           </div>
-                     </div>
-                  </div>
-               </div>
-         </div>
-      </div>
-   </header>
-
-   <main>
-      <!--? Hero Start -->
-      <div class="slider-area2">
-         <div class="slider-height2 d-flex align-items-center">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-xl-12">
-                           <div class="hero-cap hero-cap2 pt-20 text-center">
-                              <h2>Blog Details</h2>
-                           </div>
-                     </div>
-                  </div>
-               </div>
-         </div>
-      </div>
-
-      <!--? Blog Area Start -->
-      <section class="blog_area single-post-area section-padding">
-         <div class="container">
-            <div class="row">
-               <div class="col-lg-8 posts-list">
-                  <div class="single-post">
-                     <!-- image -->
-                     <div class="feature-img">
-                        <img class="img-fluid" th:src="${blogPost.imageUrl}" alt="">
-                     </div>
-                     <div class="blog_details">
-                        <!-- title -->
-                        <h2 style="color: #2d2d2d;" th:text="${blogPost.title}"></h2>
-                        <!-- useful info -->
-                        <ul class="blog-info-link mt-3 mb-4">
-                           <li><a href="#"><i class="fa fa-user"></i>Campaign Blog</a></li>
-                           <li><a href="#comments"><i class="fa fa-comments"></i><span th:text="${#lists.size(blogPost.comments) + ' Comments'}"></span></a></li>
-                        </ul>
-                        <!-- description -->
-                        <p class="excert" th:text="${blogPost.description}" style="white-space: pre-wrap;"></p>
-                     </div>
-                  </div>
-
-                  <!-- display likes/social -->
-                  <div class="navigation-top">
-                     <div class="d-sm-flex justify-content-between text-center">
-                        <p class="like-info"><span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4 people like this</p>
-                        <div class="col-sm-4 text-center my-2 my-sm-0">
-                           <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
-                        </div>
-                        <ul class="social-icons">
-                           <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                           <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                           <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
-                           <li><a href="#"><i class="fab fa-behance"></i></a></li>
-                        </ul>
-                     </div>
-                     <!-- post navigation previous/next -->
-                     <div class="navigation-area">
-                        <div class="row">
-                           <!-- previous post -->
-                           <div
-                              class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                              <div class="thumb">
-                                 <a href="#">
-                                    <img class="img-fluid" src="assets/img/post/preview.png" alt="">
-                                 </a>
-                              </div>
-                              <div class="arrow">
-                                 <a href="#">
-                                    <span class="lnr text-white ti-arrow-left"></span>
-                                 </a>
-                              </div>
-                              <div class="detials">
-                                 <p>Prev Post</p>
-                                 <a href="#">
-                                    <h4 style="color: #2d2d2d;">Space The Final Frontier</h4>
-                                 </a>
-                              </div>
-                           </div>
-                           <!-- next post -->
-                           <div
-                              class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                              <div class="detials">
-                                 <p>Next Post</p>
-                                 <a href="#">
-                                    <h4 style="color: #2d2d2d;">Telescopes 101</h4>
-                                 </a>
-                              </div>
-                              <div class="arrow">
-                                 <a href="#">
-                                    <span class="lnr text-white ti-arrow-right"></span>
-                                 </a>
-                              </div>
-                              <div class="thumb">
-                                 <a href="#">
-                                    <img class="img-fluid" src="assets/img/post/next.png" alt="">
-                                 </a>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-
-                  <!-- blog author -->
-                  <div class="blog-author">
-                     <div class="media align-items-center">
-                        <img src="assets/img/blog/author.png" alt="">
-                        <div class="media-body">
-                           <a th:href="@{/account(id=${blogPost.author.id})}">
-                              <h4 th:text="${blogPost.author.fullName}"></h4>
-                           </a>
-                           <p>Little Hearts, Big Dreams.</p>
-                        </div>
-                     </div>
-                  </div>
-
-                  <!-- comments section section -->
-                  <div id="comments"></div>
-
-                  <!-- current account comment -->
-                  <div class="comment-form" th:if="${session.account != null}">
-                     <h4>Leave a Comment</h4>
-                     <form class="form-contact comment_form" action="/blogs/comment" id="commentForm" method="POST">
-                        <input type="hidden" name="id" th:value="${blogPost.id}">
-                        <!-- content -->
-                        <div class="row">
-                           <div class="col-12">
-                              <div class="form-group">
-                                 <textarea class="form-control w-100" name="content" id="content" cols="30" rows="9"
-                                    placeholder="Write Comment"></textarea>
-                              </div>
-                           </div>
-                        </div>
-                        <!-- submit button -->
-                        <div class="form-group">
-                           <button type="submit" class="button button-contactForm btn_1 boxed-btn">Post Comment</button>
-                        </div>
-                     </form>
-                  </div>
-
-                  <!-- comments -->
-                  <div class="comments-area">
-                     <h4 th:text="${#lists.size(blogPost.comments) + ' Comments'}"></h4>
-
-                     <!-- populate -->
-                     <div class="comment-list" th:each="comment : ${blogPost.comments}">
-                        <div class="single-comment justify-content-between d-flex">
-                           <div class="user justify-content-between d-flex">
-                              <!-- user image -->
-                              <div class="thumb">
-                                 <img th:src="@{/assets/img/blog/comment_1.png}" alt="">
-                              </div>
-                              <!-- description -->
-                              <div class="desc">
-                                 <!-- comment content -->
-                                 <p class="comment" th:text="${comment.content}"></p>
-                                 <!-- name and date -->
-                                 <div class="d-flex justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                       <!-- name -->
-                                       <h5><a th:href="@{/account(id=${comment.account.id})}" th:text="${comment.account.fullName}"></a></h5>
-                                       <!-- date -->
-                                       <p class="date" th:text="${#temporals.format(comment.time, 'EEEE, MMM d, yyyy')}"></p>
-                                    </div>
-                                    <!-- actilon buttons -->
-                                    <div class="reply-btn">
-                                       <a href="#" class="btn-reply text-uppercase">reply</a>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-
-               <!-- sidebar -->
-               <div class="col-lg-4">
-                  <div class="blog_right_sidebar">
-                     <!-- recent posts -->                            
-                     <aside class="single_sidebar_widget popular_post_widget">
-                        <h3 class="widget_title" style="color: #2d2d2d;">Recent Posts</h3>
-                        <div class="media post_item" th:each="recentPost : ${recentPosts}">
-                           <img th:src="${recentPost.imageUrl}" alt="post" style="width: 90px; height: 90px; object-fit: cover;">
-                           <div class="media-body">
-                              <a th:href="@{/blogs/blog(id=${recentPost.getId()})}">
-                                 <h3 style="color: #2d2d2d;" th:text="${recentPost.title}"></h3>
-                              </a>
-                              <p th:text="${recentPost.timeAgo}"></p>
-                           </div>
-                        </div>
-                     </aside>
-                  </div>
-               </div>
+    <!--? Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img th:src="@{/assets/img/logo/loder.png}" alt="Loading...">
+                </div>
             </div>
-         </div>
-      </section>
-   </main>
+        </div>
+    </div>
+    
+    <!-- header -->
+    <header>
+        <div class="header-area">
+            <div class="main-header">
+                <div class="header-top d-none d-lg-block">
+                    <div class="container-fluid">
+                        <div class="col-xl-12">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div class="header-info-left d-flex">
+                                    <ul>    
+                                        <li>Phone: +84 (0) 793 300 359</li>
+                                        <li>Email: leqwoi@protonmail.com</li>
+                                    </ul>
+                                    <div class="header-social">    
+                                        <ul>
+                                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                            <li><a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li><a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a></li>
+                                            <li><a href="https://github.com/fuwu99"><i class="fab fa-github"></i></a></li>
+                                            <li><a href="https://leqwoi2.vercel.app/"><i class="fab fa-globe"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="header-info-right d-flex align-items-center">
+                                    <div class="select-this">
+                                        <form action="#">
+                                            <div class="select-itms">
+                                                <select name="select" id="select1">
+                                                    <option value="">English</option>
+                                                    <option value="">Vietnamese</option>
+                                                </select>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <ul class="contact-now">    
+                                        <li><a th:href="@{/register}">Register Now!</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-bottom header-sticky">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <!-- Logo -->
+                            <div class="col-xl-2 col-lg-2">
+                                <div class="logo">
+                                    <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo.png}" alt="Little Hearts, Big Dreams Logo"></a>
+                                </div>
+                            </div>
+                            <div class="col-xl-10 col-lg-10">
+                                <div class="menu-wrapper  d-flex align-items-center justify-content-end">
+                                    <!-- Main-menu -->
+                                    <div class="main-menu d-none d-lg-block">
+                                        <nav>
+                                            <ul id="navigation">                                                                                                                                     
+                                                <li><a th:href="@{/index}">Home</a></li>
+                                                <li><a th:href="@{/about}">About</a></li>
+                                                <li><a th:href="@{/campaigns}">Campaigns</a></li>
+                                                <li><a th:href="@{/blogs}">Blogs</a></li>
+                                                <li><a th:href="@{/contact}">Contact</a></li>
 
-   <!-- Footer -->
-   <footer>
-      <div class="footer-wrapper" style="background-color: #1f1f1f;">
-         <!-- Footer Top-->
-         <div class="footer-area footer-padding">
-               <div class="container">
-                  <div class="row d-flex justify-content-between">
-                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                     <div class="single-footer-caption mb-50">
-                           <div class="single-footer-caption mb-30">
-                              <div class="footer-tittle">
-                                 <div class="footer-logo mb-20">
-                                       <a href="index"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt=""></a>
-                                 </div>
-                              </div>
-                           </div>
-                     </div>
-                     </div>
-                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                           <div class="single-footer-caption mb-50">
-                              <div class="footer-tittle">
-                                 <h4>Contact Info</h4>
-                                 <ul>
-                                       <li>
-                                          <p>Address: Gia Lam, Ha Noi, Viet Nam</p>
-                                       </li>
-                                       <li><a href="tel:+84793300359">Phone: +84 793 300 359</a></li>
-                                       <li><a href="mailto:leqwoi@protonmail.com">Email: leqwoi@protonmail.com</a></li>
-                                 </ul>
-                              </div>
+                                                <!-- account info dropdown -->
+                                                <li th:if="${session.account}">
+                                                    <a th:href="@{/account}" th:text="${session.account.getFullName()}"></a>
+                                                    <ul class="submenu">
+                                                        <li><a th:href="@{/account}">Edit Account</a></li>
+                                                        <li><a th:href="@{/change-password}">Change Password</a></li>
+                                                        <li><a th:href="@{/logout}">Log Out</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    <!-- Header-btn -->
+                                    <div class="header-right-btn d-none d-lg-block ml-20">
+                                        <div th:if="${session.account==null}">
+                                            <a th:href="@{/login}" class="btn header-btn">Log In</a>
+                                        </div>
+                                        <div th:if="${session.account!=null and session.account.isAdmin()}">
+                                            <a th:href="@{/admin/manage-accounts}" class="btn header-btn">Management</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Mobile Menu -->
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
 
-                           </div>
-                     </div>
-                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                           <div class="single-footer-caption mb-50">
-                              <div class="footer-tittle">
-                                 <h4>Important Links</h4>
-                                 <ul>
-                                       <li><a href="/about">About Us</a></li>
-                                       <li><a href="/contact">Contact Us</a></li>
-                                       <li><a href="/index#testimonial">Testimonial</a></li>
-                                       <li><a href="/campaigns">Campaigns</a></li>
-                                 </ul>
-                              </div>
-                           </div>
-                     </div>
-                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                           <div class="single-footer-caption mb-50">
-                              <div class="footer-tittle">
-                                 <h4>Newsletter</h4>
-                                 <div class="footer-pera footer-pera2">
-                                 <p>Subscribe to our newsletter to receive campaign updates!</p>
-                              </div>
-                              <!-- Form -->
-                              <div class="footer-form" >
-                                 <div id="mc_embed_signup">
-                                       <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                       method="get" class="subscribe_form relative mail_part">
-                                          <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                          class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                          onblur="this.placeholder = ' Email Address '">
-                                          <div class="form-icon">
-                                             <button type="submit" name="submit" id="newsletter-submit"
-                                             class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt=""></button>
-                                          </div>
-                                          <div class="mt-10 info"></div>
-                                       </form>
-                                 </div>
-                              </div>
-                              </div>
-                           </div>
-                     </div>
-                  </div>
-               </div>
-         </div>
-         <!-- footer-bottom -->
-         <div class="footer-bottom-area">
-               <div class="container">
-                  <div class="footer-border">
-                     <div class="row d-flex justify-content-between align-items-center">
-                           <div class="col-xl-10 col-lg-9 ">
-                              <div class="footer-copy-right">
-                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                              </div>
-                           </div>
-                           <div class="col-xl-2 col-lg-3">
-                              <div class="footer-social f-right">
-                                 <a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a>
-                                 <a href="https://leqwoi2.vercel.app/"><i class="fas fa-globe"></i></a>
-                                 <a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a>
-                              </div>
-                           </div>
-                     </div>
-                  </div>
-               </div>
-         </div>
-      </div>
-   </footer>
+    <main>
+        <!--? Hero Start -->
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-20 text-center">
+                                <h2>Blog Details</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-   <!-- Scroll Up -->
-   <div id="back-top" >
-      <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
-   </div>
+        <!--? Blog Area Start -->
+        <section class="blog_area single-post-area section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 posts-list">
+                        <div class="single-post">
+                            <!-- image -->
+                            <div class="feature-img">
+                                <img class="img-fluid" th:src="${blogPost.imageUrl}" alt="Blog Post Featured Image">
+                            </div>
+                            <div class="blog_details">
+                                <!-- title -->
+                                <h2 style="color: #2d2d2d;" th:text="${blogPost.title}"></h2>
+                                <!-- useful info -->
+                                <ul class="blog-info-link mt-3 mb-4">
+                                    <li><a href="#"><i class="fa fa-user"></i>Campaign Blog</a></li>
+                                    <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}+'#comments'"><i class="fa fa-comments"></i><span th:text="${blogPost.getCommentsCount() + ' Comments'}"></span></a></li>
+                                </ul>
+                                <!-- description -->
+                                <p class="excert" th:text="${blogPost.description}" style="white-space: pre-wrap;"></p>
+                            </div>
+                        </div>
 
-   <!-- JS HERE -->
+                        <!-- display likes/social -->
+                        <div class="navigation-top">
+                            <div class="d-sm-flex justify-content-between text-center">
+                                <p class="like-info"><span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4 people like this</p>
+                                <div class="col-sm-4 text-center my-2 my-sm-0">
+                                    <!-- <p class="comment-count"><span class="align-middle"><i class="fa fa-comment"></i></span> 06 Comments</p> -->
+                                </div>
+                                <ul class="social-icons">
+                                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-dribbble"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-behance"></i></a></li>
+                                </ul>
+                            </div>
+                            <!-- post navigation previous/next -->
+                            <div class="navigation-area">
+                                <div class="row">
+                                    <!-- previous post -->
+                                    <div
+                                        class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <img class="img-fluid" th:src="@{/assets/img/post/preview.png}" alt="Previous Post Thumbnail">
+                                            </a>
+                                        </div>
+                                        <div class="arrow">
+                                            <a href="#">
+                                                <span class="lnr text-white ti-arrow-left"></span>
+                                            </a>
+                                        </div>
+                                        <div class="detials">
+                                            <p>Prev Post</p>
+                                            <a href="#">
+                                                <h4 style="color: #2d2d2d;">Space The Final Frontier</h4>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- next post -->
+                                    <div
+                                        class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
+                                        <div class="detials">
+                                            <p>Next Post</p>
+                                            <a href="#">
+                                                <h4 style="color: #2d2d2d;">Telescopes 101</h4>
+                                            </a>
+                                        </div>
+                                        <div class="arrow">
+                                            <a href="#">
+                                                <span class="lnr text-white ti-arrow-right"></span>
+                                            </a>
+                                        </div>
+                                        <div class="thumb">
+                                            <a href="#">
+                                                <img class="img-fluid" th:src="@{/assets/img/post/next.png}" alt="Next Post Thumbnail">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-   <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
+                        <!-- blog author -->
+                        <div class="blog-author">
+                            <div class="media align-items-center">
+                                <img th:src="@{/assets/img/blog/author.png}" alt="Author Image">
+                                <div class="media-body">
+                                    <a th:href="@{/account(id=${blogPost.author.id})}">
+                                        <h4 th:text="${blogPost.author.fullName}"></h4>
+                                    </a>
+                                    <p>Little Hearts, Big Dreams.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- comments section section -->
+                        <div id="comments"></div>
+
+                        <!-- current account comment -->
+                        <div class="comment-form" th:if="${session.account != null}">
+                            <h4>Leave a Comment</h4>
+                            <form class="form-contact comment_form" th:action="@{/blogs/comment}" id="commentForm" method="POST">
+                                <input type="hidden" name="id" th:value="${blogPost.id}">
+                                <!-- content -->
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <textarea class="form-control w-100" name="content" id="content" cols="30" rows="9"
+                                                placeholder="Write Comment"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- submit button -->
+                                <div class="form-group">
+                                    <button type="submit" class="button button-contactForm btn_1 boxed-btn">Post Comment</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- comments -->
+                        <div class="comments-area">
+                            <h4 th:text="${blogPost.getCommentsCount() + ' Comments'}"></h4>
+
+                            <!-- populate -->
+                            <div class="comment-list" th:each="comment : ${blogPost.comments}">
+                                <div class="single-comment justify-content-between d-flex">
+                                    <div class="user justify-content-between d-flex">
+                                        <!-- user image -->
+                                        <div class="thumb">
+                                            <img th:src="@{/assets/img/blog/comment_1.png}" alt="User Profile Picture">
+                                        </div>
+                                        <!-- description -->
+                                        <div class="desc">
+                                            <!-- comment content -->
+                                            <p class="comment" th:text="${comment.content}"></p>
+                                            <!-- name and date -->
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                   <!-- name -->
+                                                   <h5><a th:href="@{/account(id=${comment.account.id})}" th:text="${comment.account.fullName}"></a></h5>
+                                                   <!-- date -->
+                                                   <p class="date" th:text="${#temporals.format(comment.time, 'EEEE, MMM d, yyyy')}"></p>
+                                                </div>
+                                                <!-- actilon buttons -->
+                                                <div class="reply-btn">
+                                                    <a href="#" class="btn-reply text-uppercase">reply</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- sidebar -->
+                    <div class="col-lg-4">
+                        <div class="blog_right_sidebar">
+                            <!-- recent posts -->                                
+                            <aside class="single_sidebar_widget popular_post_widget">
+                                <h3 class="widget_title" style="color: #2d2d2d;">Recent Posts</h3>
+                                <div class="media post_item" th:each="recentPost : ${recentPosts}">
+                                    <img th:src="${recentPost.imageUrl}" alt="post" style="width: 90px; height: 90px; object-fit: cover;">
+                                    <div class="media-body">
+                                        <a th:href="@{/blogs/blog(id=${recentPost.getId()})}">
+                                            <h3 style="color: #2d2d2d;" th:text="${recentPost.title}"></h3>
+                                        </a>
+                                        <p th:text="${recentPost.getTimeAgo()}"></p>
+                                    </div>
+                                </div>
+                            </aside>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-wrapper" style="background-color: #1f1f1f;">
+            <!-- Footer Top-->
+            <div class="footer-area footer-padding">
+                <div class="container">
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="single-footer-caption mb-30">
+                                <div class="footer-tittle">
+                                    <div class="footer-logo mb-20">
+                                        <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt="Footer Logo"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="single-footer-caption mb-50">
+                                <div class="footer-tittle">
+                                    <h4>Contact Info</h4>
+                                    <ul>
+                                        <li>
+                                            <p>Address: Gia Lam, Ha Noi, Viet Nam</p>
+                                        </li>
+                                        <li><a href="tel:+84793300359">Phone: +84 793 300 359</a></li>
+                                        <li><a href="mailto:leqwoi@protonmail.com">Email: leqwoi@protonmail.com</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="single-footer-caption mb-50">
+                                <div class="footer-tittle">
+                                    <h4>Important Links</h4>
+                                    <ul>
+                                        <li><a th:href="@{/about}">About Us</a></li>
+                                        <li><a th:href="@{/contact}">Contact Us</a></li>
+                                        <li><a th:href="@{/index#testimonial}">Testimonial</a></li>
+                                        <li><a th:href="@{/campaigns}">Campaigns</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
+                            <div class="single-footer-caption mb-50">
+                                <div class="footer-tittle">
+                                    <h4>Newsletter</h4>
+                                    <div class="footer-pera footer-pera2">
+                                        <p>Subscribe to our newsletter to receive campaign updates!</p>
+                                    </div>
+                                    <!-- Form -->
+                                    <div class="footer-form" >
+                                        <div id="mc_embed_signup">
+                                            <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
+                                            method="get" class="subscribe_form relative mail_part">
+                                                <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
+                                                class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                                onblur="this.placeholder = ' Email Address '">
+                                                <div class="form-icon">
+                                                    <button type="submit" name="submit" id="newsletter-submit"
+                                                    class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt="Subscribe"></button>
+                                                </div>
+                                                <div class="mt-10 info"></div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- footer-bottom -->
+            <div class="footer-bottom-area">
+                <div class="container">
+                    <div class="footer-border">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-xl-10 col-lg-9 ">
+                                <div class="footer-copy-right">
+                                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                        Copyright &copy;<span th:text="${#temporals.format(T(java.time.LocalDateTime).now(), 'yyyy')}"></span> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3">
+                                <div class="footer-social f-right">
+                                    <a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="https://leqwoi2.vercel.app/"><i class="fas fa-globe"></i></a>
+                                    <a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll Up -->
+    <div id="back-top" >
+        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS HERE -->
+
+    <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
     <!-- Jquery, Popper, Bootstrap -->
     <script th:src="@{/assets/js/vendor/jquery-1.12.4.min.js}"></script>
     <script th:src="@{/assets/js/popper.min.js}"></script>
@@ -474,8 +475,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script th:src="@{/assets/js/mail-script.js}"></script>
     <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
     
-    <!-- Jquery Plugins, main Jquery -->	
+    <!-- Jquery Plugins, main Jquery -->    
     <script th:src="@{/assets/js/plugins.js}"></script>
     <script th:src="@{/assets/js/main.js}"></script>
-   </body>
+</body>
 </html>

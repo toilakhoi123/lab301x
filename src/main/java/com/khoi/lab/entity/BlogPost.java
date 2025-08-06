@@ -1,9 +1,7 @@
 package com.khoi.lab.entity;
 
-import java.sql.Date;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,27 +38,28 @@ public class BlogPost {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    // Changed from java.sql.Date to java.time.LocalDateTime
     @Column(name = "date")
-    private Date date;
+    private LocalDateTime date;
 
     @OneToMany(mappedBy = "blog", cascade = { CascadeType.ALL })
     private List<BlogPostComment> comments;
 
-    @SuppressWarnings("unused")
-    private String timeAgo;
+    // Removed the 'timeAgo' field as it's now a calculated getter
 
     public BlogPost() {
     }
 
     public BlogPost(Account author, String imageUrl, String title, String description) {
         this.author = author;
-        this.imageUrl = imageUrl == ""
+        this.imageUrl = imageUrl == null || imageUrl.isEmpty() // Handle null or empty string for default image
                 ? "https://media.sproutsocial.com/uploads/2019/09/how-to-write-a-blog-post.svg"
                 : imageUrl;
         this.title = title;
         this.description = description;
         this.comments = new ArrayList<>();
-        this.date = new java.sql.Date(System.currentTimeMillis());
+        // Set date to current LocalDateTime when creating a new post
+        this.date = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -103,11 +102,13 @@ public class BlogPost {
         this.description = description;
     }
 
-    public Date getDate() {
+    // Changed return type and parameter type to LocalDateTime
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    // Changed parameter type to LocalDateTime
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -120,22 +121,27 @@ public class BlogPost {
     }
 
     public int getCommentsCount() {
-        return this.comments.size();
+        // Ensure comments list is not null before accessing size
+        return (this.comments != null) ? this.comments.size() : 0;
     }
 
+    /**
+     * Calculates a human-readable "time ago" string for this blog post's date.
+     * This method now directly uses LocalDateTime, simplifying the conversion.
+     *
+     * @return A string indicating how long ago the date was (e.g., "5 minutes ago",
+     *         "2 days ago").
+     *         Returns "just now" if the date is very recent.
+     *         Returns the formatted date "dd MMM yyyy" if the date is older than 7
+     *         days.
+     */
     public String getTimeAgo() {
         if (this.date == null) {
-            return ""; // Or handle as an error, e.g., "Invalid Date"
+            return ""; // Handle case where date might be null
         }
 
-        // Convert java.sql.Date to java.util.Date, then to Instant, then to
-        // LocalDateTime
-        LocalDateTime postDateTime = new java.util.Date(this.date.getTime())
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
-
-        Duration duration = Duration.between(postDateTime, LocalDateTime.now());
+        // Directly use LocalDateTime for duration calculation
+        Duration duration = Duration.between(this.date, LocalDateTime.now());
 
         long minutes = duration.toMinutes();
         long hours = duration.toHours();
@@ -151,13 +157,11 @@ public class BlogPost {
             return days + " day" + (days == 1 ? "" : "s") + " ago";
         } else {
             // For dates older than a week, display the full date
-            return postDateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
+            return this.date.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
         }
     }
 
-    public void setTimeAgo(String timeAgo) {
-        this.timeAgo = timeAgo;
-    }
+    // Removed setTimeAgo(String timeAgo) as getTimeAgo is now a calculated property
 
     @Override
     public String toString() {

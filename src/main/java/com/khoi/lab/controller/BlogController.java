@@ -44,8 +44,7 @@ public class BlogController {
 
     /**
      * DAO Initiator
-     * 
-     * @param donationDAO
+     * * @param donationDAO
      */
     public BlogController(DonationDAO donationDAO, AccountDAO accountDAO, BlogDAO blogDAO) {
         this.donationDAO = donationDAO;
@@ -55,8 +54,8 @@ public class BlogController {
 
     /**
      * View a page of blog list
+     * * @param page
      * 
-     * @param page
      * @return
      */
     @GetMapping("")
@@ -99,6 +98,7 @@ public class BlogController {
                     int currentYearForWeek = now.get(weekFields.weekBasedYear());
                     blogPosts = blogPosts.stream()
                             .filter(post -> {
+                                // Now post.getDate() returns LocalDateTime directly
                                 LocalDate postDate = post.getDate().toLocalDate();
                                 return postDate.get(weekFields.weekOfWeekBasedYear()) == currentWeek &&
                                         postDate.get(weekFields.weekBasedYear()) == currentYearForWeek;
@@ -108,6 +108,7 @@ public class BlogController {
                 case "month":
                     blogPosts = blogPosts.stream()
                             .filter(post -> {
+                                // Now post.getDate() returns LocalDateTime directly
                                 LocalDate postDate = post.getDate().toLocalDate();
                                 return postDate.getMonth() == now.getMonth() &&
                                         postDate.getYear() == now.getYear();
@@ -117,6 +118,7 @@ public class BlogController {
                 case "year":
                     blogPosts = blogPosts.stream()
                             .filter(post -> {
+                                // Now post.getDate() returns LocalDateTime directly
                                 LocalDate postDate = post.getDate().toLocalDate();
                                 return postDate.getYear() == now.getYear();
                             })
@@ -133,9 +135,6 @@ public class BlogController {
         int maxPage = (totalItems == 0) ? 1 : (int) Math.ceil((double) totalItems / pageSize);
         List<BlogPost> paginatedBlogPosts = PaginationService.getPage(blogPosts, page, pageSize);
         List<BlogPost> recentBlogPosts = blogDAO.listBlogPosts().stream().limit(10).collect(Collectors.toList());
-        for (BlogPost post : recentBlogPosts) {
-            post.setTimeAgo(post.getTimeAgo());
-        }
 
         // 5. Build and return the view.
         System.out.println("| [blogListPage] Displaying page " + page + " of " + maxPage + " pages!");
@@ -156,8 +155,8 @@ public class BlogController {
     /**
      * View details of a blog
      * (blogPostNotExist)
+     * * @param id
      * 
-     * @param id
      * @return
      */
     @GetMapping("/blog")
@@ -170,10 +169,14 @@ public class BlogController {
             return mav;
         }
 
+        // Removed the explicit call to setTimeAgo as getTimeAgo is now a calculated
+        // getter
         List<BlogPost> recentBlogPosts = blogDAO.listBlogPosts().stream().limit(10).collect(Collectors.toList());
-        for (BlogPost post : recentBlogPosts) {
-            post.setTimeAgo(post.getTimeAgo());
-        }
+        // The loop below is no longer needed as getTimeAgo() is called directly in
+        // Thymeleaf
+        // for (BlogPost post : recentBlogPosts) {
+        // post.setTimeAgo(post.getTimeAgo());
+        // }
 
         ModelAndView mav = new ModelAndView("blog-details");
         mav.addObject("blogPost", blogPost);
@@ -187,5 +190,4 @@ public class BlogController {
 
         return entity;
     }
-
 }
