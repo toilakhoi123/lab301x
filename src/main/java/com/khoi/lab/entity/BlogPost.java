@@ -112,6 +112,10 @@ public class BlogPost {
         this.comments = comments;
     }
 
+    public int getCommentsCount() {
+        return this.comments.size();
+    }
+
     @Override
     public String toString() {
         return "BlogPost [id=" + id + ", author=" + author + ", title=" + title + "]";
