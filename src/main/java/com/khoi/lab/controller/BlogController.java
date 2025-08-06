@@ -132,6 +132,10 @@ public class BlogController {
         int totalItems = blogPosts.size();
         int maxPage = (totalItems == 0) ? 1 : (int) Math.ceil((double) totalItems / pageSize);
         List<BlogPost> paginatedBlogPosts = PaginationService.getPage(blogPosts, page, pageSize);
+        List<BlogPost> recentBlogPosts = blogDAO.listBlogPosts().stream().limit(10).collect(Collectors.toList());
+        for (BlogPost post : recentBlogPosts) {
+            post.setTimeAgo(post.getTimeAgo());
+        }
 
         // 5. Build and return the view.
         System.out.println("| [blogListPage] Displaying page " + page + " of " + maxPage + " pages!");
@@ -141,6 +145,7 @@ public class BlogController {
         mav.addObject("maxPage", maxPage);
         mav.addObject("currentQuery", query);
         mav.addObject("currentFilter", filter);
+        mav.addObject("recentPosts", recentBlogPosts);
 
         // Add null check before accessing the map
         String currentFilterDisplay = (filter != null) ? FILTER_NAMES.get(filter.toLowerCase()) : null;
@@ -165,8 +170,14 @@ public class BlogController {
             return mav;
         }
 
+        List<BlogPost> recentBlogPosts = blogDAO.listBlogPosts().stream().limit(10).collect(Collectors.toList());
+        for (BlogPost post : recentBlogPosts) {
+            post.setTimeAgo(post.getTimeAgo());
+        }
+
         ModelAndView mav = new ModelAndView("blog-details");
         mav.addObject("blogPost", blogPost);
+        mav.addObject("recentPosts", recentBlogPosts);
         return mav;
     }
 

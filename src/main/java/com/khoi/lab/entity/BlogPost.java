@@ -1,6 +1,10 @@
 package com.khoi.lab.entity;
 
 import java.sql.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +45,9 @@ public class BlogPost {
 
     @OneToMany(mappedBy = "blog", cascade = { CascadeType.ALL })
     private List<BlogPostComment> comments;
+
+    @SuppressWarnings("unused")
+    private String timeAgo;
 
     public BlogPost() {
     }
@@ -114,6 +121,42 @@ public class BlogPost {
 
     public int getCommentsCount() {
         return this.comments.size();
+    }
+
+    public String getTimeAgo() {
+        if (this.date == null) {
+            return ""; // Or handle as an error, e.g., "Invalid Date"
+        }
+
+        // Convert java.sql.Date to java.util.Date, then to Instant, then to
+        // LocalDateTime
+        LocalDateTime postDateTime = new java.util.Date(this.date.getTime())
+                .toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
+
+        Duration duration = Duration.between(postDateTime, LocalDateTime.now());
+
+        long minutes = duration.toMinutes();
+        long hours = duration.toHours();
+        long days = duration.toDays();
+
+        if (minutes < 1) {
+            return "just now";
+        } else if (minutes < 60) {
+            return minutes + " minute" + (minutes == 1 ? "" : "s") + " ago";
+        } else if (hours < 24) {
+            return hours + " hour" + (hours == 1 ? "" : "s") + " ago";
+        } else if (days < 7) {
+            return days + " day" + (days == 1 ? "" : "s") + " ago";
+        } else {
+            // For dates older than a week, display the full date
+            return postDateTime.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
+        }
+    }
+
+    public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
     }
 
     @Override
