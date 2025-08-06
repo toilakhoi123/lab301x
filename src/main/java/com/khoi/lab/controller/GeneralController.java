@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.khoi.lab.dao.AccountDAO;
+import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.BlogPost;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 
@@ -22,15 +24,17 @@ import jakarta.servlet.http.HttpSession;
 public class GeneralController {
     private final DonationDAO donationDAO;
     private final AccountDAO accountDAO;
+    private final BlogDAO blogDAO;
 
     /**
      * DAO Initiator
      * 
      * @param donationDAO
      */
-    public GeneralController(DonationDAO donationDAO, AccountDAO accountDAO) {
+    public GeneralController(DonationDAO donationDAO, AccountDAO accountDAO, BlogDAO blogDAO) {
         this.donationDAO = donationDAO;
         this.accountDAO = accountDAO;
+        this.blogDAO = blogDAO;
     }
 
     /**
@@ -46,8 +50,9 @@ public class GeneralController {
                 .sorted((a, b) -> Integer.compare(b.getDonatedPercentageUncapped(), a.getDonatedPercentageUncapped()))
                 .limit(3)
                 .toList();
-
+        List<BlogPost> blogPosts = blogDAO.listBlogPosts().stream().limit(2).toList();
         mav.addObject("campaigns", campaigns);
+        mav.addObject("blogPosts", blogPosts);
         return mav;
     }
 

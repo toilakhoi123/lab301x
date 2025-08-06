@@ -301,6 +301,48 @@
                 </div>
             </div>
         </div>
+        <!-- Blog -->
+        <section class="home-blog-area section-padding30">
+            <div class="container">
+                <!-- Title -->
+                <div class="row justify-content-center">
+                    <div class="col-xl-5 col-lg-6 col-md-9 col-sm-10">
+                        <div class="section-tittle text-center mb-90">
+                            <span>Blog của chúng tôi</span>
+                            <h2>Các bài viết gần đây</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6" th:each="blogPost : ${blogPosts}">
+                        <div class="home-blog-single mb-30">
+                            <div class="blog-img-cap">
+                                <div class="blog-img">
+                                    <img 
+                                        th:src="${blogPost.getImageUrl()}" 
+                                        alt=""
+                                        style="height: 330px; width: 100%; object-fit: cover; display: block;"
+                                    >
+                                    <!-- Blog date -->
+                                    <div class="blog-date text-center">
+                                        <span th:text="${#dates.format(blogPost.date, 'dd')}"></span>
+                                        <p th:text="${#dates.format(blogPost.date, 'MMMM')}"></p>
+                                    </div>
+                                </div>
+                                <div class="blog-cap">
+                                    <p>Creative derector</p>
+                                    <h3><a th:href="@{/blogs/blog(id=${blogPost.getId()})}" th:text="${blogPost.getTitle()}"></a></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- see more button -->
+                <div class="row d-flex justify-content-center">
+                    <a href="/blogs" class="btn">Xem Nhiều Hơn</a>
+                </div>
+            </div>
+        </section>
         <!-- Team -->
         <div class="team-area pt-160 pb-160">
             <div class="container">
@@ -329,66 +371,6 @@
                             <div class="team-caption">
                                 <h3><a href="instructor">Le Minh Khoi</a></h3>
                                 <p>Volunteer leader, Web Maintainer</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Testimonials -->
-        <div class="testimonial-area testimonial-padding" id="testimonial">
-            <div class="container">
-                <!-- Testimonial contents -->
-                <div class="row d-flex justify-content-center">
-                    <div class="col-xl-8 col-lg-8 col-md-10">
-                        <div class="h1-testimonial-active dot-style">
-                            <!-- Single Testimonial -->
-                            <div class="single-testimonial text-center">
-                                <div class="testimonial-caption">
-                                    <!-- founder -->
-                                    <div class="testimonial-founder">
-                                        <div class="founder-img mb-40">
-                                            <img th:src="@{/assets/img/gallery/testimonial.png}" alt="">
-                                            <span>Cháng Thị Hà</span>
-                                            <p>Người nhận hỗ trợ</p>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-top-cap">
-                                        <p>“Nhờ sự giúp đỡ của mọi người, em đã được phẫu thuật kịp thời và sức khỏe đã tốt hơn rất nhiều. Em và gia đình xin cảm ơn tấm lòng của tất cả các cô chú, anh chị!”</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Single Testimonial -->
-                            <div class="single-testimonial text-center">
-                                <div class="testimonial-caption">
-                                    <!-- founder -->
-                                    <div class="testimonial-founder">
-                                        <div class="founder-img mb-40">
-                                            <img th:src="@{/assets/img/gallery/testimonial.png}" alt="">
-                                            <span>Minh Đăng</span>
-                                            <p>Người nhận hỗ trợ</p>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-top-cap">
-                                        <p>“Cảm ơn mọi người đã cho con cơ hội được tiếp tục sống và học tập như bao bạn khác. Gia đình con biết ơn mọi người rất nhiều!”</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Single Testimonial -->
-                            <div class="single-testimonial text-center">
-                                <div class="testimonial-caption">
-                                    <!-- founder -->
-                                    <div class="testimonial-founder">
-                                        <div class="founder-img mb-40">
-                                            <img th:src="@{/assets/img/gallery/testimonial.png}" alt="">
-                                            <span>Y Sáng Buôn Dap</span>
-                                            <p>Người nhận hỗ trợ</p>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-top-cap">
-                                        <p>“Gia đình con rất khó khăn, nhưng nhờ sự hỗ trợ, con đã được phẫu thuật tim và khỏe mạnh trở lại. Chúng con xin cảm ơn tấm lòng nhân ái của tất cả mọi người!”</p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 
 import com.khoi.lab.dao.AccountDAO;
+import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
@@ -37,15 +38,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AdminController {
     private final AccountDAO accountDAO;
     private final DonationDAO donationDAO;
+    private final BlogDAO blogDAO;
 
     /**
      * DAO Initiator
      * 
      * @param accountDAO
      */
-    public AdminController(AccountDAO accountDAO, DonationDAO donationDAO) {
+    public AdminController(AccountDAO accountDAO, DonationDAO donationDAO, BlogDAO blogDAO) {
         this.accountDAO = accountDAO;
         this.donationDAO = donationDAO;
+        this.blogDAO = blogDAO;
     }
 
     @GetMapping("/dashboard")
@@ -54,11 +57,11 @@ public class AdminController {
 
         // checks
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -101,11 +104,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -237,11 +240,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -317,11 +320,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -454,11 +457,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -497,11 +500,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -540,11 +543,11 @@ public class AdminController {
         Account account = (Account) session.getAttribute("account");
 
         if (account == null) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
         }

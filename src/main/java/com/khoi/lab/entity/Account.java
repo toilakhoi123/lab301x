@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import com.khoi.lab.service.CryptographyService;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,6 +51,18 @@ public class Account {
 
     @Column(name = "is_disabled")
     private boolean isDisabled;
+
+    /**
+     * Blog post comments made by this account
+     */
+    @OneToMany(mappedBy = "account", cascade = { CascadeType.ALL })
+    private List<BlogPostComment> blogPostComments;
+
+    /**
+     * Blog post that this account authors
+     */
+    @OneToMany(mappedBy = "author", cascade = { CascadeType.ALL })
+    private List<BlogPost> blogPosts;
 
     /**
      * Date of last login attempt from the user
@@ -178,6 +191,22 @@ public class Account {
 
     public void setDonations(List<Donation> donations) {
         this.donations = donations;
+    }
+
+    public List<BlogPostComment> getBlogPostComments() {
+        return blogPostComments;
+    }
+
+    public void setBlogPostComments(List<BlogPostComment> blogPostComments) {
+        this.blogPostComments = blogPostComments;
+    }
+
+    public List<BlogPost> getBlogPosts() {
+        return blogPosts;
+    }
+
+    public void setBlogPosts(List<BlogPost> blogPosts) {
+        this.blogPosts = blogPosts;
     }
 
     // helper

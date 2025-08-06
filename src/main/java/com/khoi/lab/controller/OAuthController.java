@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.khoi.lab.dao.AccountDAO;
+import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 
@@ -43,13 +44,15 @@ public class OAuthController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final AccountDAO accountDAO;
     private final DonationDAO donationDAO;
+    private final BlogDAO blogDAO;
 
     /**
      * Deps injection constructor
      */
-    public OAuthController(AccountDAO accountDAO, DonationDAO donationDAO) {
+    public OAuthController(AccountDAO accountDAO, DonationDAO donationDAO, BlogDAO blogDAO) {
         this.accountDAO = accountDAO;
         this.donationDAO = donationDAO;
+        this.blogDAO = blogDAO;
     }
 
     /**
@@ -107,7 +110,7 @@ public class OAuthController {
             // === LOGIN EXISTING USER ===
             if (!existingAccount.isDisabled()) {
                 session.setAttribute("account", existingAccount);
-                ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+                ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
                 mav.addObject("loginSuccess", true);
                 return mav;
             } else {
@@ -133,7 +136,7 @@ public class OAuthController {
         Account newAccount = accountDAO.accountFindWithEmail(email);
         session.setAttribute("account", newAccount);
 
-        ModelAndView mav = (new GeneralController(donationDAO, accountDAO)).index();
+        ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
         mav.addObject("registerSuccess", true);
         return mav;
     }

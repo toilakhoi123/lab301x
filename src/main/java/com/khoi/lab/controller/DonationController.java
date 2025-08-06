@@ -21,12 +21,14 @@ import com.khoi.lab.service.StringService;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.json.JSONObject;
 
 /**
  * Controller for donation mappings
  */
 @Controller
+@RequestMapping("/campaigns")
 public class DonationController {
     private final DonationDAO donationDAO;
     private final AccountDAO accountDAO;
@@ -48,7 +50,7 @@ public class DonationController {
      * @param id
      * @return
      */
-    @GetMapping("/campaigns")
+    @GetMapping("")
     public ModelAndView campaignsPage() {
         List<Campaign> campaignsCreated = donationDAO.campaignFindByStatus(CampaignStatus.CREATED);
         List<Campaign> campaignsOpen = donationDAO.campaignFindByStatus(CampaignStatus.OPEN);
@@ -70,7 +72,7 @@ public class DonationController {
      * @param id
      * @return
      */
-    @GetMapping("/campaigns/campaign")
+    @GetMapping("/campaign")
     public ModelAndView campaignsViewDetail(@RequestParam Long id) {
         Campaign campaign = donationDAO.campaignFindById(id);
 
@@ -101,7 +103,7 @@ public class DonationController {
      * @param id
      * @return
      */
-    @GetMapping("/campaigns/donate")
+    @GetMapping("/donate")
     public ModelAndView campaignsDonatePage(@RequestParam Long id) {
         Campaign campaign = donationDAO.campaignFindById(id);
 
@@ -139,7 +141,7 @@ public class DonationController {
      * @param entity
      * @return
      */
-    @PostMapping("/campaigns/donate")
+    @PostMapping("/donate")
     public ModelAndView campaignsDonateRequest(@RequestBody String entity) {
         // parse json body
         JSONObject json = new JSONObject(entity);
@@ -185,7 +187,7 @@ public class DonationController {
      * @param paymentMethod
      * @return
      */
-    @GetMapping("/campaigns/donate/payment")
+    @GetMapping("/donate/payment")
     public ModelAndView handleDonationPayment(
             @RequestParam Long campaignId,
             @RequestParam Long amount,
