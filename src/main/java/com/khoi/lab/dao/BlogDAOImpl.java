@@ -82,102 +82,88 @@ public class BlogDAOImpl implements BlogDAO {
                 "We collaborate with grassroots NGOs to extend reach and impact. These local partners distribute aid, organize community events, and offer counseling services.\n\nThis profile highlights their goals, challenges, and the lives they change daily. Your donations help scale their reach.");
 
         BlogPost blog11 = createBlogPost(account1,
-                "https://images.unsplash.com/photo-1543269865-cbf4273573c7?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Celebrating a Decade of Impact",
+                "", "Celebrating a Decade of Impact",
                 "For ten years, we have worked tirelessly to empower communities. From our first small campaign to our current nationwide initiatives, we've come a long way. This post highlights our key milestones, the people we've served, and the incredible journey we've been on. Thank you for being a part of it.");
 
         BlogPost blog12 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1628126839352-09419102434a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Water for Life: Clean Water Project",
+                "", "Water for Life: Clean Water Project",
                 "Access to clean water is a fundamental human right. Our latest project focuses on installing water purification systems in drought-stricken regions. Your support helps us ensure children have safe drinking water, reducing disease and improving health.");
 
         BlogPost blog13 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1604928141064-28be5e549942?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Behind the Scenes: A Day with Our Volunteers",
+                "", "Behind the Scenes: A Day with Our Volunteers",
                 "Ever wondered what a day in the life of our volunteers looks like? Follow along as we share stories, photos, and insights from the front lines of our community efforts. Their passion and dedication are truly inspiring.");
 
         BlogPost blog14 = createBlogPost(account1,
-                "https://images.unsplash.com/photo-1588632616853-294b5952c41c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Mental Health Awareness: Our New Initiative",
+                "", "Mental Health Awareness: Our New Initiative",
                 "Beyond providing physical aid, we are now focusing on mental wellness. Our new initiative offers counseling services and support groups for individuals and families in need. Your donations can help us break the stigma and provide much-needed support.");
 
         BlogPost blog15 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1629904853716-9533f8158c5c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "The Power of Education: Scholarship Program",
+                "", "The Power of Education: Scholarship Program",
                 "Our new scholarship program is helping bright, underprivileged students attend college. We believe that education is the key to breaking the cycle of poverty. Meet the first recipients of our scholarship and hear their inspiring stories.");
 
         BlogPost blog16 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1577708573177-3a1ce06e2373?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Thank You: Donor Appreciation Event",
+                "", "Thank You: Donor Appreciation Event",
                 "To our incredible community of donors, we want to say thank you. We recently hosted an event to celebrate your generosity and highlight the impact of your contributions. We couldn't do this without you.");
 
         BlogPost blog17 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1582213782179-e0d00f345f62?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Empowering Women: Microloan Program",
+                "", "Empowering Women: Microloan Program",
                 "We launched a microloan program to help women entrepreneurs in rural areas start their own businesses. This initiative provides not just financial support but also mentorship and training. Witness the ripple effect of these small loans on entire communities.");
 
         BlogPost blog18 = createBlogPost(account1,
-                "https://images.unsplash.com/photo-1602934445890-a78b534a784d?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "The Harvest Project: Sustainable Farming",
+                "", "The Harvest Project: Sustainable Farming",
                 "Our latest project focuses on sustainable farming practices to combat food insecurity. We're providing seeds, tools, and training to local farmers, helping them cultivate a more resilient food supply for their communities.");
 
         BlogPost blog19 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1587652758197-092953282c0b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Our Impact on Wildlife Conservation",
+                "", "Our Impact on Wildlife Conservation",
                 "While our primary focus is human aid, we also understand the importance of a healthy environment. We're proud to announce a new partnership with a wildlife conservation group to protect endangered species in the regions we serve.");
 
         BlogPost blog20 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1601362843797-2007ae0133c6?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "How to Fundraise for Us: A Guide",
+                "", "How to Fundraise for Us: A Guide",
                 "Want to help but don't know where to start? This guide provides tips and resources on how to host your own fundraising event for our organization. Every dollar you raise makes a difference.");
 
         BlogPost blog21 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1596521575459-05d8f3780365?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "A New Chapter: Our 2024 Goals",
+                "", "A New Chapter: Our 2024 Goals",
                 "As we begin a new year, we're setting ambitious goals to expand our reach and impact. Learn about our plans for the upcoming year, from new projects to expanding our volunteer network. We're excited for what's to come!");
 
         BlogPost blog22 = createBlogPost(account1,
-                "https://images.unsplash.com/photo-1552581234-26160f608093?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Partnership Spotlight: The Tech for Good Foundation",
+                "", "Partnership Spotlight: The Tech for Good Foundation",
                 "We are proud to announce a new partnership with the Tech for Good Foundation. This collaboration will help us streamline our logistics and track our aid distribution more effectively, ensuring every donation reaches its intended destination.");
 
         BlogPost blog23 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1582190369966-173665790a3a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "",
                 "Children’s Health and Wellness Program",
                 "Our new program is focused on providing health screenings, vaccinations, and nutritional education to children in underserved areas. A healthy start in life is crucial for a brighter future, and your support makes it possible.");
 
         BlogPost blog24 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1599557451458-15c1e7920150?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "Holiday Charity Auction: Bid for a Cause",
+                "", "Holiday Charity Auction: Bid for a Cause",
                 "Join us for our annual holiday charity auction, where you can bid on amazing items and experiences. All proceeds go directly to our holiday aid projects, bringing joy and warmth to families in need.");
 
         BlogPost blog25 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1634714652254-e0b0431b9d4f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                "The Human Touch: A Story from the Field",
+                "", "The Human Touch: A Story from the Field",
                 "Read the moving story of a family whose life was transformed by our aid. This post shares a personal account from one of our field workers, highlighting the tangible and emotional impact of our work.");
 
         BlogPost blog26 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1592476567150-188b85770d10?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "",
                 "Beyond the Check: Corporate Social Responsibility",
                 "We believe in building long-term partnerships with businesses that share our values. This post highlights our collaborations with companies that are making a difference through their corporate social responsibility programs.");
 
         BlogPost blog27 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1555510619-3c316715a31a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "",
                 "A Volunteer's Perspective: My Time with the Organization",
                 "Hear from one of our long-time volunteers, who shares their personal journey, the challenges they've faced, and the rewarding experiences they've had. Their story is a powerful testament to the spirit of giving.");
 
         BlogPost blog28 = createBlogPost(account1,
-                "https://images.unsplash.com/photo-1627883307525-24250280f551?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "",
                 "Upcoming Events: Join Us in Person!",
                 "We're excited to announce a series of in-person events, from community clean-up drives to gala dinners. Join us to meet fellow supporters, learn more about our work, and get involved in a meaningful way.");
 
         BlogPost blog29 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1623912061458-4506822c6e61?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "",
                 "Impact of Your Dollars: A Financial Breakdown",
                 "We believe in being transparent with our donors. This post provides a detailed breakdown of our finances for the past quarter, showing exactly how your contributions are being used to make a difference.");
 
         BlogPost blog30 = createBlogPost(account2,
-                "https://images.unsplash.com/photo-1617551000624-a5518b53297a?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                "",
                 "The Lasting Legacy of a Single Donation",
                 "This blog post tells the story of how a single, anonymous donation led to the creation of a new community center. It's a testament to the incredible power of generosity and the lasting legacy of a single act of kindness.");
 

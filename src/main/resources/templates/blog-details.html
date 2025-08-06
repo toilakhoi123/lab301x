@@ -167,7 +167,7 @@
                         <!-- useful info -->
                         <ul class="blog-info-link mt-3 mb-4">
                            <li><a href="#"><i class="fa fa-user"></i>Campaign Blog</a></li>
-                           <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}"><i class="fa fa-comments"></i><span th:text="${#lists.size(blogPost.comments) + ' Comments'}"></span></a></li>
+                           <li><a href="#comments"><i class="fa fa-comments"></i><span th:text="${#lists.size(blogPost.comments) + ' Comments'}"></span></a></li>
                         </ul>
                         <!-- description -->
                         <p class="excert" th:text="${blogPost.description}">
@@ -251,6 +251,8 @@
                         </div>
                      </div>
                   </div>
+
+                  <div id="comments"></div>
 
                   <!-- current account comment -->
                   <div class="comment-form" th:if="${session.account != null}">

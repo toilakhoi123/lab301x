@@ -47,7 +47,9 @@ public class BlogPost {
 
     public BlogPost(Account author, String imageUrl, String title, String description) {
         this.author = author;
-        this.imageUrl = imageUrl;
+        this.imageUrl = imageUrl == ""
+                ? "https://media.sproutsocial.com/uploads/2019/09/how-to-write-a-blog-post.svg"
+                : imageUrl;
         this.title = title;
         this.description = description;
         this.comments = new ArrayList<>();

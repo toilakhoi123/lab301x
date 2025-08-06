@@ -173,7 +173,7 @@
                                     <p th:text="${blogPost.description}"></p>
                                     <ul class="blog-info-link">
                                         <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}"><i class="fa fa-user"></i>Campaign</a></li>
-                                        <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}"><i class="fa fa-comments"></i><span th:text="${#lists.size(blogPost.comments) + ' Comments'}"></span></a></li>
+                                        <li><a th:href="@{/blogs/blog(id=${blogPost.getId()})}+'#comments'"><i class="fa fa-comments"></i><span th:text="${#lists.size(blogPost.comments) + ' Comments'}"></span></a></li>
                                     </ul>
                                 </div>
                             </article>

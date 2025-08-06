@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
+    @SuppressWarnings("unused")
     private final DonationDAO donationDAO;
+    @SuppressWarnings("unused")
     private final AccountDAO accountDAO;
     private final BlogDAO blogDAO;
 
