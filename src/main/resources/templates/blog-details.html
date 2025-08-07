@@ -324,7 +324,15 @@
                                                 </div>
                                                 <!-- action buttons -->
                                                 <div class="reply-btn">
-                                                    <a href="#" class="btn-reply text-uppercase">reply</a>
+                                                    <a class="btn-reply text-uppercase" href="#">reply</a>
+                                                </div>
+                                                <div class="reply-btn">
+                                                    <a class="btn-reply text-uppercase"
+                                                        th:href="@{/blogs/comment/delete(comment=${comment.getId()})}"
+                                                        th:if="${session.account != null and (session.account.id == comment.account.id or session.account.isAdmin)}"
+                                                        onclick="return confirm('Delete this comment?');">
+                                                        delete
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>

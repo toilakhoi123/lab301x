@@ -19,6 +19,7 @@ import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.BlogPost;
+import com.khoi.lab.entity.BlogPostComment;
 import com.khoi.lab.service.PaginationService;
 
 import jakarta.servlet.http.HttpSession;
@@ -33,7 +34,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BlogController {
     @SuppressWarnings("unused")
     private final DonationDAO donationDAO;
-    @SuppressWarnings("unused")
     private final AccountDAO accountDAO;
     private final BlogDAO blogDAO;
 
@@ -167,7 +167,7 @@ public class BlogController {
         BlogPost blogPost = blogDAO.findBlogPostById(id);
 
         if (blogPost == null) {
-            ModelAndView mav = new ModelAndView("blog-list");
+            ModelAndView mav = new ModelAndView("blog-details");
             mav.addObject("blogPostNotExist", true);
             return mav;
         }
@@ -212,7 +212,7 @@ public class BlogController {
 
     /**
      * Post a comment
-     * (commentSuccess)
+     * (commentPostSuccess)
      * 
      * @param id
      * @param content
@@ -238,7 +238,48 @@ public class BlogController {
         }
 
         ModelAndView mav = blogViewDetail(id);
-        mav.addObject("commentSuccess", true);
+        mav.addObject("commentPostSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Handles the deletion of a blog post comment.
+     * (commentDeleteSuccess/commentDeleteFailure)
+     *
+     * @param id      The ID of the comment to delete.
+     * @param session The current HTTP session to get the logged-in user.
+     * @return a ModelAndView to the blog post detail page.
+     */
+    @GetMapping("/comment/delete")
+    public ModelAndView deleteComment(@RequestParam("comment") Long id, HttpSession session) {
+        Account loggedInAccount = (Account) session.getAttribute("account");
+
+        // fetch comment
+        BlogPostComment commentToDelete = blogDAO.findBlogPostCommentById(id);
+        Long blogPostId = null;
+
+        // perm checks
+        if (loggedInAccount != null && commentToDelete != null) {
+            // Check if the logged-in user is the comment's author or an admin
+            boolean isAuthor = loggedInAccount.getId().equals(commentToDelete.getAccount().getId());
+            boolean isAdmin = loggedInAccount.isAdmin();
+
+            if (isAuthor || isAdmin) {
+                blogDAO.deleteBlogPostCommentById(id);
+                blogPostId = commentToDelete.getBlog().getId();
+            }
+        }
+
+        // null check
+        if (blogPostId == null) {
+            ModelAndView mav = blogListPage(null, null, null, null);
+            mav.addObject("commentDeleteFailure", true);
+            return mav;
+        }
+
+        // build view
+        ModelAndView mav = blogViewDetail(blogPostId);
+        mav.addObject("commentDeleteSuccess", true);
         return mav;
     }
 }
