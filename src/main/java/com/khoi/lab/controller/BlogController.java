@@ -17,10 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
+import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.BlogPost;
 import com.khoi.lab.service.PaginationService;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Controller for blog mappings
@@ -207,10 +210,35 @@ public class BlogController {
         return mav;
     }
 
-    @PostMapping("/comment")
-    public String postMethodName(@RequestBody String entity) {
-        // TODO: process POST request
+    /**
+     * Post a comment
+     * (commentSuccess)
+     * 
+     * @param id
+     * @param content
+     * @param session
+     * @return
+     */
+    @PostMapping("/comment/post")
+    public ModelAndView postComment(
+            @RequestParam Long id,
+            @RequestParam String content,
+            HttpSession session) {
+        // Get the current user from the session
+        Account account = (Account) session.getAttribute("account");
 
-        return entity;
+        // Find the blog post by its ID
+        BlogPost blogPost = blogDAO.findBlogPostById(id);
+
+        // Ensure the user is logged in, the comment content is not empty, and the blog
+        // post exists
+        if (account != null && blogPost != null && !content.trim().isEmpty()) {
+            account = accountDAO.accountFindWithId(account.getId());
+            blogDAO.createBlogPostComment(blogPost, account, content);
+        }
+
+        ModelAndView mav = blogViewDetail(id);
+        mav.addObject("commentSuccess", true);
+        return mav;
     }
 }

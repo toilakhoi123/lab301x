@@ -266,7 +266,7 @@
                                     </a>
                                     <p>Little Hearts, Big Dreams.</p>
                                 </div>
-                            </div>3
+                            </div>
                         </div>
 
                         <!-- comments section section -->
@@ -275,7 +275,7 @@
                         <!-- current account comment -->
                         <div class="comment-form" th:if="${session.account != null}">
                             <h4>Leave a Comment</h4>
-                            <form class="form-contact comment_form" th:action="@{/blogs/comment}" id="commentForm" method="POST">
+                            <form class="form-contact comment_form" th:action="@{/blogs/comment/post}" id="commentForm" method="POST">
                                 <input type="hidden" name="id" th:value="${blogPost.id}">
                                 <!-- content -->
                                 <div class="row">
