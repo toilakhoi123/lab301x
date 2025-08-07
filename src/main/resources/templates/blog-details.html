@@ -255,14 +255,18 @@
                         <!-- blog author -->
                         <div class="blog-author">
                             <div class="media align-items-center">
-                                <img th:src="@{/assets/img/blog/author.png}" alt="Author Image">
+                                <div class="d-flex align-items-center justify-content-center rounded-full text-white font-bold mr-5"
+                                    style="width: 70px; height: 70px; background-color: #333333;">
+                                    <span th:with="words=${#strings.arraySplit(blogPost.author.fullName, ' ')}"
+                                        th:text="${blogPost.author != null ? (#strings.substring(words[0], 0, 1) + (#arrays.length(words) > 1 ? #strings.substring(words[#arrays.length(words) - 1], 0, 1) : '')) : '?'}">?</span>
+                                </div>
                                 <div class="media-body">
                                     <a th:href="@{/account(id=${blogPost.author.id})}">
                                         <h4 th:text="${blogPost.author.fullName}"></h4>
                                     </a>
                                     <p>Little Hearts, Big Dreams.</p>
                                 </div>
-                            </div>
+                            </div>3
                         </div>
 
                         <!-- comments section section -->
@@ -299,7 +303,12 @@
                                     <div class="user justify-content-between d-flex">
                                         <!-- user image -->
                                         <div class="thumb">
-                                            <img th:src="@{/assets/img/blog/comment_1.png}" alt="User Profile Picture">
+                                            <div class="d-flex align-items-center justify-content-center rounded-full text-white font-bold"
+                                                style="width: 70px; height: 70px; background-color: #333333; border-radius: 50%;">
+                                                <!-- Display first and last initial of the full name using a more robust method -->
+                                                <span th:with="words=${#strings.arraySplit(comment.account.fullName, ' ')}"
+                                                    th:text="${comment.account != null ? (#strings.substring(words[0], 0, 1) + (#arrays.length(words) > 1 ? #strings.substring(words[#arrays.length(words) - 1], 0, 1) : '')) : '?'}">AB</span>
+                                            </div>
                                         </div>
                                         <!-- description -->
                                         <div class="desc">
@@ -308,12 +317,12 @@
                                             <!-- name and date -->
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center">
-                                                   <!-- name -->
-                                                   <h5><a th:href="@{/account(id=${comment.account.id})}" th:text="${comment.account.fullName}"></a></h5>
-                                                   <!-- date -->
-                                                   <p class="date" th:text="${#temporals.format(comment.time, 'EEEE, MMM d, yyyy')}"></p>
+                                                    <!-- name -->
+                                                    <h5><a th:href="@{/account(id=${comment.account.id})}" th:text="${comment.account.fullName}"></a></h5>
+                                                    <!-- date -->
+                                                    <p class="date" th:text="${#temporals.format(comment.time, 'EEEE, MMM d, yyyy')}"></p>
                                                 </div>
-                                                <!-- actilon buttons -->
+                                                <!-- action buttons -->
                                                 <div class="reply-btn">
                                                     <a href="#" class="btn-reply text-uppercase">reply</a>
                                                 </div>
