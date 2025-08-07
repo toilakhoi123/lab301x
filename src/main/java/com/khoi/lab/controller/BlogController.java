@@ -282,4 +282,31 @@ public class BlogController {
         mav.addObject("commentDeleteSuccess", true);
         return mav;
     }
+
+    /**
+     * Handles the update of a comment.
+     *
+     * @param blogPostId The ID of the blog post the comment belongs to.
+     * @param commentId  The ID of the comment to be updated.
+     * @param content    The new content of the comment.
+     * @param session    The current HTTP session to get the logged-in user.
+     * @return a ModelAndView to the blog post detail page.
+     */
+    @PostMapping("/comment/update")
+    public ModelAndView updateComment(@RequestParam("id") Long blogPostId,
+            @RequestParam Long commentId,
+            @RequestParam String content,
+            HttpSession session) {
+        Account loggedInAccount = (Account) session.getAttribute("account");
+        BlogPostComment commentToUpdate = blogDAO.findBlogPostCommentById(commentId);
+
+        if (loggedInAccount != null && commentToUpdate != null) {
+            if (loggedInAccount.getId().equals(commentToUpdate.getAccount().getId())) {
+                commentToUpdate.setContent(content);
+                blogDAO.updateBlogPostComment(commentToUpdate);
+            }
+        }
+
+        return blogViewDetail(blogPostId);
+    }
 }

@@ -272,23 +272,24 @@
                         <!-- comments section section -->
                         <div id="comments"></div>
 
-                        <!-- current account comment -->
+                        <!-- current account comment form -->
                         <div class="comment-form" th:if="${session.account != null}">
                             <h4>Leave a Comment</h4>
                             <form class="form-contact comment_form" th:action="@{/blogs/comment/post}" id="commentForm" method="POST">
                                 <input type="hidden" name="id" th:value="${blogPost.id}">
+                                <input type="hidden" name="commentId" id="commentId"> <!-- Hidden field for the comment ID -->
                                 <!-- content -->
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group">
                                             <textarea class="form-control w-100" name="content" id="content" cols="30" rows="9"
-                                                placeholder="Write Comment"></textarea>
+                                                    placeholder="Write Comment"></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- submit button -->
                                 <div class="form-group">
-                                    <button type="submit" class="button button-contactForm btn_1 boxed-btn">Post Comment</button>
+                                    <button type="submit" class="button button-contactForm btn_1 boxed-btn" id="commentButton">Post Comment</button>
                                 </div>
                             </form>
                         </div>
@@ -313,7 +314,7 @@
                                         <!-- description -->
                                         <div class="desc">
                                             <!-- comment content -->
-                                            <p class="comment" th:text="${comment.content}"></p>
+                                            <p class="comment" th:text="${comment.content}" th:id="${'comment-content-' + comment.id}"></p>
                                             <!-- name and date -->
                                             <div class="d-flex justify-content-between">
                                                 <div class="d-flex align-items-center">
@@ -324,13 +325,20 @@
                                                 </div>
                                                 <!-- action buttons -->
                                                 <div class="reply-btn">
-                                                    <a class="btn-reply text-uppercase" href="#">reply</a>
+                                                    <a class="btn-reply text-uppercase"
+                                                    th:if="${session.account != null and session.account.id == comment.account.id}"
+                                                    href="#"
+                                                    th:data-comment-id="${comment.id}"
+                                                    th:data-comment-content="${comment.content}"
+                                                    onclick="editComment(this)">
+                                                        edit
+                                                    </a>
                                                 </div>
                                                 <div class="reply-btn">
                                                     <a class="btn-reply text-uppercase"
-                                                        th:href="@{/blogs/comment/delete(comment=${comment.getId()})}"
-                                                        th:if="${session.account != null and (session.account.id == comment.account.id or session.account.isAdmin)}"
-                                                        onclick="return confirm('Delete this comment?');">
+                                                    th:href="@{/blogs/comment/delete(comment=${comment.getId()})}"
+                                                    th:if="${session.account != null and (session.account.id == comment.account.id or session.account.isAdmin)}"
+                                                    onclick="return confirm('Delete this comment?');">
                                                         delete
                                                     </a>
                                                 </div>
@@ -340,6 +348,28 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- comment edit script -->
+                        <script th:inline="javascript">
+                            function editComment(element) {
+                                // Retrieve values from the data attributes
+                                const commentId = element.getAttribute('data-comment-id');
+                                const commentContent = element.getAttribute('data-comment-content');
+
+                                // Set the value of the textarea to the comment's content
+                                document.getElementById('content').value = commentContent;
+
+                                // Set the hidden input for the commentId
+                                document.getElementById('commentId').value = commentId;
+
+                                // Change the form action to the update endpoint
+                                const commentForm = document.getElementById('commentForm');
+                                commentForm.action = /*[[@{/blogs/comment/update}]]*/ '/blogs/comment/update';
+
+                                // Change the button text
+                                document.getElementById('commentButton').textContent = 'Update Comment';
+                            }
+                        </script>
                     </div>
 
                     <!-- sidebar -->
