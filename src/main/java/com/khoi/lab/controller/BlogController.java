@@ -164,23 +164,46 @@ public class BlogController {
         BlogPost blogPost = blogDAO.findBlogPostById(id);
 
         if (blogPost == null) {
-            ModelAndView mav = blogListPage(null, null, null, null);
+            ModelAndView mav = new ModelAndView("blog-list");
             mav.addObject("blogPostNotExist", true);
             return mav;
         }
 
-        // Removed the explicit call to setTimeAgo as getTimeAgo is now a calculated
-        // getter
-        List<BlogPost> recentBlogPosts = blogDAO.listBlogPosts().stream().limit(10).collect(Collectors.toList());
-        // The loop below is no longer needed as getTimeAgo() is called directly in
-        // Thymeleaf
-        // for (BlogPost post : recentBlogPosts) {
-        // post.setTimeAgo(post.getTimeAgo());
-        // }
+        // Fetch ALL blog posts, sorted by a consistent criteria (e.g., date descending
+        // or id ascending)
+        // This is crucial to ensure consistent "next" and "previous" posts.
+        // It's assumed blogDAO.listBlogPosts() returns a sorted list.
+        List<BlogPost> allBlogPosts = blogDAO.listBlogPosts();
+
+        // Find the index of the current blog post
+        int currentIndex = -1;
+        for (int i = 0; i < allBlogPosts.size(); i++) {
+            if (allBlogPosts.get(i).getId().equals(id)) {
+                currentIndex = i;
+                break;
+            }
+        }
+
+        BlogPost previousPost = null;
+        // The fix: Add this check to prevent IndexOutOfBoundsException
+        if (currentIndex > 0) {
+            previousPost = allBlogPosts.get(currentIndex - 1);
+        }
+
+        BlogPost nextPost = null;
+        // Check if a next post exists (i.e., we are not at the last post)
+        if (currentIndex >= 0 && currentIndex < allBlogPosts.size() - 1) {
+            nextPost = allBlogPosts.get(currentIndex + 1);
+        }
+
+        // Get recent posts as you were before
+        List<BlogPost> recentBlogPosts = allBlogPosts.stream().limit(10).collect(Collectors.toList());
 
         ModelAndView mav = new ModelAndView("blog-details");
         mav.addObject("blogPost", blogPost);
         mav.addObject("recentPosts", recentBlogPosts);
+        mav.addObject("previousPost", previousPost); // Add previousPost to the model
+        mav.addObject("nextPost", nextPost); // Add nextPost to the model
         return mav;
     }
 

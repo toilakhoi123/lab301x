@@ -156,6 +156,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 posts-list">
+                        <!-- basic blog info -->
                         <div class="single-post">
                             <!-- image -->
                             <div class="feature-img">
@@ -174,8 +175,8 @@
                             </div>
                         </div>
 
-                        <!-- display likes/social -->
                         <div class="navigation-top">
+                            <!-- display likes/social -->
                             <div class="d-sm-flex justify-content-between text-center">
                                 <p class="like-info"><span class="align-middle"><i class="fa fa-heart"></i></span> Lily and 4 people like this</p>
                                 <div class="col-sm-4 text-center my-2 my-sm-0">
@@ -188,48 +189,64 @@
                                     <li><a href="#"><i class="fab fa-behance"></i></a></li>
                                 </ul>
                             </div>
-                            <!-- post navigation previous/next -->
+
+                            <!-- previous post & next post switchers -->
+                            <style>
+                                .navigation-area .thumb img {
+                                    width: 90px;
+                                    height: 90px;
+                                    object-fit: cover;
+                                }
+                            </style>
                             <div class="navigation-area">
-                                <div class="row">
-                                    <!-- previous post -->
-                                    <div
-                                        class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                        <div class="thumb">
-                                            <a href="#">
-                                                <img class="img-fluid" th:src="@{/assets/img/post/preview.png}" alt="Previous Post Thumbnail">
-                                            </a>
+                                <div class="row d-flex justify-content-between align-items-center">
+                                    <!-- Previous post container -->
+                                    <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
+                                        <!-- Content for previous post, only displayed if it exists -->
+                                        <div th:if="${previousPost != null}" class="d-flex align-items-center">
+                                            <div class="thumb">
+                                                <a th:href="@{/blogs/blog(id=${previousPost.id})}">
+                                                    <img class="img-fluid" th:src="${previousPost.imageUrl}" alt="Previous Post Thumbnail">
+                                                </a>
+                                            </div>
+                                            <div class="arrow">
+                                                <a th:href="@{/blogs/blog(id=${previousPost.id})}">
+                                                    <span class="lnr text-white ti-arrow-left"></span>
+                                                </a>
+                                            </div>
+                                            <div class="detials">
+                                                <p>Prev Post</p>
+                                                <a th:href="@{/blogs/blog(id=${previousPost.id})}">
+                                                    <h4 class="text-gray-800" th:text="${previousPost.title}"></h4>
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div class="arrow">
-                                            <a href="#">
-                                                <span class="lnr text-white ti-arrow-left"></span>
-                                            </a>
-                                        </div>
-                                        <div class="detials">
-                                            <p>Prev Post</p>
-                                            <a href="#">
-                                                <h4 style="color: #2d2d2d;">Space The Final Frontier</h4>
-                                            </a>
-                                        </div>
+                                        <!-- Empty placeholder when no previous post exists -->
+                                        <div th:unless="${previousPost != null}" class="w-full"></div>
                                     </div>
-                                    <!-- next post -->
-                                    <div
-                                        class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                                        <div class="detials">
-                                            <p>Next Post</p>
-                                            <a href="#">
-                                                <h4 style="color: #2d2d2d;">Telescopes 101</h4>
-                                            </a>
+                                    <!-- Next post container -->
+                                    <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
+                                        <!-- Content for next post, only displayed if it exists -->
+                                        <div th:if="${nextPost != null}" class="d-flex align-items-center">
+                                            <div class="detials">
+                                                <p>Next Post</p>
+                                                <a th:href="@{/blogs/blog(id=${nextPost.id})}">
+                                                    <h4 class="text-gray-800" th:text="${nextPost.title}"></h4>
+                                                </a>
+                                            </div>
+                                            <div class="arrow">
+                                                <a th:href="@{/blogs/blog(id=${nextPost.id})}">
+                                                    <span class="lnr text-white ti-arrow-right"></span>
+                                                </a>
+                                            </div>
+                                            <div class="thumb">
+                                                <a th:href="@{/blogs/blog(id=${nextPost.id})}">
+                                                    <img class="img-fluid" th:src="${nextPost.imageUrl}" alt="Next Post Thumbnail">
+                                                </a>
+                                            </div>
                                         </div>
-                                        <div class="arrow">
-                                            <a href="#">
-                                                <span class="lnr text-white ti-arrow-right"></span>
-                                            </a>
-                                        </div>
-                                        <div class="thumb">
-                                            <a href="#">
-                                                <img class="img-fluid" th:src="@{/assets/img/post/next.png}" alt="Next Post Thumbnail">
-                                            </a>
-                                        </div>
+                                        <!-- Empty placeholder when no next post exists -->
+                                        <div th:unless="${nextPost != null}" class="w-full"></div>
                                     </div>
                                 </div>
                             </div>
