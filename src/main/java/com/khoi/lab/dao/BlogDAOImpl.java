@@ -286,7 +286,6 @@ public class BlogDAOImpl implements BlogDAO {
     @Override
     @Transactional
     public BlogPost createBlogPost(Account author, String imageUrl, String title, String description) {
-        // TODO: Check perms
         BlogPost blogPost = new BlogPost(author, imageUrl, title, description);
         blogPost = saveBlogPost(blogPost);
 

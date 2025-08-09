@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.PasswordResetCode;
+import com.khoi.lab.entity.Role;
+import com.khoi.lab.enums.UserPermission;
 
 /**
  * Data Access Object for Accounts
@@ -15,6 +17,27 @@ public interface AccountDAO {
     void initiate();
 
     /**
+     * Create a role with desired permissions
+     * 
+     * @param roleName
+     * @param permissions
+     * @return
+     */
+    Role roleCreate(String roleName, List<UserPermission> permissions);
+
+    Role roleSave(Role role);
+
+    Role roleFindById(Long id);
+
+    Role roleFindByRoleName(String roleName);
+
+    List<Role> roleList();
+
+    Role roleUpdate(Role role);
+
+    void roleDeleteById(Long id);
+
+    /**
      * Register new user account
      * 
      * @param username
@@ -23,10 +46,11 @@ public interface AccountDAO {
      * @param email
      * @param phoneNumber
      * @param password
+     * @param roleName
      * @return
      */
     Account accountRegister(String username, String firstName, String lastName, String email, String phoneNumber,
-            String password);
+            String password, String roleName);
 
     /**
      * Log an user in with their username/email/phone and password

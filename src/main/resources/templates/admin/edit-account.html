@@ -179,21 +179,18 @@
                                 th:value="${account.getPhoneNumber()}" required>
                         </div>
 
-                        <!-- isAdmin & isDisabled checkboxes (inline) -->
-                        <div th:if="${session.account.getId() != account.getId()}">
-                            <div class="mb-3 form-check form-check-inline">
-                                <input type="checkbox" class="form-check-input" id="isAdmin" name="isAdmin"
-                                    th:checked="${account.isAdmin()}">
-                                <label class="form-check-label" for="isAdmin">Admin</label>
-                            </div>
-                            <div class="mb-3 form-check form-check-inline">
-                                <input type="checkbox" class="form-check-input" id="isDisabled" name="isDisabled"
-                                    th:checked="${account.isDisabled()}">
-                                <label class="form-check-label" for="isDisabled">Disabled</label>
-                            </div>
-                        </div>
-                        <div th:if="${session.account.getId() == account.getId()}">
-                            <input type="hidden" name="isAdmin" th:value="false">
+                        <!-- Roles -->
+                        <div class="mb-3">
+                            <label for="roleName" class="form-label">Role</label><br>
+                            <select class="form-control" id="roleName" name="roleName" required>
+                                <option 
+                                    th:each="role : ${roles}" 
+                                    th:value="${role.roleName}" 
+                                    th:text="${role.roleName}"
+                                    th:selected="${role.roleName} == ${account.role.roleName}">
+                                </option>
+                            </select>
+                            <br><br>
                         </div>
 
                         <!-- Buttons -->

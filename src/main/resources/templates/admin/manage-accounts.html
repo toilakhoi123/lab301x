@@ -139,8 +139,14 @@
                     <h1 class="h3 mb-2 text-gray-800">Accounts</h1>
                     <p class="mb-4">Manage accounts present in the system.</p>
 
-                    <!-- align table search bar to left -->
-                    <style>#dataTable_filter {display: flex; align-items: flex-start;}</style>
+                    <!-- css fixes -->
+                    <style>
+                        /* align table search bar to left */
+                        #dataTable_filter {
+                            display: flex; 
+                            align-items: flex-start;
+                        }
+                    </style>
 
                     <!-- datatable -->
                     <div class="card shadow mb-4">
@@ -170,8 +176,8 @@
                                             <th>Username</th>
                                             <th>Email</th>
                                             <th>Phone Number</th>
-                                            <th>Role</th>
                                             <th>Last Login Date</th>
+                                            <th>Role</th>
                                             <th>Account Disabled</th>
                                             <th>Actions</th>
                                         </tr>
@@ -179,151 +185,170 @@
                                     <!-- data -->
                                     <tbody>
                                         <!-- populate data -->
-                                        <div th:each="account : ${accounts}">
-                                            <tr>
-                                                <td th:text="${account.getId()}" class="d-none"></td>
-                                                <td th:text="${account.getFullName()}"></td>
-                                                <td th:text="${account.getUsername()}"></td>
-                                                <td th:text="${account.getEmail()}"></td>
-                                                <td th:text="${account.getPhoneNumber()}"></td>
-                                                <td>
-                                                    <span th:if="${account.isAdmin()}">Admin</span>
-                                                    <span th:if="${!account.isAdmin()}">User</span>
-                                                </td>
-                                                <td>
-                                                    <span th:if="${account.getLastLoginDate() == null}">Never</span>
-                                                    <span th:if="${account.getLastLoginDate() != null}" th:text="${#dates.format(account.getLastLoginDate(), 'dd/MM/yyyy')}"></span>
-                                                </td>
-                                                <td>
-                                                    <span th:if="${account.isDisabled()}">✔️</span>
-                                                    <span th:if="${!account.isDisabled()}">❌</span>
-                                                </td>
-                                                <td>
-                                                    <!-- view donations -->
-                                                    <a 
-                                                        th:href="@{/admin/manage-donations(account=${account.getId()})}"
-                                                        class="btn-sm btn-success btn-icon-split m-1" 
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Donations</span>
-                                                    </a>
-                                                    <!-- edit campaign -->
-                                                    <a 
-                                                        th:href="@{/admin/manage-accounts/edit(id=${account.getId()})}"
-                                                        class="btn-sm btn-warning btn-icon-split m-1"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Edit</span>
-                                                    </a>
-                                                    <!-- enable account -->
-                                                    <a 
-                                                        href="#"
-                                                        th:if="${account.isDisabled() and account.getId()!=session.account.getId()}"
-                                                        th:attr="data-id=${account.getId()}"
-                                                        class="btn-sm btn-success btn-icon-split m-1 account-action" 
-                                                        data-isdisabled="false"
-                                                        data-isadmin=""
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Enable</span>
-                                                    </a>
-                                                    <!-- disable account -->
-                                                    <a 
-                                                        href="#"
-                                                        th:if="${!account.isDisabled() and account.getId()!=session.account.getId()}"
-                                                        th:attr="data-id=${account.getId()}"
-                                                        class="btn-sm btn-danger btn-icon-split m-1 account-action" 
-                                                        data-isdisabled="true"
-                                                        data-isadmin=""
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Disable</span>
-                                                    </a>
-                                                    <!-- convert to normal user -->
-                                                    <a 
-                                                        href="#"
-                                                        th:if="${account.isAdmin() and account.getId()!=session.account.getId()}"
-                                                        th:attr="data-id=${account.getId()}"
-                                                        class="btn-sm btn-warning btn-icon-split m-1 account-action"
-                                                        data-isadmin="false"
-                                                        data-isdisabled=""
-                                                        th:classappend="${session.account.getId() == account.id} ? 'disabled'"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Convert to USER</span>
-                                                    </a>
-                                                    <!-- convert to admin -->
-                                                    <a
-                                                        href="#"
-                                                        th:if="${!account.isAdmin() and account.getId()!=session.account.getId()}"
-                                                        th:attr="data-id=${account.getId()}"
-                                                        class="btn-sm btn-warning btn-icon-split m-1 account-action"
-                                                        data-isadmin="true"
-                                                        data-isdisabled=""
-                                                        th:classappend="${session.account.getId() == account.id} ? 'disabled'"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Convert to ADMIN</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </div>
-                                        <!-- account actions js -->
-                                        <script>
-                                            document.addEventListener("DOMContentLoaded", () => {
-                                                document.querySelectorAll(".account-action").forEach(button => {
-                                                    button.addEventListener("click", async (e) => {
-                                                        e.preventDefault();
-
-                                                        if (button.classList.contains("disabled")) {
-                                                            console.log("This action is disabled for your own account.");
-                                                            return;
-                                                        }
-                                                        
-                                                        const id = button.dataset.id;
-                                                        const isAdmin = button.dataset.isadmin || null;
-                                                        const isDisabled = button.dataset.isdisabled || null;
-
-                                                        if (
-                                                            (isAdmin != null || isDisabled != null)
-                                                            && !confirm('Are you sure you want to carry out this action?')
-                                                        ) {
-                                                            return;
-                                                        }
-
-                                                        const requestBody = {
-                                                            method: "POST",
-                                                            body: JSON.stringify({
-                                                                id: id,
-                                                                isAdmin: isAdmin,
-                                                                isDisabled: isDisabled,
-                                                            }),
-                                                            headers: {
-                                                                "Content-type": "application/json; charset=UTF-8"
-                                                            }
-                                                        };
-
-                                                        console.log("Sending request:", requestBody);
-
-                                                        await fetch("/admin/manage-accounts/quickedit", requestBody);
-                                                        window.location.reload();
-                                                    });
-                                                });
-                                            });
-                                        </script>
+                                        <tr th:each="account : ${accounts}">
+                                            <td th:text="${account.getId()}" class="d-none"></td>
+                                            <td th:text="${account.getFullName()}"></td>
+                                            <td th:text="${account.getUsername()}"></td>
+                                            <td th:text="${account.getEmail()}"></td>
+                                            <td th:text="${account.getPhoneNumber()}"></td>
+                                            <td>
+                                                <span th:if="${account.getLastLoginDate() == null}">Never</span>
+                                                <span th:if="${account.getLastLoginDate() != null}" th:text="${#dates.format(account.getLastLoginDate(), 'dd/MM/yyyy')}"></span>
+                                            </td>
+                                            <td>
+                                                <!-- Role dropdown -->
+                                                <select
+                                                    class="form-control role-dropdown my-dropdown"
+                                                    th:id="'role-select-' + ${account.getId()}"
+                                                    th:onchange="'handleRoleChange(this, \'' + ${account.getId()} + '\')'"
+                                                    th:disabled="${account.getId() == session.account.id}"
+                                                >
+                                                    <option
+                                                        th:each="role : ${roles}"
+                                                        th:value="${role.getRoleName()}"
+                                                        th:text="${role.getRoleName()}"
+                                                        th:selected="${role.getRoleName() == account.getRole().getRoleName()}"
+                                                    ></option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <!-- Account Disabled dropdown -->
+                                                <select
+                                                    class="form-control account-disabled-dropdown my-dropdown"
+                                                    th:id="'disabled-select-' + ${account.getId()}"
+                                                    th:onchange="'handleDisabledChange(this, \'' + ${account.getId()} + '\')'"
+                                                    th:disabled="${account.getId() == session.account.id}"
+                                                >
+                                                    <option value="false" th:selected="${!account.isDisabled()}">❌</option>
+                                                    <option value="true" th:selected="${account.isDisabled()}">✔️</option>
+                                                </select>
+                                            </td>
+                                            <!-- action buttons -->
+                                            <td>
+                                                <!-- view donations -->
+                                                <a 
+                                                    th:href="@{/admin/manage-donations(account=${account.getId()})}"
+                                                    class="btn-sm btn-success btn-icon-split m-1" 
+                                                >
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-flag"></i>
+                                                    </span>
+                                                    <span class="text">Donations</span>
+                                                </a>
+                                                <!-- edit campaign -->
+                                                <a 
+                                                    th:href="@{/admin/manage-accounts/edit(id=${account.getId()})}"
+                                                    class="btn-sm btn-warning btn-icon-split m-1"
+                                                >
+                                                    <span class="icon text-white-50">
+                                                        <i class="fas fa-flag"></i>
+                                                    </span>
+                                                    <span class="text">Edit</span>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
+                                    <!-- script -->
+                                    <script>
+                                        /**
+                                        * Handles the change event of the role dropdown.
+                                        * It prompts the user for confirmation and sends a POST request to update the role.
+                                        * @param {HTMLSelectElement} selectElement The dropdown element that triggered the event.
+                                        * @param {string} accountId The ID of the account being edited.
+                                        */
+                                        async function handleRoleChange(selectElement, accountId) {
+                                            const newRoleName = selectElement.value;
+                                            const currentRoleName = selectElement.options[selectElement.selectedIndex].text;
+
+                                            // Custom modal replacement for alert/confirm
+                                            // This is a simple implementation; for a real application, you'd build a more robust modal UI.
+                                            const confirmation = window.confirm(`Are you sure you want to change the role of this account to "${newRoleName}"?`);
+                                            
+                                            if (!confirmation) {
+                                                // Revert the dropdown to its original value if the user cancels.
+                                                selectElement.value = currentRoleName;
+                                                return;
+                                            }
+
+                                            const formData = new FormData();
+                                            formData.append('id', accountId);
+                                            formData.append('roleName', newRoleName);
+
+                                            try {
+                                                const response = await fetch('/admin/manage-accounts/edit', {
+                                                    method: 'POST',
+                                                    body: formData
+                                                });
+
+                                                if (response.ok) {
+                                                    console.log('Role updated successfully.');
+                                                    window.location.reload();
+                                                } else {
+                                                    console.error('Failed to update role:', response.statusText);
+                                                    // Revert the dropdown if the update fails
+                                                    selectElement.value = currentRoleName;
+                                                    // Display an error to the user
+                                                    window.alert('An error occurred. The role was not updated.');
+                                                }
+                                            } catch (error) {
+                                                console.error('An error occurred during the fetch operation:', error);
+                                                // Revert the dropdown on network error
+                                                selectElement.value = currentRoleName;
+                                                // Display an error to the user
+                                                window.alert('A network error occurred. Please try again.');
+                                            }
+                                        }
+                                        
+                                        /**
+                                        * Handles the change event for the account disabled dropdown.
+                                        * It prompts the user for confirmation and sends a POST request to update the account status.
+                                        * @param {HTMLSelectElement} selectElement The dropdown element that triggered the event.
+                                        * @param {string} accountId The ID of the account being edited.
+                                        */
+                                        async function handleDisabledChange(selectElement, accountId) {
+                                            const newStatus = selectElement.value === 'true';
+                                            const currentStatus = selectElement.options[selectElement.selectedIndex].value === 'true';
+
+                                            const confirmation = window.confirm(`Are you sure you want to change the account status?`);
+
+                                            if (!confirmation) {
+                                                // Revert the dropdown to its original value if the user cancels.
+                                                selectElement.value = currentStatus ? 'true' : 'false';
+                                                return;
+                                            }
+
+                                            const formData = new FormData();
+                                            formData.append('id', accountId);
+                                            
+                                            // Based on the server-side logic, we only send the 'isDisabled' parameter if the status is true.
+                                            // If it's false, we omit the parameter entirely so the server sets it to false.
+                                            if (newStatus) {
+                                                formData.append('isDisabled', 'true');
+                                            }
+
+                                            try {
+                                                const response = await fetch('/admin/manage-accounts/edit', {
+                                                    method: 'POST',
+                                                    body: formData
+                                                });
+
+                                                if (response.ok) {
+                                                    console.log('Account status updated successfully.');
+                                                    window.location.reload();
+                                                } else {
+                                                    console.error('Failed to update account status:', response.statusText);
+                                                    // Revert the dropdown if the update fails
+                                                    selectElement.value = currentStatus ? 'true' : 'false';
+                                                    window.alert('An error occurred. The account status was not updated.');
+                                                }
+                                            } catch (error) {
+                                                console.error('An error occurred during the fetch operation:', error);
+                                                // Revert the dropdown on network error
+                                                selectElement.value = currentStatus ? 'true' : 'false';
+                                                window.alert('A network error occurred. Please try again.');
+                                            }
+                                        }
+                                    </script>
                                 </table>
                             </div>
                         </div>

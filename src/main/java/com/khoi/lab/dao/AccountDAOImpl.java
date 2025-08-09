@@ -4,8 +4,11 @@ import java.sql.Date;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
+import com.khoi.lab.data.DefaultRolePermissions;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.PasswordResetCode;
+import com.khoi.lab.entity.Role;
+import com.khoi.lab.enums.UserPermission;
 import com.khoi.lab.service.CryptographyService;
 
 import jakarta.persistence.EntityManager;
@@ -26,43 +29,62 @@ public class AccountDAOImpl implements AccountDAO {
     public void initiate() {
         System.out.println("| [initiate] Initiating test data.");
 
-        // register accounts
-        Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi");
-        Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165");
-        Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11");
+        // 1. Create and save roles
+        roleCreate("manager", DefaultRolePermissions.getPermissionsForRole("manager"));
+        roleCreate("admin", DefaultRolePermissions.getPermissionsForRole("admin"));
+        roleCreate("user", DefaultRolePermissions.getPermissionsForRole("user"));
+        roleCreate("blog_writer", DefaultRolePermissions.getPermissionsForRole("blog_writer"));
+        roleCreate("campaign_manager", DefaultRolePermissions.getPermissionsForRole("campaign_manager"));
+        roleCreate("donation_manager", DefaultRolePermissions.getPermissionsForRole("donation_manager"));
+
+        // 2. Register accounts and assign roles
+        Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi", "manager");
+        Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165",
+                "user");
+        Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11",
+                "user");
         Account acc4 = accountRegister("skywalker", "Luke", "Skywalker", "luke.skywalker@jedi.com", "0812345678",
-                "force123");
+                "force123", "user");
         Account acc5 = accountRegister("vader", "Anakin", "Skywalker", "darth.vader@empire.com", "0823456789",
-                "darkside");
+                "darkside", "user");
         Account acc6 = accountRegister("kenobi", "Obi-Wan", "Kenobi", "obiwan.kenobi@jedi.com", "0834567890",
-                "hello_there");
-        Account acc7 = accountRegister("yoda", "Master", "Yoda", "master.yoda@jedi.com", "0845678901", "wisdom");
-        Account acc8 = accountRegister("han", "Han", "Solo", "han.solo@falcon.com", "0856789012", "chewie");
-        Account acc9 = accountRegister("leia", "Leia", "Organa", "leia.organa@rebel.com", "0867890123", "princess");
-        Account acc10 = accountRegister("chewbacca", "Chew", "Bacca", "chewbacca@falcon.com", "0878901234", "rrraagh");
-        Account acc11 = accountRegister("r2d2", "R2", "D2", "r2.d2@astro.com", "0889012345", "beepboop");
-        Account acc12 = accountRegister("c3po", "C-3", "PO", "c3.po@protocol.com", "0890123456", "etiquette");
+                "hello_there", "user");
+        Account acc7 = accountRegister("yoda", "Master", "Yoda", "master.yoda@jedi.com", "0845678901", "wisdom",
+                "user");
+        Account acc8 = accountRegister("han", "Han", "Solo", "han.solo@falcon.com", "0856789012", "chewie", "user");
+        Account acc9 = accountRegister("leia", "Leia", "Organa", "leia.organa@rebel.com", "0867890123", "princess",
+                "user");
+        Account acc10 = accountRegister("chewbacca", "Chew", "Bacca", "chewbacca@falcon.com", "0878901234", "rrraagh",
+                "admin");
+        Account acc11 = accountRegister("r2d2", "R2", "D2", "r2.d2@astro.com", "0889012345", "beepboop", "user");
+        Account acc12 = accountRegister("c3po", "C-3", "PO", "c3.po@protocol.com", "0890123456", "etiquette",
+                "user");
         Account acc13 = accountRegister("palpatine", "Sheev", "Palpatine", "emperor@empire.com", "0901234567",
-                "unlimitedpower");
-        Account acc14 = accountRegister("rey", "Rey", "Skywalker", "rey@jedi.com", "0912345678", "lightforce");
-        Account acc15 = accountRegister("finn", "FN", "2187", "finn@rebel.com", "0923456789", "freedom");
-        Account acc16 = accountRegister("poe", "Poe", "Dameron", "poe.dameron@rebel.com", "0934567890", "blackleader");
-        Account acc17 = accountRegister("bb8", "BB", "8", "bb.8@astro.com", "0945678901", "rolling");
-        Account acc18 = accountRegister("maul", "Darth", "Maul", "darth.maul@sith.com", "0956789012", "doubleblade");
+                "unlimitedpower", "admin");
+        Account acc14 = accountRegister("rey", "Rey", "Skywalker", "rey@jedi.com", "0912345678", "lightforce",
+                "user");
+        Account acc15 = accountRegister("finn", "FN", "2187", "finn@rebel.com", "0923456789", "freedom", "user");
+        Account acc16 = accountRegister("poe", "Poe", "Dameron", "poe.dameron@rebel.com", "0934567890", "blackleader",
+                "user");
+        Account acc17 = accountRegister("bb8", "BB", "8", "bb.8@astro.com", "0945678901", "rolling", "user");
+        Account acc18 = accountRegister("maul", "Darth", "Maul", "darth.maul@sith.com", "0956789012", "doubleblade",
+                "user");
         Account acc19 = accountRegister("grievous", "General", "Grievous", "general.grievous@separatist.com",
-                "0967890123", "coughcough");
-        Account acc20 = accountRegister("ahsoka", "Ahsoka", "Tano", "ahsoka.tano@jedi.com", "0978901234", "snips");
-        Account acc21 = accountRegister("mace", "Mace", "Windu", "mace.windu@jedi.com", "0989012345", "purple");
-        Account acc22 = accountRegister("jango", "Jango", "Fett", "jango.fett@bounty.com", "0990123456", "clonesource");
-        Account acc23 = accountRegister("boba", "Boba", "Fett", "boba.fett@bounty.com", "0701234567", "sarlacc");
-        Account acc24 = accountRegister("padme", "Padme", "Amidala", "padme.amidala@senate.com", "0712345678", "queen");
+                "0967890123", "coughcough", "user");
+        Account acc20 = accountRegister("ahsoka", "Ahsoka", "Tano", "ahsoka.tano@jedi.com", "0978901234", "snips",
+                "admin");
+        Account acc21 = accountRegister("mace", "Mace", "Windu", "mace.windu@jedi.com", "0989012345", "purple",
+                "user");
+        Account acc22 = accountRegister("jango", "Jango", "Fett", "jango.fett@bounty.com", "0990123456", "clonesource",
+                "user");
+        Account acc23 = accountRegister("boba", "Boba", "Fett", "boba.fett@bounty.com", "0701234567", "sarlacc",
+                "user");
+        Account acc24 = accountRegister("padme", "Padme", "Amidala", "padme.amidala@senate.com", "0712345678", "queen",
+                "user");
         Account acc25 = accountRegister("snoke", "Supreme", "Leader Snoke", "snoke@firstorder.com", "0723456789",
-                "darkforce");
+                "darkforce", "user");
 
         // set details
-        acc1.setAdmin(true);
-        acc10.setAdmin(true);
-        acc20.setAdmin(true);
         acc2.setDisabled(true);
         acc13.setDisabled(true);
         acc15.setDisabled(true);
@@ -97,9 +119,80 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     @Transactional
+    public Role roleCreate(String roleName, List<UserPermission> permissions) {
+        Role role = new Role(roleName.toLowerCase(), permissions);
+        roleSave(role);
+        System.out.println("| [roleCreate] Role created: " + role);
+        return role;
+    }
+
+    @Override
+    @Transactional
+    public Role roleSave(Role role) {
+        em.persist(role);
+        System.out.println("| [roleSave] Role saved: " + role);
+        return role;
+    }
+
+    @Override
+    public Role roleFindById(Long id) {
+        Role role = em.find(Role.class, id);
+        if (role == null) {
+            System.out.println("| [roleFindById] Couldn't find role with id: " + id);
+        } else {
+            System.out.println("| [roleFindById] Found role: " + role);
+        }
+        return role;
+    }
+
+    @Override
+    public Role roleFindByRoleName(String roleName) {
+        TypedQuery<Role> tq = em.createQuery(
+                "SELECT r FROM Role r WHERE r.roleName=:roleName",
+                Role.class);
+        tq.setParameter("roleName", roleName.toLowerCase());
+        try {
+            Role role = tq.getSingleResult();
+            System.out.println("| [roleFindByRoleName] Role found: " + role);
+            return role;
+        } catch (NoResultException e) {
+            System.out.println("| [roleFindByRoleName] Role not found!");
+            return null;
+        }
+    }
+
+    @Override
+    public List<Role> roleList() {
+        TypedQuery<Role> tq = em.createQuery(
+                "SELECT r FROM Role r",
+                Role.class);
+        List<Role> roles = tq.getResultList();
+        System.out.println("| [roleList] Found and returned: " + roles.size() + " roles!");
+        return roles;
+    }
+
+    @Override
+    @Transactional
+    public Role roleUpdate(Role role) {
+        role = em.merge(role);
+        System.out.println("| [roleUpdate] Role updated: " + role);
+        return role;
+    }
+
+    @Override
+    @Transactional
+    public void roleDeleteById(Long id) {
+        Role role = roleFindById(id);
+        em.remove(role);
+        System.out.println("| [roleDeleteById] Deleted role with id: " + id);
+    }
+
+    @Override
+    @Transactional
     public Account accountRegister(String username, String firstName, String lastName, String email, String phoneNumber,
-            String password) {
-        Account account = new Account(username, firstName, lastName, email, phoneNumber, password);
+            String password, String roleName) {
+        Role role = roleFindByRoleName(roleName);
+        Account account = new Account(username, firstName, lastName, email, phoneNumber, password, role);
         accountSave(account);
         System.out.println("| [accountRegister] Registered account: " + account);
         return account;

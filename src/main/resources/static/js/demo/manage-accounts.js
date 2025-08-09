@@ -13,15 +13,30 @@ $(document).ready(function() {
         exportOptions: {
           columns: [0, 1, 2, 3, 4, 5, 6, 7],
           format: {
-            body: function ( data, _, column, _ ) {
-              // process data for account status column
+            body: function (data, _, column, _) {
+              // Logic for the 'role' column (column 6)
               if (column === 6) {
-                if (data.includes('✔️')) {
-                  return 'true';
-                } else if (data.includes('❌')) {
-                  return 'false';
-                }
+                // Create a temporary DOM element to parse the HTML string.
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+
+                // Find the option element with the 'selected' attribute and return its value.
+                const selectedOption = doc.querySelector('select.role-dropdown option[selected]');
+                return selectedOption ? selectedOption.value : '';
               }
+
+              // Logic for the 'disabled' column (column 7)
+              if (column === 7) {
+                // Create a temporary DOM element to parse the HTML string.
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+
+                // Find the option element with the 'selected' attribute and return its value ('true' or 'false').
+                const selectedOption = doc.querySelector('select.account-disabled-dropdown option[selected]');
+                return selectedOption ? selectedOption.value : '';
+              }
+
+              // Default logic for other columns: remove <span> tags
               return data.replaceAll("<span>", "").replaceAll("</span>", "");
             }
           }
@@ -39,7 +54,7 @@ $(document).ready(function() {
       }
 
       // get 6th column
-      var lastLogin = data[6];
+      var lastLogin = data[5];
 
       // never logged in -> always show
       if (lastLogin === "Never") {

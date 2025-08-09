@@ -16,6 +16,7 @@ import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
+import com.khoi.lab.entity.Role;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.TimeMinutes;
 import com.khoi.lab.object.AccountEditRequest;
@@ -115,6 +116,7 @@ public class AdminController {
 
         ModelAndView mav = new ModelAndView("admin/manage-accounts");
         mav.addObject("accounts", accountDAO.accountList());
+        mav.addObject("roles", accountDAO.roleList());
         return mav;
     }
 
@@ -152,8 +154,10 @@ public class AdminController {
             account.setDisabled(request.isDisabled.equals("true"));
         }
 
-        if (request.isAdmin != null) {
-            account.setAdmin(request.isAdmin.equals("true"));
+        Role roleUser = accountDAO.roleFindByRoleName("user");
+        Role roleAdmin = accountDAO.roleFindByRoleName("admin");
+        if (request.isDisabled != null) {
+            account.setRole(request.isAdmin.equals("true") ? roleAdmin : roleUser);
         }
 
         accountDAO.accountUpdate(account);
@@ -175,6 +179,7 @@ public class AdminController {
         }
         ModelAndView mav = new ModelAndView("admin/edit-account");
         mav.addObject("account", accountDAO.accountFindWithId(id));
+        mav.addObject("roles", accountDAO.roleList());
         return mav;
     }
 
@@ -198,11 +203,11 @@ public class AdminController {
             HttpSession session,
             @RequestParam Long id,
             @RequestParam(required = false) String username,
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String email,
-            @RequestParam String phoneNumber,
-            @RequestParam(required = false) String isAdmin,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String phoneNumber,
+            @RequestParam(required = false) String roleName,
             @RequestParam(required = false) String isDisabled) {
         Account account = accountDAO.accountFindWithId(id);
 
@@ -212,12 +217,16 @@ public class AdminController {
             return mav;
         }
 
+        if (roleName != null) {
+            Role role = accountDAO.roleFindByRoleName(roleName);
+            account.setRole(role);
+        }
+
         account.setUsername(username != null ? username : account.getUsername());
-        account.setFirstName(firstName);
-        account.setLastName(lastName);
-        account.setEmail(email);
-        account.setPhoneNumber(phoneNumber);
-        account.setAdmin(isAdmin != null);
+        account.setFirstName(firstName != null ? firstName : account.getFirstName());
+        account.setLastName(lastName != null ? lastName : account.getLastName());
+        account.setEmail(email != null ? email : account.getEmail());
+        account.setPhoneNumber(phoneNumber != null ? phoneNumber : account.getPhoneNumber());
         account.setDisabled(isDisabled != null);
 
         accountDAO.accountUpdate(account);

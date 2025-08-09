@@ -1,21 +1,13 @@
 package com.khoi.lab.entity;
 
+import com.khoi.lab.enums.UserPermission;
+import com.khoi.lab.service.CryptographyService;
+import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.khoi.lab.service.CryptographyService;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 /**
  * User Account Entity
@@ -46,8 +38,10 @@ public class Account {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "is_admin")
-    private boolean isAdmin;
+    // A single user now belongs to one role
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Column(name = "is_disabled")
     private boolean isDisabled;
@@ -81,22 +75,23 @@ public class Account {
 
     /**
      * Register constructor
-     * 
+     *
      * @param username
      * @param firstName
      * @param lastName
      * @param email
      * @param phoneNumber
      * @param password
+     * @param role
      */
     public Account(String username, String firstName, String lastName, String email, String phoneNumber,
-            String password) {
+            String password, Role role) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.isAdmin = false;
+        this.role = role;
         this.isDisabled = false;
         this.donations = new ArrayList<>();
         setPassword(password);
@@ -138,12 +133,14 @@ public class Account {
         this.password = CryptographyService.encrypt(password);
     }
 
+    // This method now checks the role name, maintaining compatibility
     public boolean isAdmin() {
-        return isAdmin;
+        return this.role != null && "ADMIN".equalsIgnoreCase(this.role.getRoleName());
     }
 
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    // New helper method to check if the account has a specific permission
+    public boolean hasPermission(UserPermission permission) {
+        return this.role != null && this.role.getPermissions().contains(permission);
     }
 
     public boolean isDisabled() {
@@ -209,6 +206,14 @@ public class Account {
         this.blogPosts = blogPosts;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     // helper
     public void addDonation(Donation donation) {
         this.donations.add(donation);
@@ -217,6 +222,6 @@ public class Account {
     @Override
     public String toString() {
         return "Account [username=" + username + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", phoneNumber=" + phoneNumber + "]";
+                + ", phoneNumber=" + phoneNumber + ", role=" + role.getRoleName() + "]";
     }
 }

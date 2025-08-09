@@ -130,7 +130,7 @@ public class OAuthController {
         String password = ""; // empty password
 
         // Save to DB
-        accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password);
+        accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password, "user");
 
         // Fetch the new account and log in
         Account newAccount = accountDAO.accountFindWithEmail(email);

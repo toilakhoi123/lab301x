@@ -118,7 +118,7 @@
                                         <div th:if="${session.account==null}">
                                             <a th:href="@{/login}" class="btn header-btn">Log In</a>
                                         </div>
-                                        <div th:if="${session.account!=null and session.account.isAdmin()}">
+                                        <div th:if="${session.account!=null and session.account.isAdmin}">
                                             <a th:href="@{/admin/manage-accounts}" class="btn header-btn">Management</a>
                                         </div>
                                     </div>
@@ -290,7 +290,7 @@
                                 <div class="mb-3 d-flex justify-content-between px-3">
                                     <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
                                     <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm" th:if="${(campaign.getStatus().name()=='OPEN' or campaign.getStatus().name()=='COMPLETE') and (session.account==null or (session.account!=null and !session.account.isAdmin()))}">Donate</a>
-                                    <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and session.account.isAdmin()}" class="btn btn-success btn-sm">Edit</a>
+                                    <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and session.account.isAdmin}" class="btn btn-success btn-sm">Edit</a>
                                 </div>
                             </div>
                         </div>

@@ -6156,13 +6156,12 @@ hr {
 }
 
 /* line 1260, C:/Users/HP/Desktop/jun-2020/277.Charity _Non-profit/assets/scss/_blog_page.scss */
-.single-post-area .thumb .overlay-bg {
+/* .single-post-area .thumb .overlay-bg {
   background: rgba(0, 0, 0, 0.8);
-}
+} */
 
 /* line 1265, C:/Users/HP/Desktop/jun-2020/277.Charity _Non-profit/assets/scss/_blog_page.scss */
 .single-post-area .navigation-top {
-  padding-top: 15px;
   border-top: 1px solid #f0e9ff;
 }
 

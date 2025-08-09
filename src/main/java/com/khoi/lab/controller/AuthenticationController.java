@@ -171,7 +171,7 @@ public class AuthenticationController {
         }
 
         // register successful
-        accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password);
+        accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password, "user");
         ModelAndView mav = login();
         mav.addObject("registerSuccess", true);
         return mav;
