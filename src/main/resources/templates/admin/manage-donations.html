@@ -57,22 +57,27 @@
             </div>
 
             <!-- Nav Item - Accounts -->
-            <li class="nav-item">
+            <li class="nav-item" th:if="${session.account != null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
                 <a class="nav-link" href="/admin/manage-accounts">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Accounts</span></a>
+                    <span>Accounts</span>
+                </a>
             </li>
+
             <!-- Nav Item - Campaigns -->
-            <li class="nav-item">
+            <li class="nav-item" th:if="${session.account != null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}">
                 <a class="nav-link" href="/admin/manage-campaigns">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Campaigns</span></a>
+                    <span>Campaigns</span>
+                </a>
             </li>
+
             <!-- Nav Item - Donations -->
-            <li class="nav-item active">
+            <li class="nav-item active" th:if="${session.account != null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_DONATIONS)}">
                 <a class="nav-link" href="/admin/manage-donations">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Donations</span></a>
+                    <span>Donations</span>
+                </a>
             </li>
 
             <!-- Divider -->

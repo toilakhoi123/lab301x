@@ -40,7 +40,7 @@ public class AccountDAOImpl implements AccountDAO {
         // 2. Register accounts and assign roles
         Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi", "manager");
         Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165",
-                "user");
+                "admin");
         Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11",
                 "user");
         Account acc4 = accountRegister("skywalker", "Luke", "Skywalker", "luke.skywalker@jedi.com", "0812345678",
@@ -53,14 +53,14 @@ public class AccountDAOImpl implements AccountDAO {
                 "user");
         Account acc8 = accountRegister("han", "Han", "Solo", "han.solo@falcon.com", "0856789012", "chewie", "user");
         Account acc9 = accountRegister("leia", "Leia", "Organa", "leia.organa@rebel.com", "0867890123", "princess",
-                "user");
+                "blog_manager");
         Account acc10 = accountRegister("chewbacca", "Chew", "Bacca", "chewbacca@falcon.com", "0878901234", "rrraagh",
-                "admin");
+                "campaign_manager");
         Account acc11 = accountRegister("r2d2", "R2", "D2", "r2.d2@astro.com", "0889012345", "beepboop", "user");
         Account acc12 = accountRegister("c3po", "C-3", "PO", "c3.po@protocol.com", "0890123456", "etiquette",
-                "user");
+                "donation_manager");
         Account acc13 = accountRegister("palpatine", "Sheev", "Palpatine", "emperor@empire.com", "0901234567",
-                "unlimitedpower", "admin");
+                "unlimitedpower", "donation_manager");
         Account acc14 = accountRegister("rey", "Rey", "Skywalker", "rey@jedi.com", "0912345678", "lightforce",
                 "user");
         Account acc15 = accountRegister("finn", "FN", "2187", "finn@rebel.com", "0923456789", "freedom", "user");
