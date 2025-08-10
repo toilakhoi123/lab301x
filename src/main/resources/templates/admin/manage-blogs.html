@@ -239,10 +239,16 @@
                                             
                                             <!-- actions -->
                                             <td>
-                                                <a th:href="@{'/admin/manage-blogs/edit/' + ${blogPost.getId()}}" class="btn-sm btn-info btn-circle m-1">
+                                                <a 
+                                                    th:href="@{/admin/manage-blogs/edit(id=${blogPost.getId()})}"
+                                                    class="btn-sm btn-info btn-circle m-1"
+                                                >
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a th:href="@{'/admin/manage-blogs/delete/' + ${blogPost.getId()}}" class="btn-sm btn-danger btn-circle m-1">
+                                                <a 
+                                                    th:href="@{/admin/manage-blogs/delete(id=${blogPost.getId()})}" 
+                                                    class="btn-sm btn-danger btn-circle m-1"
+                                                >
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>

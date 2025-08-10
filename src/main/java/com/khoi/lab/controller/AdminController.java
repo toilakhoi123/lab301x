@@ -13,6 +13,7 @@ import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.BlogPost;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
@@ -751,5 +752,126 @@ public class AdminController {
         sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
         blogDAO.createBlogPost(sessionAccount, imageUrl, title, description);
         return blogsManage(session).addObject("blogPostCreateSuccess", true);
+    }
+
+    /**
+     * Handles the GET request for editing a blog post, displaying the edit form.
+     * 
+     * @param session The HTTP session to check for a logged-in user.
+     * @param id      The ID of the blog post to be edited.
+     * @return A ModelAndView for the edit blog page.
+     */
+    @GetMapping("/manage-blogs/edit")
+    public ModelAndView blogEditRequest(HttpSession session, @RequestParam Long id) {
+        // --- Permission Checks ---
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_BLOGS)) {
+            ModelAndView mav = new ModelAndView("admin/dashboard");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        // --- Fetch and display blog post data ---
+        BlogPost blogPost = blogDAO.findBlogPostById(id);
+
+        if (blogPost == null) {
+            // Blog post not found, redirect back to the manage blogs page.
+            ModelAndView mav = new ModelAndView("redirect:/admin/manage-blogs");
+            mav.addObject("blogPostNotFound", true);
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("admin/edit-blog");
+        mav.addObject("blogPost", blogPost);
+        return mav;
+    }
+
+    /**
+     * Handles the POST request from the edit form to update a blog post.
+     * 
+     * @param session  The HTTP session for permission checks.
+     * @param blogPost The BlogPost object bound from the form data.
+     * @return A ModelAndView to redirect back to the manage blogs page with a
+     *         status message.
+     */
+    @PostMapping("/manage-blogs/edit")
+    public ModelAndView blogEditPostRequest(HttpSession session, @RequestParam Long id, @RequestParam String title,
+            @RequestParam String description, @RequestParam(required = false) String imageUrl) {
+        // --- Permission Checks ---
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_BLOGS)) {
+            ModelAndView mav = new ModelAndView("admin/dashboard");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        BlogPost blogPost = blogDAO.findBlogPostById(id);
+        if (blogPost == null) {
+            ModelAndView mav = new ModelAndView("redirect:/admin/manage-blogs");
+            mav.addObject("blogPostNotFound", true);
+            return mav;
+        }
+
+        blogPost.setTitle(title);
+        blogPost.setDescription(description);
+        blogPost.setImageUrl(imageUrl != null ? imageUrl : blogPost.getImageUrl());
+        blogDAO.updateBlogPost(blogPost);
+
+        // compose view
+        ModelAndView mav = new ModelAndView("redirect:/admin/manage-blogs");
+        mav.addObject("blogUpdateSuccess", true);
+        return mav;
+    }
+
+    /**
+     * Handles the GET request for deleting a blog post.
+     * (notLoggedIn/notAuthorized/blogPostNotFound/blogDeleteSuccess)
+     * 
+     * @param session The HTTP session to check for a logged-in user.
+     * @param id      The ID of the blog post to be deleted.
+     * @return A ModelAndView to redirect back to the manage blogs page with a
+     *         status message.
+     */
+    @GetMapping("/manage-blogs/delete")
+    public ModelAndView blogDeleteRequest(HttpSession session, @RequestParam Long id) {
+        // --- Permission Checks ---
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            // Redirect to a login or index page if the user is not logged in.
+            // You'll need to instantiate a GeneralController or a similar class to get the
+            // correct view.
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_BLOGS)) {
+            // Redirect to the dashboard with an authorization error if the user lacks
+            // permission.
+            ModelAndView mav = new ModelAndView("admin/dashboard");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        // --- Deletion Logic ---
+        BlogPost blogPost = blogDAO.findBlogPostById(id);
+
+        if (blogPost == null) {
+            ModelAndView mav = new ModelAndView("redirect:/admin/manage-blogs");
+            mav.addObject("blogPostNotFound", true);
+            return mav;
+        }
+
+        blogDAO.deleteBlogPostById(id);
+
+        ModelAndView mav = new ModelAndView("redirect:/admin/manage-blogs");
+        mav.addObject("blogDeleteSuccess", true);
+        return mav;
     }
 }
