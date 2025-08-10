@@ -214,6 +214,11 @@ public class AccountDAOImpl implements AccountDAO {
             System.out.println("| [accountLogin] Logged in!");
             account.setLastLoginDate(new java.sql.Date(System.currentTimeMillis()));
             account = accountUpdate(account);
+
+            for (UserPermission permission : account.getRole().getPermissions()) {
+                System.out.println(permission.name());
+            }
+
             return account;
         } catch (NoResultException e) {
             System.out.println("| [accountLogin] Didn't match any account!");
