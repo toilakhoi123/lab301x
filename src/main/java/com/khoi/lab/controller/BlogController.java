@@ -77,7 +77,10 @@ public class BlogController {
             pageSize = 3;
 
         // 1. Get all blog posts from the data source.
-        List<BlogPost> blogPosts = blogDAO.listBlogPosts();
+        List<BlogPost> allBlogPosts = blogDAO.listBlogPosts().stream()
+                .sorted(Comparator.comparing(BlogPost::getId).reversed())
+                .collect(Collectors.toList());
+        List<BlogPost> blogPosts = allBlogPosts;
 
         // 2. Apply category filter if 'query' is present.
         if (query != null && !query.trim().isEmpty()) {
@@ -141,7 +144,7 @@ public class BlogController {
         int totalItems = blogPosts.size();
         int maxPage = (totalItems == 0) ? 1 : (int) Math.ceil((double) totalItems / pageSize);
         List<BlogPost> paginatedBlogPosts = PaginationService.getPage(blogPosts, page, pageSize);
-        List<BlogPost> recentBlogPosts = blogDAO.listBlogPosts().stream().limit(10).collect(Collectors.toList());
+        List<BlogPost> recentBlogPosts = allBlogPosts.stream().limit(10).collect(Collectors.toList());
 
         // 5. Build and return the view.
         System.out.println("| [blogListPage] Displaying page " + page + " of " + maxPage + " pages!");
@@ -178,7 +181,8 @@ public class BlogController {
 
         // fetch all posts by recent
         List<BlogPost> allBlogPosts = blogDAO.listBlogPosts().stream()
-                .sorted(Comparator.comparing(BlogPost::getId).reversed()).collect(Collectors.toList());
+                .sorted(Comparator.comparing(BlogPost::getId).reversed())
+                .collect(Collectors.toList());
 
         // Find the index of the current blog post
         int currentIndex = -1;

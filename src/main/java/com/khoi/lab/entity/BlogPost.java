@@ -4,7 +4,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -113,7 +115,9 @@ public class BlogPost {
     }
 
     public List<BlogPostComment> getComments() {
-        return comments;
+        return comments.stream()
+                .sorted(Comparator.comparing(BlogPostComment::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     public void setComments(List<BlogPostComment> comments) {
