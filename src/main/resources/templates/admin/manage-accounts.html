@@ -82,7 +82,7 @@
 
             <!-- Nav Item - Blog Posts -->
             <li class="nav-item" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_BLOGS)}">
-                <a class="nav-link" href="/admin/manage-blog-posts">
+                <a class="nav-link" href="/admin/manage-blogs">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Blog Posts</span>
                 </a>

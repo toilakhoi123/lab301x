@@ -92,7 +92,7 @@
 
             <!-- Nav Item - Blog Posts -->
             <li class="nav-item active" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_BLOGS)}">
-                <a class="nav-link" href="/admin/manage-blog-posts">
+                <a class="nav-link" href="/admin/manage-blogs">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Blog Posts</span>
                 </a>
@@ -169,7 +169,7 @@
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center">
                             <h6 class="m-0 font-weight-bold text-success">Blog Posts</h6>
-                            <a href="/admin/manage-blog-posts/create" class="btn btn-success btn-icon-split">
+                            <a href="/admin/manage-blogs/create" class="btn btn-success btn-icon-split">
                                 <span class="icon text-white-50">
                                     <i class="fas fa-plus"></i>
                                 </span>
@@ -209,10 +209,10 @@
                                             
                                             <!-- actions -->
                                             <td>
-                                                <a th:href="@{'/admin/manage-blog-posts/edit/' + ${blogPost.getId()}}" class="btn-sm btn-info btn-circle m-1">
+                                                <a th:href="@{'/admin/manage-blogs/edit/' + ${blogPost.getId()}}" class="btn-sm btn-info btn-circle m-1">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a th:href="@{'/admin/manage-blog-posts/delete/' + ${blogPost.getId()}}" class="btn-sm btn-danger btn-circle m-1">
+                                                <a th:href="@{'/admin/manage-blogs/delete/' + ${blogPost.getId()}}" class="btn-sm btn-danger btn-circle m-1">
                                                     <i class="fas fa-trash"></i>
                                                 </a>
                                             </td>
