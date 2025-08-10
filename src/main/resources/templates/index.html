@@ -119,7 +119,7 @@
                                             <a th:href="@{/login}" class="btn header-btn">Log In</a>
                                         </div>
                                         <div th:if="${session.account!=null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
-                                            <a th:href="@{/admin/manage-accounts}" class="btn header-btn">Management</a>
+                                            <a th:href="@{/admin/dashboard}" class="btn header-btn">Management</a>
                                         </div>
                                     </div>
                                 </div>
