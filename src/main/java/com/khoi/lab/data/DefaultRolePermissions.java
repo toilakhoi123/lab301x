@@ -39,16 +39,18 @@ public class DefaultRolePermissions {
                     UserPermission.MANAGE_OWN_COMMENTS,
                     UserPermission.MANAGE_COMMENTS),
             "user", List.of(
-                    UserPermission.CREATE_COMMENTS,
                     UserPermission.CREATE_DONATIONS,
+                    UserPermission.CREATE_COMMENTS,
                     UserPermission.MANAGE_OWN_COMMENTS),
             "blog_manager", List.of(
                     UserPermission.VIEW_DASHBOARD,
                     UserPermission.CREATE_BLOGS,
                     UserPermission.MANAGE_OWN_BLOGS,
+                    UserPermission.MANAGE_BLOGS,
                     UserPermission.CREATE_DONATIONS,
                     UserPermission.CREATE_COMMENTS,
-                    UserPermission.MANAGE_OWN_COMMENTS),
+                    UserPermission.MANAGE_OWN_COMMENTS,
+                    UserPermission.MANAGE_COMMENTS),
             "campaign_manager", List.of(
                     UserPermission.VIEW_DASHBOARD,
                     UserPermission.CREATE_CAMPAIGNS,

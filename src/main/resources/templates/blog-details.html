@@ -265,11 +265,11 @@
                             </div>
                         </div>
 
-                        <!-- comments section section -->
+                        <!-- comments section -->
                         <div id="comments"></div>
 
                         <!-- current account comment form -->
-                        <div class="comment-form" th:if="${session.account != null}">
+                        <div class="comment-form" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_COMMENTS)}">
                             <h4>Leave a Comment</h4>
                             <form class="form-contact comment_form" th:action="@{/blogs/comment/post}" id="commentForm" method="POST">
                                 <input type="hidden" name="id" th:value="${blogPost.id}">
@@ -322,8 +322,8 @@
                                                 <!-- action buttons -->
                                                 <div class="reply-btn">
                                                     <a class="btn-reply text-uppercase"
-                                                    th:if="${session.account != null and (session.account.id == comment.account.id and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_OWN_COMMENTS))}"
-                                                    href="#"
+                                                    th:if="${session.account != null and session.account.id == comment.account.id and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_OWN_COMMENTS)}"
+                                                    href="#comments"
                                                     th:data-comment-id="${comment.id}"
                                                     th:data-comment-content="${comment.content}"
                                                     onclick="editComment(this)">
@@ -333,7 +333,7 @@
                                                 <div class="reply-btn">
                                                     <a class="btn-reply text-uppercase"
                                                     th:href="@{/blogs/comment/delete(comment=${comment.getId()})}"
-                                                    th:if="${session.account != null and (userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_COMMENTS) or (session.account.id == comment.account.id and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_OWN_COMMENTS)))}"
+                                                    th:if="${(userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_COMMENTS) or (session.account != null and session.account.id == comment.account.id and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_OWN_COMMENTS)))}"
                                                     onclick="return confirm('Delete this comment?');">
                                                         delete
                                                     </a>

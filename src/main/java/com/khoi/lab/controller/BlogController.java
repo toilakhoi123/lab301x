@@ -277,8 +277,7 @@ public class BlogController {
             return mav;
         } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS)
                 && !userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS)) {
-            ModelAndView mav = blogListPage(null, null, null, null);
-            mav.addObject("notAuthorized", true);
+            ModelAndView mav = blogListPage(null, null, null, null).addObject("notAuthorized", true);
             return mav;
         }
 
@@ -286,16 +285,20 @@ public class BlogController {
         BlogPostComment commentToDelete = blogDAO.findBlogPostCommentById(id);
         Long blogPostId = null;
 
-        if (commentToDelete != null && ((sessionAccount.getId().equals(commentToDelete.getAccount().getId())
+        // check if comment exists
+        if (commentToDelete == null) {
+            ModelAndView mav = blogListPage(null, null, null, null);
+            mav.addObject("commentNotExist", true);
+            return mav;
+        }
+
+        // delete commment
+        if ((sessionAccount.getId().equals(commentToDelete.getAccount().getId())
                 && userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS))
-                || (userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS))))
-            if (commentToDelete != null
-                    && (sessionAccount.getId().equals(commentToDelete.getAccount().getId())
-                            && userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS))
-                    && (userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS))) {
-                blogDAO.deleteBlogPostCommentById(id);
-                blogPostId = commentToDelete.getBlog().getId();
-            }
+                || (userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS))) {
+            blogDAO.deleteBlogPostCommentById(id);
+            blogPostId = commentToDelete.getBlog().getId();
+        }
 
         // check if failed
         if (blogPostId == null) {
@@ -337,10 +340,16 @@ public class BlogController {
             return mav;
         }
 
-        // update comment
+        // check if comment exists
         BlogPostComment commentToUpdate = blogDAO.findBlogPostCommentById(commentId);
-        if (commentToUpdate != null
-                && sessionAccount.getId().equals(commentToUpdate.getAccount().getId())
+        if (commentToUpdate == null) {
+            ModelAndView mav = blogListPage(null, null, null, null);
+            mav.addObject("commentNotExist", true);
+            return mav;
+        }
+
+        // update comment
+        if (sessionAccount.getId().equals(commentToUpdate.getAccount().getId())
                 && userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS)) {
             commentToUpdate.setContent(content);
             blogDAO.updateBlogPostComment(commentToUpdate);
