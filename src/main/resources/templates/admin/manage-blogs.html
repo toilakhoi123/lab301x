@@ -231,7 +231,7 @@
                                                 <img class="blog-post-image" th:src="${blogPost.getImageUrl()}" alt="Post Image">
                                             </td>
                                             <td>
-                                                <a th:href="@{'/blog/' + ${blogPost.getId()}}" th:text="${blogPost.getTitle()}"></a>
+                                                <a th:href="@{'/blogs/blog?id=' + ${blogPost.getId()}}" th:text="${blogPost.getTitle()}"></a>
                                             </td>
                                             <td th:text="${blogPost.getAuthor().getFullName()}"></td>
                                             <td th:text="${#temporals.format(blogPost.getDate(), 'dd-MM-yyyy HH:mm')}"></td>

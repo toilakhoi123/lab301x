@@ -147,6 +147,11 @@ public class BlogDAOImpl implements BlogDAO {
                                 "Become a Champion: Monthly Giving Program",
                                 "Monthly donors are the backbone of consistent impact. Your recurring support sustains long‑term projects—like education access and clean‑water systems.\n\nJoin our Monthly Giving Circle and help us build lasting community resilience.");
 
+                BlogPost blog10 = createBlogPost(account2,
+                                "https://plus.unsplash.com/premium_photo-1661962402563-9ad78bf7feda?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGRvbmF0aW9ufGVufDB8fDB8fHww",
+                                "Partner Profile: Empowering Local NGOs",
+                                "We collaborate with grassroots NGOs to extend reach and impact. These local partners distribute aid, organize community events, and offer counseling services.\n\nThis profile highlights their goals, challenges, and the lives they change daily. Your donations help scale their reach.");
+
                 BlogPost blog7 = createBlogPost(account2,
                                 "https://images.unsplash.com/photo-1609139003551-ee40f5f73ec0?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dy",
                                 "Rebuilding Lives After Natural Disasters",
@@ -161,11 +166,6 @@ public class BlogDAOImpl implements BlogDAO {
                                 "https://images.unsplash.com/photo-1536856136534-bb679c52a9aa?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                                 "On the Ground: Healthcare Outreach in Rural Clinics",
                                 "Our team recently visited clinics in remote villages that rely on donations to operate. We met healthcare workers and patients whose lives have transformed.\n\nRead their stories—stories powered by your kindness and commitment.");
-
-                BlogPost blog10 = createBlogPost(account2,
-                                "https://plus.unsplash.com/premium_photo-1661962402563-9ad78bf7feda?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGRvbmF0aW9ufGVufDB8fDB8fHww",
-                                "Partner Profile: Empowering Local NGOs",
-                                "We collaborate with grassroots NGOs to extend reach and impact. These local partners distribute aid, organize community events, and offer counseling services.\n\nThis profile highlights their goals, challenges, and the lives they change daily. Your donations help scale their reach.");
 
                 BlogPostComment cmt1 = createBlogPostComment(blog1, account2, "Yo this is sick wth");
                 BlogPostComment cmt2 = createBlogPostComment(blog1, account2, "Actually goated");
