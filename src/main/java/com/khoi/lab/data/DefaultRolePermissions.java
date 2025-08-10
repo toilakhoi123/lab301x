@@ -12,6 +12,7 @@ public class DefaultRolePermissions {
     // This map stores the default permissions for each role.
     public static final Map<String, List<UserPermission>> DEFAULT_ROLE_PERMISSIONS = Map.of(
             "manager", List.of(
+                    UserPermission.VIEW_DASHBOARD,
                     UserPermission.MANAGE_USERS,
                     UserPermission.CREATE_ROLES,
                     UserPermission.MANAGE_ROLES,
@@ -25,6 +26,7 @@ public class DefaultRolePermissions {
                     UserPermission.MANAGE_OWN_COMMENTS,
                     UserPermission.MANAGE_COMMENTS),
             "admin", List.of(
+                    UserPermission.VIEW_DASHBOARD,
                     UserPermission.MANAGE_USERS,
                     UserPermission.CREATE_CAMPAIGNS,
                     UserPermission.MANAGE_CAMPAIGNS,
@@ -40,16 +42,19 @@ public class DefaultRolePermissions {
                     UserPermission.CREATE_COMMENTS,
                     UserPermission.CREATE_DONATIONS,
                     UserPermission.MANAGE_OWN_COMMENTS),
-            "blog_writer", List.of(
+            "blog_manager", List.of(
+                    UserPermission.VIEW_DASHBOARD,
                     UserPermission.CREATE_BLOGS,
                     UserPermission.MANAGE_OWN_BLOGS,
                     UserPermission.CREATE_DONATIONS,
                     UserPermission.CREATE_COMMENTS,
                     UserPermission.MANAGE_OWN_COMMENTS),
             "campaign_manager", List.of(
+                    UserPermission.VIEW_DASHBOARD,
                     UserPermission.CREATE_CAMPAIGNS,
                     UserPermission.MANAGE_CAMPAIGNS),
             "donation_manager", List.of(
+                    UserPermission.VIEW_DASHBOARD,
                     UserPermission.CREATE_DONATIONS,
                     UserPermission.MANAGE_DONATIONS));
 

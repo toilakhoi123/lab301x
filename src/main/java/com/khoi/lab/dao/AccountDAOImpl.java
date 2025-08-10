@@ -33,7 +33,7 @@ public class AccountDAOImpl implements AccountDAO {
         roleCreate("manager", DefaultRolePermissions.getPermissionsForRole("manager"));
         roleCreate("admin", DefaultRolePermissions.getPermissionsForRole("admin"));
         roleCreate("user", DefaultRolePermissions.getPermissionsForRole("user"));
-        roleCreate("blog_writer", DefaultRolePermissions.getPermissionsForRole("blog_writer"));
+        roleCreate("blog_manager", DefaultRolePermissions.getPermissionsForRole("blog_manager"));
         roleCreate("campaign_manager", DefaultRolePermissions.getPermissionsForRole("campaign_manager"));
         roleCreate("donation_manager", DefaultRolePermissions.getPermissionsForRole("donation_manager"));
 

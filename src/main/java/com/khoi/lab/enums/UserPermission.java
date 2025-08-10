@@ -4,6 +4,8 @@ package com.khoi.lab.enums;
  * User permission enum
  */
 public enum UserPermission {
+    VIEW_DASHBOARD,
+
     // User management permissions
     MANAGE_USERS,
     CREATE_ROLES,

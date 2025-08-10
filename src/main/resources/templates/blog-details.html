@@ -118,7 +118,7 @@
                                         <div th:if="${session.account==null}">
                                             <a th:href="@{/login}" class="btn header-btn">Log In</a>
                                         </div>
-                                        <div th:if="${session.account!=null and session.account.isAdmin()}">
+                                        <div th:if="${session.account!=null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
                                             <a th:href="@{/admin/manage-accounts}" class="btn header-btn">Management</a>
                                         </div>
                                     </div>
@@ -201,50 +201,6 @@
                             <div class="navigation-area">
                                 <div class="row">
                                     <!-- Previous post container -->
-                                    <!-- <div class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                        <div th:if="${previousPost != null}" class="d-flex align-items-center">
-                                            <div class="thumb">
-                                                <a th:href="@{/blogs/blog(id=${previousPost.id})}">
-                                                    <img class="img-fluid" th:src="${previousPost.imageUrl}" alt="Previous Post Thumbnail">
-                                                </a>
-                                            </div>
-                                            <div class="arrow">
-                                                <a th:href="@{/blogs/blog(id=${previousPost.id})}">
-                                                    <span class="lnr text-white ti-arrow-left"></span>
-                                                </a>
-                                            </div>
-                                            <div class="detials">
-                                                <p>Prev Post</p>
-                                                <a th:href="@{/blogs/blog(id=${previousPost.id})}">
-                                                    <h4 class="text-gray-800" th:text="${previousPost.title}"></h4>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div th:unless="${previousPost != null}" class="w-full"></div>
-                                    </div> -->
-                                    <!-- Next post container -->
-                                    <!-- <div class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                                        <div th:if="${nextPost != null}" class="d-flex align-items-center">
-                                            <div class="detials">
-                                                <p>Next Post</p>
-                                                <a th:href="@{/blogs/blog(id=${nextPost.id})}">
-                                                    <h4 class="text-gray-800" th:text="${nextPost.title}"></h4>
-                                                </a>
-                                            </div>
-                                            <div class="arrow">
-                                                <a th:href="@{/blogs/blog(id=${nextPost.id})}">
-                                                    <span class="lnr text-white ti-arrow-right"></span>
-                                                </a>
-                                            </div>
-                                            <div class="thumb">
-                                                <a th:href="@{/blogs/blog(id=${nextPost.id})}">
-                                                    <img class="img-fluid" th:src="${nextPost.imageUrl}" alt="Next Post Thumbnail">
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div th:unless="${nextPost != null}" class="w-full"></div>
-                                    </div> -->
-
                                     <div 
                                         class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center"
                                     >
@@ -266,7 +222,7 @@
                                         </div>
                                         <div th:unless="${previousPost != null}" class="w-full"></div>
                                     </div>
-                                    <!-- next -->
+                                    <!-- Next post container -->
                                     <div
                                         class="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center"
                                     >
@@ -313,7 +269,7 @@
                         <div id="comments"></div>
 
                         <!-- current account comment form -->
-                        <div class="comment-form" th:if="${session.account != null}">
+                        <div class="comment-form" th:if="${session.account != null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_COMMENTS)}">
                             <h4>Leave a Comment</h4>
                             <form class="form-contact comment_form" th:action="@{/blogs/comment/post}" id="commentForm" method="POST">
                                 <input type="hidden" name="id" th:value="${blogPost.id}">
@@ -366,7 +322,7 @@
                                                 <!-- action buttons -->
                                                 <div class="reply-btn">
                                                     <a class="btn-reply text-uppercase"
-                                                    th:if="${session.account != null and session.account.id == comment.account.id}"
+                                                    th:if="${session.account != null and (session.account.id == comment.account.id and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_OWN_COMMENTS))}"
                                                     href="#"
                                                     th:data-comment-id="${comment.id}"
                                                     th:data-comment-content="${comment.content}"
@@ -377,7 +333,7 @@
                                                 <div class="reply-btn">
                                                     <a class="btn-reply text-uppercase"
                                                     th:href="@{/blogs/comment/delete(comment=${comment.getId()})}"
-                                                    th:if="${session.account != null and (session.account.id == comment.account.id or session.account.isAdmin)}"
+                                                    th:if="${session.account != null and (userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_COMMENTS) or (session.account.id == comment.account.id and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_OWN_COMMENTS)))}"
                                                     onclick="return confirm('Delete this comment?');">
                                                         delete
                                                     </a>

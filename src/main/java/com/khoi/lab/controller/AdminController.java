@@ -19,8 +19,10 @@ import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.entity.Role;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.TimeMinutes;
+import com.khoi.lab.enums.UserPermission;
 import com.khoi.lab.object.AccountEditRequest;
 import com.khoi.lab.object.DonationConfirmRequest;
+import com.khoi.lab.service.UserPermissionService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -40,16 +42,19 @@ public class AdminController {
     private final AccountDAO accountDAO;
     private final DonationDAO donationDAO;
     private final BlogDAO blogDAO;
+    private final UserPermissionService userPermissionService;
 
     /**
      * DAO Initiator
      * 
      * @param accountDAO
      */
-    public AdminController(AccountDAO accountDAO, DonationDAO donationDAO, BlogDAO blogDAO) {
+    public AdminController(AccountDAO accountDAO, DonationDAO donationDAO, BlogDAO blogDAO,
+            UserPermissionService userPermissionService) {
         this.accountDAO = accountDAO;
         this.donationDAO = donationDAO;
         this.blogDAO = blogDAO;
+        this.userPermissionService = userPermissionService;
     }
 
     @GetMapping("/dashboard")
@@ -61,7 +66,7 @@ public class AdminController {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
+        } else if (!userPermissionService.hasPermission(account, UserPermission.VIEW_DASHBOARD)) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
