@@ -30,7 +30,8 @@ $(document).ready(function() {
         },
         className: 'btn btn-secondary'
       }
-    ]
+    ],
+    order: [[0, 'desc']]
   });
 
   // Thêm custom filter cho ID

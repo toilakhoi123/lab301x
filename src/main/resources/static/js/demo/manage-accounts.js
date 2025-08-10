@@ -42,7 +42,8 @@ $(document).ready(function() {
           }
         }
       }
-    ]
+    ],
+    order: [[0, 'desc']]
   });
 
   // Custom filter function

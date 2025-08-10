@@ -694,6 +694,12 @@ public class AdminController {
         return campaignsManage(session).addObject("donationReceiverCreateSuccess", true);
     }
 
+    /**
+     * Shows the manage-blog interface
+     * 
+     * @param session
+     * @return
+     */
     @GetMapping("/manage-blogs")
     public ModelAndView blogsManage(
             HttpSession session) {
@@ -712,5 +718,38 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("admin/manage-blogs");
         mav.addObject("blogPosts", blogDAO.listBlogPosts());
         return mav;
+    }
+
+    /**
+     * Create blog post
+     * (blogPostCreateSuccess/notLoggedIn/notAuthorized)
+     * 
+     * @param session
+     * @param title
+     * @param description
+     * @param imageUrl
+     * @return
+     */
+    @PostMapping("/manage-blogs/create")
+    public ModelAndView blogPostCreate(
+            HttpSession session,
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam String imageUrl) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = new GeneralController(donationDAO, accountDAO, blogDAO).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_BLOGS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
+        blogDAO.createBlogPost(sessionAccount, imageUrl, title, description);
+        return blogsManage(session).addObject("blogPostCreateSuccess", true);
     }
 }

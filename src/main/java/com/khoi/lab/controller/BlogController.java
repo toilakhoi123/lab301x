@@ -176,11 +176,9 @@ public class BlogController {
             return mav;
         }
 
-        // Fetch ALL blog posts, sorted by a consistent criteria (e.g., date descending
-        // or id ascending)
-        // This is crucial to ensure consistent "next" and "previous" posts.
-        // It's assumed blogDAO.listBlogPosts() returns a sorted list.
-        List<BlogPost> allBlogPosts = blogDAO.listBlogPosts();
+        // fetch all posts by recent
+        List<BlogPost> allBlogPosts = blogDAO.listBlogPosts().stream()
+                .sorted(Comparator.comparing(BlogPost::getId).reversed()).collect(Collectors.toList());
 
         // Find the index of the current blog post
         int currentIndex = -1;
@@ -204,7 +202,9 @@ public class BlogController {
         }
 
         // Get recent posts as you were before
-        List<BlogPost> recentBlogPosts = allBlogPosts.stream().limit(10).collect(Collectors.toList());
+        List<BlogPost> recentBlogPosts = allBlogPosts.stream()
+                .limit(10)
+                .collect(Collectors.toList());
 
         ModelAndView mav = new ModelAndView("blog-details");
         mav.addObject("blogPost", blogPost);
