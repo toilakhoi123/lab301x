@@ -16,7 +16,11 @@ import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationPaymentCode;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.PaymentMethod;
+import com.khoi.lab.enums.UserPermission;
 import com.khoi.lab.service.StringService;
+import com.khoi.lab.service.UserPermissionService;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +36,7 @@ import org.json.JSONObject;
 public class DonationController {
     private final DonationDAO donationDAO;
     private final AccountDAO accountDAO;
+    private final UserPermissionService userPermissionService;
 
     /**
      * DAO Initiator
@@ -39,9 +44,11 @@ public class DonationController {
      * @param donationDAO
      * @param accountDAO
      */
-    public DonationController(DonationDAO donationDAO, AccountDAO accountDAO) {
+    public DonationController(DonationDAO donationDAO, AccountDAO accountDAO,
+            UserPermissionService userPermissionService) {
         this.donationDAO = donationDAO;
         this.accountDAO = accountDAO;
+        this.userPermissionService = userPermissionService;
     }
 
     /**
@@ -142,7 +149,16 @@ public class DonationController {
      * @return
      */
     @PostMapping("/donate")
-    public ModelAndView campaignsDonateRequest(@RequestBody String entity) {
+    public ModelAndView campaignsDonateRequest(HttpSession session, @RequestBody String entity) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount != null
+                && !userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_DONATIONS)) {
+            ModelAndView mav = campaignsPage();
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         // parse json body
         JSONObject json = new JSONObject(entity);
         Long campaignId = json.getLong("campaignId");
@@ -189,9 +205,19 @@ public class DonationController {
      */
     @GetMapping("/donate/payment")
     public ModelAndView handleDonationPayment(
+            HttpSession session,
             @RequestParam Long campaignId,
             @RequestParam Long amount,
             @RequestParam PaymentMethod paymentMethod) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount != null
+                && !userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_DONATIONS)) {
+            ModelAndView mav = campaignsPage();
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         switch (paymentMethod) {
             case BANK:
                 ModelAndView mav = new ModelAndView("payment/bank");
