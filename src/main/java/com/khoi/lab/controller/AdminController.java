@@ -693,4 +693,24 @@ public class AdminController {
         donationDAO.donationReceiverCreate(name, phoneNumber);
         return campaignsManage(session).addObject("donationReceiverCreateSuccess", true);
     }
+
+    @GetMapping("/manage-blogs")
+    public ModelAndView blogsManage(
+            HttpSession session) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_BLOGS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("admin/manage-blogs");
+        mav.addObject("blogPosts", blogDAO.listBlogPosts());
+        return mav;
+    }
 }

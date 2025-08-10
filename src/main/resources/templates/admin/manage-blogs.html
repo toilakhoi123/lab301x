@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
-    <title>Manage Donations</title>
+    <title>Manage Blog Posts</title>
 
     <!-- Custom fonts for this template -->
     <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -23,6 +23,15 @@
     <!-- Custom styles for this page -->
     <link rel="stylesheet" th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap4.min.css">
+    
+    <style>
+        .blog-post-image {
+            width: 100px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -45,7 +54,8 @@
             <li class="nav-item">
                 <a class="nav-link" href="/admin/dashboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>Dashboard</span>
+                </a>
             </li>
 
             <!-- Divider -->
@@ -73,7 +83,7 @@
             </li>
 
             <!-- Nav Item - Donations -->
-            <li class="nav-item active" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_DONATIONS)}">
+            <li class="nav-item" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_DONATIONS)}">
                 <a class="nav-link" href="/admin/manage-donations">
                     <i class="fas fa-fw fa-hand-holding-heart"></i>
                     <span>Donations</span>
@@ -81,7 +91,7 @@
             </li>
 
             <!-- Nav Item - Blog Posts -->
-            <li class="nav-item" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_BLOGS)}">
+            <li class="nav-item active" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_BLOGS)}">
                 <a class="nav-link" href="/admin/manage-blog-posts">
                     <i class="fas fa-fw fa-newspaper"></i>
                     <span>Blog Posts</span>
@@ -149,16 +159,22 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Donations</h1>
-                    <p class="mb-4">Manage submitted donations.</p>
+                    <h1 class="h3 mb-2 text-gray-800">Blog Posts</h1>
+                    <p class="mb-4">Manage published blog posts and comments.</p>
 
                     <!-- align table search bar to left -->
                     <style>#dataTable_filter {display: flex; align-items: flex-start;}</style>
 
                     <!-- datatable -->
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-success">Donations</h6>
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-success">Blog Posts</h6>
+                            <a href="/admin/manage-blog-posts/create" class="btn btn-success btn-icon-split">
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-plus"></i>
+                                </span>
+                                <span class="text">Create New Post</span>
+                            </a>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -167,128 +183,47 @@
                                     <!-- headers -->
                                     <thead>
                                         <tr>
-                                            <th class="d-none">ID</th>
-                                            <th>Campaign</th>
-                                            <th>Account</th>
-                                            <th>Amount</th>
-                                            <th>Donate Time</th>
-                                            <th>Status</th>
+                                            <th>ID</th>
+                                            <th>Image</th>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Date</th>
+                                            <th>Comments</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <!-- data -->
                                     <tbody>
                                         <!-- populate data -->
-                                        <div th:each="donation : ${donations}">
-                                            <tr>
-                                                <td th:text="${donation.getId()}" class="d-none"></td>
-                                                <td th:text="${'[id:' + donation.getCampaign().getId() + '] ' + donation.getCampaign().getName()}"></td>
-                                                <td th:if="${donation.getAccount()!=null}" th:text="${'[id:' + donation.getAccount().getId() + '] ' + donation.getAccount().getFullName()}"></td>
-                                                <td th:if="${donation.getAccount()==null}">[id:-1] Anonymous</td>
-                                                <td th:text="${#numbers.formatDecimal(donation.getAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></td>
-                                                <td th:text="${donation.getDonateTime()}"></td>
-                                                <td th:text="${donation.getStatus().name()}"></td>
-                                                
-                                                <!-- actions -->
-                                                <td>
-                                                    <!-- confirm donation -->
-                                                    <a 
-                                                        href="#"
-                                                        th:if="${donation.isPending()}"
-                                                        th:attr="data-id=${donation.getId()}"
-                                                        data-action="confirm"
-                                                        class="btn-sm btn-success btn-icon-split m-1 donation-action"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Confirm</span>
-                                                    </a>
-                                                    <!-- refuse donation -->
-                                                    <a 
-                                                        href="#"
-                                                        th:if="${donation.isPending()}"
-                                                        th:attr="data-id=${donation.getId()}"
-                                                        data-action="refuse"
-                                                        class="btn-sm btn-warning btn-icon-split m-1 donation-action"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Refuse</span>
-                                                    </a>
-                                                    <!-- reset donation status -->
-                                                    <a 
-                                                        href="#"
-                                                        th:if="${!donation.isPending()}"
-                                                        th:attr="data-id=${donation.getId()}"
-                                                        data-action="reset"
-                                                        class="btn-sm btn-danger btn-icon-split m-1 donation-action"
-                                                    >
-                                                        <span class="icon text-white-50">
-                                                            <i class="fas fa-flag"></i>
-                                                        </span>
-                                                        <span class="text">Reset</span>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </div>
-
-                                        <!-- donation actions js -->
-                                        <script>
-                                            document.addEventListener("DOMContentLoaded", () => {
-                                                document.querySelectorAll(".donation-action").forEach(button => {
-                                                    button.addEventListener("click", async (e) => {
-                                                        e.preventDefault()
-                                                        
-                                                        const id = button.dataset.id;
-                                                        const action = button.dataset.action;
-                                                        let url;
-
-                                                        switch (action) {
-                                                            case 'confirm':
-                                                                url = '/admin/manage-donations/confirm';
-                                                                break;
-                                                            case 'refuse':
-                                                                url = '/admin/manage-donations/refuse';
-                                                                break;
-                                                            case 'reset':
-                                                                url = '/admin/manage-donations/reset';
-                                                                break;
-                                                        }
-
-                                                        console.log(action, url);
-
-                                                        if (
-                                                            !confirm('Are you sure you want to carry out this action? ' + url)
-                                                        ) {
-                                                            return;
-                                                        }
-
-                                                        const requestBody = {
-                                                            method: "POST",
-                                                            body: JSON.stringify({
-                                                                id: id
-                                                            }),
-                                                            headers: {
-                                                                "Content-type": "application/json; charset=UTF-8"
-                                                            }
-                                                        };
-
-                                                        console.log("Sending request:", requestBody);
-
-                                                        await fetch(url, requestBody);
-                                                        window.location.reload();
-                                                    });
-                                                });
-                                            });
-                                        </script>
+                                        <tr th:each="blogPost : ${blogPosts}">
+                                            <td th:text="${blogPost.getId()}"></td>
+                                            <td>
+                                                <img class="blog-post-image" th:src="${blogPost.getImageUrl()}" alt="Post Image">
+                                            </td>
+                                            <td>
+                                                <a th:href="@{'/blog/' + ${blogPost.getId()}}" th:text="${blogPost.getTitle()}"></a>
+                                            </td>
+                                            <td th:text="${blogPost.getAuthor().getFullName()}"></td>
+                                            <td th:text="${#temporals.format(blogPost.getDate(), 'dd-MM-yyyy HH:mm')}"></td>
+                                            <td th:text="${blogPost.getCommentsCount()}"></td>
+                                            
+                                            <!-- actions -->
+                                            <td>
+                                                <a th:href="@{'/admin/manage-blog-posts/edit/' + ${blogPost.getId()}}" class="btn-sm btn-info btn-circle m-1">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a th:href="@{'/admin/manage-blog-posts/delete/' + ${blogPost.getId()}}" class="btn-sm btn-danger btn-circle m-1">
+                                                    <i class="fas fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
 
@@ -348,7 +283,7 @@
     <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
 
     <!-- Page level custom scripts -->
-    <script th:src="@{/js/demo/manage-donations.js}"></script>
+    <script th:src="@{/js/demo/manage-blogs.js}"></script>
 
     <!-- Export to excel -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
