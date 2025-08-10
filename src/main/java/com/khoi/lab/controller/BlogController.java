@@ -20,7 +20,9 @@ import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.BlogPost;
 import com.khoi.lab.entity.BlogPostComment;
+import com.khoi.lab.enums.UserPermission;
 import com.khoi.lab.service.PaginationService;
+import com.khoi.lab.service.UserPermissionService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,10 +34,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequestMapping("/blogs")
 public class BlogController {
-    @SuppressWarnings("unused")
     private final DonationDAO donationDAO;
     private final AccountDAO accountDAO;
     private final BlogDAO blogDAO;
+    private final UserPermissionService userPermissionService;
 
     private static final Map<String, String> FILTER_NAMES = Map.of(
             "newest", "Newest First",
@@ -49,10 +51,12 @@ public class BlogController {
      * DAO Initiator
      * * @param donationDAO
      */
-    public BlogController(DonationDAO donationDAO, AccountDAO accountDAO, BlogDAO blogDAO) {
+    public BlogController(DonationDAO donationDAO, AccountDAO accountDAO, BlogDAO blogDAO,
+            UserPermissionService userPermissionService) {
         this.donationDAO = donationDAO;
         this.accountDAO = accountDAO;
         this.blogDAO = blogDAO;
+        this.userPermissionService = userPermissionService;
     }
 
     /**
@@ -224,17 +228,26 @@ public class BlogController {
             @RequestParam Long id,
             @RequestParam String content,
             HttpSession session) {
-        // Get the current user from the session
-        Account account = (Account) session.getAttribute("account");
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_COMMENTS)) {
+            ModelAndView mav = blogListPage(null, null, null, null);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
 
         // Find the blog post by its ID
         BlogPost blogPost = blogDAO.findBlogPostById(id);
 
         // Ensure the user is logged in, the comment content is not empty, and the blog
         // post exists
-        if (account != null && blogPost != null && !content.trim().isEmpty()) {
-            account = accountDAO.accountFindWithId(account.getId());
-            blogDAO.createBlogPostComment(blogPost, account, content);
+        if (blogPost != null && !content.trim().isEmpty()) {
+            sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
+            blogDAO.createBlogPostComment(blogPost, sessionAccount, content);
         }
 
         ModelAndView mav = blogViewDetail(id);
@@ -252,25 +265,35 @@ public class BlogController {
      */
     @GetMapping("/comment/delete")
     public ModelAndView deleteComment(@RequestParam("comment") Long id, HttpSession session) {
-        Account loggedInAccount = (Account) session.getAttribute("account");
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS)
+                && !userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS)) {
+            ModelAndView mav = blogListPage(null, null, null, null);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
 
-        // fetch comment
+        // delete comment
         BlogPostComment commentToDelete = blogDAO.findBlogPostCommentById(id);
         Long blogPostId = null;
 
-        // perm checks
-        if (loggedInAccount != null && commentToDelete != null) {
-            // Check if the logged-in user is the comment's author or an admin
-            boolean isAuthor = loggedInAccount.getId().equals(commentToDelete.getAccount().getId());
-            boolean isAdmin = loggedInAccount.isAdmin();
-
-            if (isAuthor || isAdmin) {
+        if (commentToDelete != null && ((sessionAccount.getId().equals(commentToDelete.getAccount().getId())
+                && userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS))
+                || (userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS))))
+            if (commentToDelete != null
+                    && (sessionAccount.getId().equals(commentToDelete.getAccount().getId())
+                            && userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS))
+                    && (userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS))) {
                 blogDAO.deleteBlogPostCommentById(id);
                 blogPostId = commentToDelete.getBlog().getId();
             }
-        }
 
-        // null check
+        // check if failed
         if (blogPostId == null) {
             ModelAndView mav = blogListPage(null, null, null, null);
             mav.addObject("commentDeleteFailure", true);
@@ -297,14 +320,26 @@ public class BlogController {
             @RequestParam Long commentId,
             @RequestParam String content,
             HttpSession session) {
-        Account loggedInAccount = (Account) session.getAttribute("account");
-        BlogPostComment commentToUpdate = blogDAO.findBlogPostCommentById(commentId);
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_COMMENTS)
+                && !userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS)) {
+            ModelAndView mav = blogListPage(null, null, null, null);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
 
-        if (loggedInAccount != null && commentToUpdate != null) {
-            if (loggedInAccount.getId().equals(commentToUpdate.getAccount().getId())) {
-                commentToUpdate.setContent(content);
-                blogDAO.updateBlogPostComment(commentToUpdate);
-            }
+        // update comment
+        BlogPostComment commentToUpdate = blogDAO.findBlogPostCommentById(commentId);
+        if (commentToUpdate != null
+                && sessionAccount.getId().equals(commentToUpdate.getAccount().getId())
+                && userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_OWN_COMMENTS)) {
+            commentToUpdate.setContent(content);
+            blogDAO.updateBlogPostComment(commentToUpdate);
         }
 
         return blogViewDetail(blogPostId);
