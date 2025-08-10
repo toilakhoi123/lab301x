@@ -20,7 +20,6 @@ import com.khoi.lab.entity.Role;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.TimeMinutes;
 import com.khoi.lab.enums.UserPermission;
-import com.khoi.lab.object.AccountEditRequest;
 import com.khoi.lab.object.DonationConfirmRequest;
 import com.khoi.lab.service.UserPermissionService;
 
@@ -59,14 +58,13 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public ModelAndView dashboardPage(HttpSession session) {
-        Account account = (Account) session.getAttribute("account");
-
-        // checks
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!userPermissionService.hasPermission(account, UserPermission.VIEW_DASHBOARD)) {
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.VIEW_DASHBOARD)) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notAuthorized", true);
             return mav;
@@ -107,14 +105,14 @@ public class AdminController {
     @GetMapping("/manage-accounts")
     public ModelAndView accountsManage(
             HttpSession session) {
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_USERS)) {
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -122,52 +120,6 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("admin/manage-accounts");
         mav.addObject("accounts", accountDAO.accountList());
         mav.addObject("roles", accountDAO.roleList());
-        return mav;
-    }
-
-    /**
-     * Redirect to admin/manage-accounts page
-     * 
-     * @param param
-     * @return
-     */
-    @GetMapping("/manage-accounts/quickedit")
-    public ModelAndView accountsQuickEdit(HttpSession session) {
-        return accountsManage(session);
-    }
-
-    /**
-     * Handle account quick edit request (from manage-accounts action button)
-     * (accountNotFound/accountEditSuccess)
-     * 
-     * @param id
-     * @param isDisabled
-     * @param isAdmin
-     * @return
-     */
-    @PostMapping("/manage-accounts/quickedit")
-    public ModelAndView accountsQuickEditRequest(HttpSession session, @RequestBody AccountEditRequest request) {
-        Account account = accountDAO.accountFindWithId(request.id);
-
-        if (account == null) {
-            ModelAndView mav = accountsManage(session);
-            mav.addObject("accountNotFound", true);
-            return mav;
-        }
-
-        if (request.isDisabled != null) {
-            account.setDisabled(request.isDisabled.equals("true"));
-        }
-
-        Role roleUser = accountDAO.roleFindByRoleName("user");
-        Role roleAdmin = accountDAO.roleFindByRoleName("admin");
-        if (request.isDisabled != null) {
-            account.setRole(request.isAdmin.equals("true") ? roleAdmin : roleUser);
-        }
-
-        accountDAO.accountUpdate(account);
-        ModelAndView mav = accountsManage(session);
-        mav.addObject("accountEditSuccess", true);
         return mav;
     }
 
@@ -190,7 +142,7 @@ public class AdminController {
 
     /**
      * Handle account edit request
-     * (accountNotFound/accountEditSuccess)
+     * (accountNotFound/accountEditSuccess/notAuthorized)
      * 
      * @param session
      * @param id
@@ -219,6 +171,18 @@ public class AdminController {
         if (account == null) {
             ModelAndView mav = accountsManage(session);
             mav.addObject("accountNotFound", true);
+            return mav;
+        }
+
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_USERS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
             return mav;
         }
 
@@ -251,14 +215,14 @@ public class AdminController {
     @GetMapping("/manage-campaigns")
     public ModelAndView campaignsManage(
             HttpSession session) {
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -270,7 +234,7 @@ public class AdminController {
 
     /**
      * Handles campaign create request
-     * (donationReceiverNotFound, durationTooLong/campaignCreateSuccess)
+     * (notLoggedIn/notAuthorized/donationReceiverNotFound/durationTooLong/campaignCreateSuccess)
      * 
      * @param name
      * @param goal
@@ -291,6 +255,18 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int weeks,
             @RequestParam(defaultValue = "0") int months,
             @RequestParam(defaultValue = "0") int years) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         // check if donation receiver found
         DonationReceiver donationReceiver = donationDAO.donationReceiverFindByPhoneNumber(receiverPhone);
         if (donationReceiver == null) {
@@ -331,14 +307,14 @@ public class AdminController {
      */
     @GetMapping("/manage-campaigns/edit")
     public ModelAndView campaignsEdit(HttpSession session, @RequestParam Long id) {
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -374,6 +350,19 @@ public class AdminController {
             @RequestParam String receiverPhone,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        // edit campaign
         Campaign campaign = donationDAO.campaignFindById(id);
 
         if (campaign == null) {
@@ -432,6 +421,18 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int weeks,
             @RequestParam(defaultValue = "0") int months,
             @RequestParam(defaultValue = "0") int years) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         Campaign campaign = donationDAO.campaignFindById(id);
         if (campaign == null) {
             ModelAndView mav = campaignsManage(session);
@@ -468,18 +469,19 @@ public class AdminController {
      */
     @GetMapping("/manage-campaigns/close")
     public ModelAndView campaignsCloseRequest(HttpSession session, @RequestParam Long id) {
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
 
+        // close campaign
         Campaign campaign = donationDAO.campaignFindById(id);
 
         if (campaign == null) {
@@ -511,18 +513,19 @@ public class AdminController {
      */
     @GetMapping("/manage-campaigns/delete")
     public ModelAndView campaignsDeleteRequest(HttpSession session, @RequestParam Long id) {
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
 
+        // delete campaign
         Campaign campaign = donationDAO.campaignFindById(id);
 
         if (campaign == null) {
@@ -554,14 +557,14 @@ public class AdminController {
     @GetMapping("/manage-donations")
     public ModelAndView donationsManage(
             HttpSession session) {
-        Account account = (Account) session.getAttribute("account");
-
-        if (account == null) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
             ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
             mav.addObject("notLoggedIn", true);
             return mav;
-        } else if (!account.isAdmin()) {
-            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_DONATIONS)) {
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
@@ -580,6 +583,18 @@ public class AdminController {
      */
     @PostMapping("/manage-donations/confirm")
     public ModelAndView donationsConfirmDonation(HttpSession session, @RequestBody DonationConfirmRequest request) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_DONATIONS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         Donation donation = donationDAO.donationFindById(request.id);
         donationDAO.donationConfirm(donation);
         ModelAndView mav = donationsManage(session);
@@ -597,6 +612,18 @@ public class AdminController {
      */
     @PostMapping("/manage-donations/refuse")
     public ModelAndView donationsRefuseDonation(HttpSession session, @RequestBody DonationConfirmRequest request) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_DONATIONS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         Donation donation = donationDAO.donationFindById(request.id);
         donationDAO.donationRefuse(donation);
         ModelAndView mav = donationsManage(session);
@@ -614,6 +641,18 @@ public class AdminController {
      */
     @PostMapping("/manage-donations/reset")
     public ModelAndView donationsResetDonation(HttpSession session, @RequestBody DonationConfirmRequest request) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_DONATIONS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         Donation donation = donationDAO.donationFindById(request.id);
         donationDAO.donationReset(donation);
         ModelAndView mav = donationsManage(session);
@@ -635,6 +674,18 @@ public class AdminController {
             HttpSession session,
             @RequestParam String name,
             @RequestParam String phoneNumber) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
         DonationReceiver donationReceiver = donationDAO.donationReceiverFindByPhoneNumber(phoneNumber);
         if (donationReceiver != null) {
             return campaignsManage(session).addObject("donationReceiverPhoneNumberExists", true);
