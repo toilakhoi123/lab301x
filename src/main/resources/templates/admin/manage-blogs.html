@@ -248,6 +248,7 @@
                                                 <a 
                                                     th:href="@{/admin/manage-blogs/delete(id=${blogPost.getId()})}" 
                                                     class="btn-sm btn-danger btn-circle m-1"
+                                                    onclick="return confirm('Are you sure you want to delete this blog post?');"
                                                 >
                                                     <i class="fas fa-trash"></i>
                                                 </a>
