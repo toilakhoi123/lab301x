@@ -28,6 +28,8 @@ public class DefaultRolePermissions {
             "admin", List.of(
                     UserPermission.VIEW_DASHBOARD,
                     UserPermission.MANAGE_USERS,
+                    UserPermission.CREATE_ROLES,
+                    UserPermission.MANAGE_ROLES,
                     UserPermission.CREATE_CAMPAIGNS,
                     UserPermission.MANAGE_CAMPAIGNS,
                     UserPermission.CREATE_DONATIONS,
