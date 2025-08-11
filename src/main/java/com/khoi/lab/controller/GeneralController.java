@@ -78,13 +78,13 @@ public class GeneralController {
      */
     @GetMapping("/account")
     public ModelAndView accountProfile(HttpSession session, @RequestParam(required = false) Long id) {
-        Account account = (Account) session.getAttribute("account");
+        Account sessionAccount = (Account) session.getAttribute("account");
 
         // id or session account exists
-        if (id != null || account != null) {
-            account = (id != null)
+        if (id != null || sessionAccount != null) {
+            Account account = (id != null)
                     ? accountDAO.accountFindWithId(id) // id provided
-                    : accountDAO.accountFindWithId(account.getId()); // user logged in
+                    : accountDAO.accountFindWithId(sessionAccount.getId()); // user logged in
 
             if (account == null) {
                 ModelAndView mav = index();
@@ -102,7 +102,7 @@ public class GeneralController {
         }
 
         ModelAndView mav = index();
-        mav.addObject("notLoggedIn", account);
+        mav.addObject("notLoggedIn", true);
         return mav;
     }
 }

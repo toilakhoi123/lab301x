@@ -12,6 +12,12 @@ import com.khoi.lab.enums.CampaignStatus;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents a fundraising campaign entity.
+ * This class maps to the "campaign" table in the database and manages all
+ * campaign-related data,
+ * including donations and goal tracking.
+ */
 @Entity
 @Table(name = "campaign")
 public class Campaign {
@@ -27,7 +33,7 @@ public class Campaign {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     private DonationReceiver receiver;
 
@@ -43,25 +49,50 @@ public class Campaign {
 
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "campaign", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "campaign", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
     private List<Donation> donations = new ArrayList<>();
 
+    /**
+     * A list of accounts that are following this campaign.
+     * This is the other side of the many-to-many relationship, mapped by the field
+     * in the Account entity.
+     */
+    @ManyToMany(mappedBy = "followedCampaigns")
+    private List<Account> followers = new ArrayList<>();
+
+    /**
+     * Default constructor for JPA.
+     */
     public Campaign() {
     }
 
+    /**
+     * Constructor to create a new Campaign.
+     * 
+     * @param name        The name of the campaign.
+     * @param receiver    The donation receiver associated with this campaign.
+     * @param description A detailed description of the campaign.
+     * @param imageUrl    The URL for the campaign's image.
+     * @param goal        The fundraising goal in currency units.
+     * @param startTime   The start date and time of the campaign.
+     * @param endTime     The end date and time of the campaign.
+     */
     public Campaign(String name, DonationReceiver receiver, String description,
             String imageUrl, int goal, LocalDateTime startTime, LocalDateTime endTime) {
         this.name = name;
         this.receiver = receiver;
         this.status = CampaignStatus.CREATED;
         this.description = description;
-        this.imageUrl = imageUrl != "" ? imageUrl
-                : "https://www.shutterstock.com/image-vector/fundraising-giving-heart-symbol-money-600nw-2509445751.jpg";
+        this.imageUrl = (imageUrl == null || imageUrl.isBlank())
+                ? "https://www.shutterstock.com/image-vector/fundraising-giving-heart-symbol-money-600nw-2509445751.jpg"
+                : imageUrl;
         this.goal = goal;
         this.startTime = startTime;
         this.endTime = endTime;
         this.donations = new ArrayList<>();
     }
+
+    // --- Getters and Setters ---
 
     public Long getId() {
         return id;
@@ -143,18 +174,15 @@ public class Campaign {
     }
 
     public int getDonatedAmount() {
-        int sum = 0;
-        for (Donation donation : donations) {
-            if (!donation.isConfirmed())
-                continue;
-            sum += donation.getAmount();
-        }
-        return sum;
+        return donations.stream()
+                .filter(Donation::isConfirmed)
+                .mapToInt(Donation::getAmount)
+                .sum();
     }
 
     public double getDonatedPercentage() {
         int amount = getDonatedAmount();
-        if (goal == 0) {
+        if (goal <= 0) {
             return 100;
         }
 
@@ -165,7 +193,7 @@ public class Campaign {
                 .multiply(BigDecimal.valueOf(100))
                 .setScale(1, RoundingMode.HALF_UP);
 
-        return percentage.doubleValue();
+        return Math.min(percentage.doubleValue(), 100.0);
     }
 
     public int getDonatedPercentageCapped() {
@@ -182,6 +210,15 @@ public class Campaign {
 
     public void setDonatedPercentageUncapped(int donatedPercentageUncapped) {
         this.donatedPercentageUncapped = donatedPercentageUncapped;
+    }
+
+    // Getter and setter for followers
+    public List<Account> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Account> followers) {
+        this.followers = followers;
     }
 
     @Override

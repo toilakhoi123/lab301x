@@ -70,6 +70,16 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = { CascadeType.ALL })
     private List<Donation> donations = new ArrayList<>();
 
+    /**
+     * Campaigns that this account is following.
+     * This is the corrected relationship: a many-to-many relationship.
+     * The join table `account_campaign_followers` is created to link accounts and
+     * campaigns.
+     */
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @JoinTable(name = "account_campaign_followers", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "campaign_id"))
+    private List<Campaign> followedCampaigns = new ArrayList<>();
+
     public Account() {
     }
 
@@ -94,6 +104,7 @@ public class Account {
         this.role = role;
         this.isDisabled = false;
         this.donations = new ArrayList<>();
+        this.followedCampaigns = new ArrayList<>();
         setPassword(password);
     }
 
@@ -212,6 +223,19 @@ public class Account {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    // new getters and setters for campaigns
+    public List<Campaign> getFollowedCampaigns() {
+        return followedCampaigns;
+    }
+
+    public List<Long> getFollowedCampaignIds() {
+        return followedCampaigns.stream().map(fc -> fc.getId()).collect(Collectors.toList());
+    }
+
+    public void setFollowedCampaigns(List<Campaign> followedCampaigns) {
+        this.followedCampaigns = followedCampaigns;
     }
 
     // helper

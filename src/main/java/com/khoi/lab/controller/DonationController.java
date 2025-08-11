@@ -104,6 +104,38 @@ public class DonationController {
     }
 
     /**
+     * Handles the GET request to follow a campaign.
+     * (campaignNotExist/notLoggedIn/campaignFollowSuccess)
+     *
+     * @param campaignId The ID of the campaign to follow.
+     *                   This parameter is required.
+     * @return A ResponseEntity with a status code and a message indicating success
+     *         or failure.
+     */
+    @GetMapping("/campaign/follow")
+    public ModelAndView followCampaign(HttpSession session, @RequestParam(name = "id") Long id) {
+        Campaign campaign = donationDAO.campaignFindById(id);
+
+        if (campaign == null) {
+            return campaignsPage()
+                    .addObject("campaignNotExist", true);
+        }
+
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            return campaignsPage()
+                    .addObject("notLoggedIn", true);
+        }
+
+        sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
+        sessionAccount.getFollowedCampaigns().add(campaign);
+        accountDAO.accountUpdate(sessionAccount);
+
+        return campaignsPage()
+                .addObject("campaignFollowSuccess", true);
+    }
+
+    /**
      * Returns donate page for a campaign
      * (campaignNotExist/campaignNotOpen/campaignClosed)
      * 

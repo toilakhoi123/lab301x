@@ -169,12 +169,20 @@
                 .cases-img {
                     height: 259px;
                     overflow: hidden;
+                    position: relative; /* Already present, good for positioning the heart button */
                 }
 
                 .cases-img img {
                     width: 100%;
                     height: 100%;
-                    object-fit: cover; /* ensures images cover the div while preserving aspect ratio */
+                    object-fit: cover;
+                    /* New CSS for a smooth transition on opacity */
+                    transition: opacity 0.3s ease-in-out;
+                }
+
+                /* New CSS to dim the image on hover */
+                .cases-img:hover img {
+                    opacity: 0.7; /* Change this value to adjust the dimming level */
                 }
 
                 select#campaignFilter {
@@ -183,6 +191,63 @@
 
                 #campaignFilter + .nice-select {
                     margin-top: 30px;
+                }
+
+                /* New styles for the heart button functionality */
+                .follow-button-container {
+                    position: absolute;
+                    top: 10px;
+                    right: 10px;
+                    opacity: 0;
+                    transition: opacity 0.3s ease-in-out;
+                }
+
+                .cases-img::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0); /* Start as transparent black */
+                    transition: background-color 0.3s ease-in-out;
+                }
+
+                .cases-img:hover::before {
+                    background-color: rgba(0, 0, 0, 0.8); /* Darken the overlay on hover */
+                }
+
+                .cases-img:hover .follow-button-container {
+                    opacity: 1;
+                }
+
+                .follow-button {
+                    background-color: rgba(255, 255, 255, 0.8);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: #dc3545; /* Red color for the heart */
+                    font-size: 1.2rem;
+                    transition: background-color 0.2s ease-in-out;
+                }
+                
+                .follow-button .far.fa-heart {
+                    display: block; /* Show empty heart by default */
+                }
+
+                .follow-button .fas.fa-heart {
+                    display: none; /* Hide filled heart by default */
+                }
+
+                .follow-button.following .far.fa-heart {
+                    display: none; /* Hide empty heart when following */
+                }
+
+                .follow-button.following .fas.fa-heart {
+                    display: block; /* Show filled heart when following */
                 }
             </style>
 
@@ -198,8 +263,21 @@
                     <!-- upcoming campaigns -->
                     <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsCreated}">
                         <div class="single-cases mb-40">
-                            <div class="cases-img">
+                            <!-- image container for hover effect -->
+                            <div class="cases-img position-relative">
                                 <img th:src="${campaign.getImageUrl()}" alt="">
+                                <!-- Heart button, only visible to non-admin users -->
+                                <div th:if="${session.account != null and !session.account.isAdmin()}" class="follow-button-container d-flex justify-content-center align-items-center">
+                                    <a 
+                                        href="javascript:void(0)"
+                                        class="follow-button"
+                                        th:data-campaign-id="${campaign.getId()}"
+                                        th:classappend="${#lists.contains(session.account.getFollowedCampaignIds(), campaign.getId()) ? 'following' : ''}"
+                                    >
+                                        <i class="far fa-heart"></i>
+                                        <i class="fas fa-heart"></i>
+                                    </a>
+                                </div>
                             </div>
                             <div class="cases-caption">
                                 <!-- title, redirect -->
@@ -233,7 +311,7 @@
                 </div>
                 <hr class="my-4">
             </div>
-            
+
             <!-- ongoing campaigns -->
             <div id="ongoing-campaigns">
                 <div class="section-tittle text-center mb-50">
@@ -246,9 +324,21 @@
                     <!-- ongoing campaigns -->
                     <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsOpen}">
                         <div class="single-cases mb-40">
-                            <!-- image -->
-                            <div class="cases-img">
+                            <!-- image container for hover effect -->
+                            <div class="cases-img position-relative">
                                 <img th:src="${campaign.getImageUrl()}" alt="">
+                                <!-- Heart button, only visible to non-admin users -->
+                                <div th:if="${session.account != null and !session.account.isAdmin()}" class="follow-button-container d-flex justify-content-center align-items-center">
+                                    <a 
+                                        href="javascript:void(0)"
+                                        class="follow-button"
+                                        th:data-campaign-id="${campaign.getId()}"
+                                        th:classappend="${#lists.contains(session.account.getFollowedCampaignIds(), campaign.getId()) ? 'following' : ''}"
+                                    >
+                                        <i class="far fa-heart"></i>
+                                        <i class="fas fa-heart"></i>
+                                    </a>
+                                </div>
                             </div>
                             <div class="cases-caption">
                                 <!-- title, redirect -->
@@ -260,7 +350,7 @@
                                             <div class="tipWrap">
                                                 <span class="tip"></span>
                                             </div>
-                                            <span 
+                                            <span
                                                 class="fill"
                                                 th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
                                             </span>
@@ -295,64 +385,10 @@
                     <h2>Completed</h2>
                 </div>
                 <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsComplete)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- complete campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsComplete}">
-                        <div class="single-cases mb-40">
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                                <!-- Details and Donate buttons -->
-                                <div class="mb-3 d-flex justify-content-between px-3">
-                                    <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm" th:if="${session.account==null or !session.account.isAdmin()}">Donate</a>
-                                    <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and session.account.isAdmin()}" class="btn btn-success btn-sm">Edit</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-
-            <!-- past campaigns -->
-            <div id="past-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Past Campaigns</h2>
-                </div>
-                <div class="row">
                     <div th:if="${#lists.isEmpty(campaignsClosed)}" class="col-12 text-center my-4">
                         <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
                     </div>
-                    <!-- past campaigns -->
+                    <!-- complete campaigns -->
                     <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsClosed}">
                         <div class="single-cases mb-40">
                             <div class="cases-img">
@@ -390,6 +426,38 @@
                 </div>
                 <hr class="my-4">
             </div>
+
+            <!-- js: follow campaign -->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const followButtons = document.querySelectorAll('.follow-button');
+                    
+                    followButtons.forEach(button => {
+                        button.addEventListener('click', async (event) => {
+                            event.preventDefault();
+                            const campaignId = button.getAttribute('data-campaign-id');
+                            if (campaignId) {
+                                try {
+                                    const response = await fetch(`/campaigns/campaign/follow?id=${campaignId}`, {
+                                        method: 'GET'
+                                    });
+
+                                    if (response.ok) {
+                                        // Toggle the 'following' class to switch the heart icon
+                                        button.classList.toggle('following');
+                                        console.log(`Campaign ${campaignId} follow status toggled.`);
+                                    } else {
+                                        console.error('Failed to toggle follow status.');
+                                    }
+                                } catch (error) {
+                                    console.error('An error occurred while toggling follow status:', error);
+                                }
+                            }
+                        });
+                    });
+                });
+            </script>
+
         </div>
     </div>
     <!-- Our Cases End -->
