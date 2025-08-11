@@ -183,6 +183,13 @@ public class AccountDAOImpl implements AccountDAO {
     @Transactional
     public void roleDeleteById(Long id) {
         Role role = roleFindById(id);
+
+        // update accounts' new role to 'user'
+        for (Account account : role.getAccounts()) {
+            account.setRole(roleFindByRoleName("user"));
+            accountUpdate(account);
+        }
+
         em.remove(role);
         System.out.println("| [roleDeleteById] Deleted role with id: " + id);
     }
