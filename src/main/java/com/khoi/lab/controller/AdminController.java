@@ -961,7 +961,7 @@ public class AdminController {
                     // Find the role in the database
                     Role role = accountDAO.roleFindById(roleId);
                     if (role == null) {
-                        System.err.println("Role with ID " + roleId + " not found. Skipping update.");
+                        System.out.println("Role with ID " + roleId + " not found. Skipping update.");
                         continue;
                     }
 
@@ -974,20 +974,17 @@ public class AdminController {
                             try {
                                 updatedPermissions.add(UserPermission.valueOf(permName));
                             } catch (IllegalArgumentException e) {
-                                System.err.println("Invalid permission name: " + permName + ". Skipping.");
+                                System.out.println("Invalid permission name: " + permName + ". Skipping.");
                             }
                         }
                     }
 
                     // Update the role's permissions
                     role.setPermissions(updatedPermissions);
-
-                    // Save the updated role to the database
                     accountDAO.roleUpdate(role);
 
                 } catch (Exception e) {
-                    // Log any parsing errors to the console
-                    System.err.println("Error parsing role ID or permissions: " + e.getMessage());
+                    System.out.println("Error parsing role ID or permissions: " + e.getMessage());
                 }
             }
         }

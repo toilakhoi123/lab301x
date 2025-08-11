@@ -39,7 +39,7 @@ public class Account {
     private String password;
 
     // A single user now belongs to one role
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "role_id")
     private Role role;
 
@@ -67,7 +67,7 @@ public class Account {
     /**
      * Donations made by this account
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = { CascadeType.ALL })
     private List<Donation> donations = new ArrayList<>();
 
     public Account() {

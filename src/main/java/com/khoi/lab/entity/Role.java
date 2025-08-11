@@ -23,7 +23,7 @@ public class Role {
     @Column(name = "permission")
     private List<UserPermission> permissions;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Account> accounts;
 
     // Constructors

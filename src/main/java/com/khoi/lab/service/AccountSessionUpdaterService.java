@@ -31,6 +31,6 @@ public class AccountSessionUpdaterService implements HandlerInterceptor {
                 session.setAttribute("account", updatedAccount);
             }
         }
-        return true; // continue the request
+        return true;
     }
 }
