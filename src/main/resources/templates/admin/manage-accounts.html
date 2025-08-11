@@ -64,6 +64,14 @@
                 </a>
             </li>
 
+            <!-- Nav Item - Roles -->
+            <li class="nav-item" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_ROLES)}">
+                <a class="nav-link" href="/admin/manage-roles">
+                    <i class="fas fa-fw fa-user-tag"></i>
+                    <span>Roles</span>
+                </a>
+            </li>
+
             <!-- Nav Item - Campaigns -->
             <li class="nav-item" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}">
                 <a class="nav-link" href="/admin/manage-campaigns">

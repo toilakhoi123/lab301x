@@ -874,4 +874,25 @@ public class AdminController {
         mav.addObject("blogDeleteSuccess", true);
         return mav;
     }
+
+    @GetMapping("/manage-roles")
+    public ModelAndView rolesManage(
+            HttpSession session) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_ROLES)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        ModelAndView mav = new ModelAndView("admin/manage-roles");
+        mav.addObject("roles", accountDAO.roleList());
+        mav.addObject("permissions", UserPermission.values());
+        return mav;
+    }
 }
