@@ -1006,7 +1006,7 @@ public class AdminController {
      * @param id
      * @return
      */
-    @GetMapping("/admin/manage-roles/delete")
+    @GetMapping("/manage-roles/delete")
     public ModelAndView roleDeleteRequest(HttpSession session, @RequestParam Long id) {
         // permission checks
         Account sessionAccount = (Account) session.getAttribute("account");
