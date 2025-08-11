@@ -1070,5 +1070,4 @@ public class AdminController {
         accountDAO.roleDeleteById(id);
         return rolesManage(session).addObject("roleDeleteSuccess", true);
     }
-
 }
