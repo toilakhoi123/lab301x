@@ -935,6 +935,14 @@ public class AdminController {
         return rolesManage(session).addObject("roleCreateSuccess", true);
     }
 
+    /**
+     * Handle role update request
+     * (notLoggedIn/notAuthorized)
+     * 
+     * @param session
+     * @param formData
+     * @return
+     */
     @PostMapping("/manage-roles/update")
     public ModelAndView updateRoles(HttpSession session, @RequestParam MultiValueMap<String, String> formData) {
         // --- Permission Checks ---
@@ -949,23 +957,21 @@ public class AdminController {
             return mav;
         }
 
-        // Iterate through the submitted form data to find and update roles
+        // iterate paramName
         for (String paramName : formData.keySet()) {
-            // Check if the parameter is a permissions checkbox for a specific role
             if (paramName.startsWith("permissions[")) {
-                // Extract the role ID from the parameter name (e.g., "permissions[123]")
                 try {
                     String roleIdStr = paramName.substring(paramName.indexOf('[') + 1, paramName.indexOf(']'));
                     Long roleId = Long.parseLong(roleIdStr);
 
-                    // Find the role in the database
+                    // find role
                     Role role = accountDAO.roleFindById(roleId);
                     if (role == null) {
                         System.out.println("Role with ID " + roleId + " not found. Skipping update.");
                         continue;
                     }
 
-                    // Get the list of permission strings submitted for this role
+                    // get permissions
                     List<String> permissionStrings = formData.get(paramName);
                     List<UserPermission> updatedPermissions = new ArrayList<>();
 
@@ -979,10 +985,8 @@ public class AdminController {
                         }
                     }
 
-                    // Update the role's permissions
                     role.setPermissions(updatedPermissions);
                     accountDAO.roleUpdate(role);
-
                 } catch (Exception e) {
                     System.out.println("Error parsing role ID or permissions: " + e.getMessage());
                 }
@@ -990,8 +994,45 @@ public class AdminController {
         }
 
         // compose view and redirect on success
+        return new ModelAndView("redirect:/admin/manage-roles")
+                .addObject("roleUpdateSuccess", true);
+    }
+
+    /**
+     * Handles role delete request
+     * (notLoggedIn/notAuthorized/roleDeleteSuccess/roleNotFound)
+     * 
+     * @param session
+     * @param id
+     * @return
+     */
+    @GetMapping("/admin/manage-roles/delete")
+    public ModelAndView roleDeleteRequest(HttpSession session, @RequestParam Long id) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = new ModelAndView("index");
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_ROLES)) {
+            ModelAndView mav = new ModelAndView("admin/dashboard");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        // role check if exists
+        Role role = accountDAO.roleFindById(id);
+        if (role == null) {
+            ModelAndView mav = new ModelAndView("redirect:/admin/manage-roles");
+            mav.addObject("roleNotFound", true);
+            return mav;
+        }
+
+        // delete role
+        accountDAO.roleDeleteById(id);
+
         ModelAndView mav = new ModelAndView("redirect:/admin/manage-roles");
-        mav.addObject("roleUpdateSuccess", true);
+        mav.addObject("roleDeleteSuccess", true);
         return mav;
     }
 }
