@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -881,7 +883,7 @@ public class AdminController {
     /**
      * Mapping to show manage-roles page
      * (notLoggedIn/notAuthorized)
-     * 
+     *
      * @param session
      * @return
      */
@@ -909,15 +911,17 @@ public class AdminController {
     /**
      * Handle role create request
      * (notLoggedIn/notAuthorized/roleCreateSuccess)
-     * 
+     *
      * @param session
      * @param roleName
+     * @param powerLevel - New parameter to handle the power level from the form.
      * @return
      */
     @PostMapping("/manage-roles/create")
     public ModelAndView rolesCreate(
             HttpSession session,
-            @RequestParam String roleName) {
+            @RequestParam String roleName,
+            @RequestParam int powerLevel) {
         // permission checks
         Account sessionAccount = (Account) session.getAttribute("account");
         if (sessionAccount == null) {
@@ -930,15 +934,24 @@ public class AdminController {
             return mav;
         }
 
-        accountDAO.roleCreate(roleName.replaceAll(" ", "_").toLowerCase(),
-                DefaultRolePermissions.getPermissionsForRole("user"));
+        // New check: A user cannot create a role with a power level >= their own role's
+        // power level.
+        if (sessionAccount.getRole().getPowerLevel() <= powerLevel) {
+            // Redirect to the manage roles page with an error message.
+            return rolesManage(session).addObject("roleCreateFailure", true);
+        }
+
+        accountDAO.roleCreate(
+                roleName.replaceAll(" ", "_").toLowerCase(),
+                DefaultRolePermissions.getPermissionsForRole("user"),
+                powerLevel); // Now using the powerLevel from the form.
         return rolesManage(session).addObject("roleCreateSuccess", true);
     }
 
     /**
      * Handle role update request
      * (notLoggedIn/notAuthorized)
-     * 
+     *
      * @param session
      * @param formData
      * @return
@@ -957,82 +970,105 @@ public class AdminController {
             return mav;
         }
 
-        // iterate paramName
+        // Map to hold updated role data before saving
+        Map<Long, Role> rolesToUpdate = new HashMap<>();
+
+        // Iterate through formData to find all roles being updated
         for (String paramName : formData.keySet()) {
-            if (paramName.startsWith("permissions[")) {
+            if (paramName.startsWith("permissions[") || paramName.startsWith("roleName[")
+                    || paramName.startsWith("powerLevel[")) {
                 try {
                     String roleIdStr = paramName.substring(paramName.indexOf('[') + 1, paramName.indexOf(']'));
                     Long roleId = Long.parseLong(roleIdStr);
 
-                    // find role
-                    Role role = accountDAO.roleFindById(roleId);
-                    if (role == null) {
-                        System.out.println("Role with ID " + roleId + " not found. Skipping update.");
-                        continue;
+                    // Initialize role object for update if it doesn't exist in the map
+                    if (!rolesToUpdate.containsKey(roleId)) {
+                        Role existingRole = accountDAO.roleFindById(roleId);
+                        if (existingRole == null) {
+                            System.out.println("Role with ID " + roleId + " not found. Skipping update.");
+                            continue;
+                        }
+
+                        // New check: A user cannot update a role with a power level >= their own.
+                        if (existingRole.getPowerLevel() >= sessionAccount.getRole().getPowerLevel()) {
+                            System.out.println("Attempt to update a role with equal or higher power level. Skipping.");
+                            continue;
+                        }
+
+                        rolesToUpdate.put(roleId, existingRole);
                     }
 
-                    // get permissions
-                    List<String> permissionStrings = formData.get(paramName);
-                    List<UserPermission> updatedPermissions = new ArrayList<>();
+                    // Update the role object based on the form data
+                    if (paramName.startsWith("roleName[")) {
+                        rolesToUpdate.get(roleId).setRoleName(formData.getFirst(paramName));
+                    } else if (paramName.startsWith("powerLevel[")) {
+                        rolesToUpdate.get(roleId).setPowerLevel(Integer.parseInt(formData.getFirst(paramName)));
+                    } else if (paramName.startsWith("permissions[")) {
+                        List<String> permissionStrings = formData.get(paramName);
+                        List<UserPermission> updatedPermissions = new ArrayList<>();
 
-                    if (permissionStrings != null) {
-                        for (String permName : permissionStrings) {
-                            try {
-                                updatedPermissions.add(UserPermission.valueOf(permName));
-                            } catch (IllegalArgumentException e) {
-                                System.out.println("Invalid permission name: " + permName + ". Skipping.");
+                        if (permissionStrings != null) {
+                            for (String permName : permissionStrings) {
+                                try {
+                                    updatedPermissions.add(UserPermission.valueOf(permName));
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println("Invalid permission name: " + permName + ". Skipping.");
+                                }
                             }
                         }
+                        rolesToUpdate.get(roleId).setPermissions(updatedPermissions);
                     }
-
-                    role.setPermissions(updatedPermissions);
-                    accountDAO.roleUpdate(role);
                 } catch (Exception e) {
                     System.out.println("Error parsing role ID or permissions: " + e.getMessage());
                 }
             }
         }
 
-        // compose view and redirect on success
-        return new ModelAndView("redirect:/admin/manage-roles")
-                .addObject("roleUpdateSuccess", true);
+        // Save all the updated roles
+        for (Role role : rolesToUpdate.values()) {
+            accountDAO.roleUpdate(role);
+        }
+
+        return new ModelAndView("redirect:/admin/manage-roles").addObject("roleUpdateSuccess", true);
     }
 
     /**
-     * Handles role delete request
-     * (notLoggedIn/notAuthorized/roleDeleteSuccess/roleNotFound)
+     * Handle role delete request
+     * (notLoggedIn/notAuthorized)
+     * * @param session
      * 
-     * @param session
      * @param id
      * @return
      */
     @GetMapping("/manage-roles/delete")
-    public ModelAndView roleDeleteRequest(HttpSession session, @RequestParam Long id) {
+    public ModelAndView deleteRole(
+            HttpSession session,
+            @RequestParam long id) {
         // permission checks
         Account sessionAccount = (Account) session.getAttribute("account");
         if (sessionAccount == null) {
-            ModelAndView mav = new ModelAndView("index");
+            ModelAndView mav = new GeneralController(donationDAO, accountDAO, blogDAO).index();
             mav.addObject("notLoggedIn", true);
             return mav;
         } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_ROLES)) {
-            ModelAndView mav = new ModelAndView("admin/dashboard");
+            ModelAndView mav = dashboardPage(session);
             mav.addObject("notAuthorized", true);
             return mav;
         }
 
-        // role check if exists
-        Role role = accountDAO.roleFindById(id);
-        if (role == null) {
-            ModelAndView mav = new ModelAndView("redirect:/admin/manage-roles");
-            mav.addObject("roleNotFound", true);
-            return mav;
+        // find role
+        Role roleToDelete = accountDAO.roleFindById(id);
+        if (roleToDelete == null) {
+            return rolesManage(session).addObject("roleDeleteFailure", true);
         }
 
-        // delete role
-        accountDAO.roleDeleteById(id);
+        // New check: A user cannot delete a role with a power level >= their own.
+        if (roleToDelete.getPowerLevel() >= sessionAccount.getRole().getPowerLevel()) {
+            return rolesManage(session).addObject("roleDeleteFailure", true);
+        }
 
-        ModelAndView mav = new ModelAndView("redirect:/admin/manage-roles");
-        mav.addObject("roleDeleteSuccess", true);
-        return mav;
+        accountDAO.roleDeleteById(id);
+        return rolesManage(session).addObject("roleDeleteSuccess", true);
     }
+
 }

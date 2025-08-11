@@ -207,6 +207,10 @@
                                                         <label for="roleName" class="form-label">Role Name</label>
                                                         <input type="text" class="form-control" id="roleName" name="roleName" required>
                                                     </div>
+                                                    <div class="mb-3">
+                                                        <label for="newRolePowerLevel" class="form-label">Power Level</label>
+                                                        <input type="number" class="form-control" id="newRolePowerLevel" name="powerLevel" value="1" min="1" max="3" required>
+                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -216,7 +220,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- datatable -->
                                 <form th:action="@{/admin/manage-roles/update}" method="post">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -225,6 +229,8 @@
                                             <tr>
                                                 <th class="d-none">ID</th>
                                                 <th>Role Name</th>
+                                                <!-- Add a new header for the power level -->
+                                                <th>Power Level</th>
                                                 <!-- Dynamically generate headers for each permission -->
                                                 <th th:each="permission : ${permissions}" class="text-center">
                                                     <span th:text="${permission.name()}"></span>
@@ -236,7 +242,18 @@
                                         <tbody>
                                             <tr th:each="role : ${roles}">
                                                 <td th:text="${role.id}" class="d-none"></td>
-                                                <td th:text="${role.roleName}"></td>
+                                                <td style="min-width: 150px;">
+                                                    <!-- Role name is read-only if power level is too high -->
+                                                    <span th:if="${role.powerLevel >= session.account.role.powerLevel}" th:text="${role.roleName}"></span>
+                                                    <!-- Otherwise, it's an editable input field -->
+                                                    <input th:if="${role.powerLevel < session.account.role.powerLevel}" type="text" th:name="'roleName[' + ${role.id} + ']'" th:value="${role.roleName}" class="form-control" required/>
+                                                </td>
+                                                <td>
+                                                    <!-- Power Level is read-only if power level is too high -->
+                                                    <span th:if="${role.powerLevel >= session.account.role.powerLevel}" th:text="${role.powerLevel}"></span>
+                                                    <!-- Otherwise, it's an editable input field -->
+                                                    <input th:if="${role.powerLevel < session.account.role.powerLevel}" type="number" th:name="'powerLevel[' + ${role.id} + ']'" th:value="${role.powerLevel}" class="form-control" min="1" max="3" required/>
+                                                </td>
                                                 <!-- Dynamically generate checkboxes for each permission -->
                                                 <td th:each="permission : ${permissions}" class="text-center">
                                                     <input
@@ -245,14 +262,16 @@
                                                         th:name="'permissions[' + ${role.id} + ']' "
                                                         th:value="${permission.name()}"
                                                         th:checked="${#lists.contains(role.permissions, permission)}"
-                                                        />
+                                                        th:disabled="${role.powerLevel >= session.account.role.powerLevel}"
+                                                    />
                                                 </td>
                                                 <td class="action-column">
+                                                    <!-- The delete button is only shown if the current user's role has a higher power level -->
                                                     <a
-                                                            th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_ROLES)}"
-                                                            th:href="@{/admin/manage-roles/delete(id=${role.id})}"
-                                                            class="btn-sm btn-danger btn-circle m-1"
-                                                            onclick="return confirm('Are you sure you want to delete this role?');"
+                                                        th:if="${role.powerLevel < session.account.role.powerLevel}"
+                                                        th:href="@{/admin/manage-roles/delete(id=${role.id})}"
+                                                        class="btn-sm btn-danger btn-circle m-1"
+                                                        onclick="return confirm('Are you sure you want to delete this role?');"
                                                     >
                                                         <i class="fas fa-trash"></i>
                                                     </a>
@@ -260,7 +279,8 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <button type="submit" class="btn btn-success float-right">Save Changes</button>
+                                    <!-- The save button is only enabled if the user has permission to manage roles -->
+                                    <button type="submit" class="btn btn-success float-right" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_ROLES)}">Save Changes</button>
                                 </form>
                             </div>
                         </div>

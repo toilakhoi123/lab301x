@@ -16,15 +16,16 @@ public class Role {
     @Column(name = "role_name", unique = true, nullable = false)
     private String roleName;
 
-    // This creates a separate table to store the permissions for each role
     @ElementCollection(targetClass = UserPermission.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"))
-    @Enumerated(EnumType.STRING) // Store the enum as a string
+    @Enumerated(EnumType.STRING)
     @Column(name = "permission")
     private List<UserPermission> permissions;
 
     @OneToMany(mappedBy = "role", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Account> accounts;
+
+    private int powerLevel;
 
     // Constructors
     public Role() {
@@ -33,6 +34,13 @@ public class Role {
     public Role(String roleName, List<UserPermission> permissions) {
         this.roleName = roleName;
         this.permissions = permissions;
+        this.powerLevel = 1;
+    }
+
+    public Role(String roleName, List<UserPermission> permissions, int powerLevel) {
+        this.roleName = roleName;
+        this.permissions = permissions;
+        this.powerLevel = powerLevel;
     }
 
     // Getters and Setters
@@ -60,10 +68,16 @@ public class Role {
         this.permissions = permissions;
     }
 
-    // The accounts list should not have a public setter to prevent accidental
-    // changes
     public List<Account> getAccounts() {
         return accounts;
+    }
+
+    public int getPowerLevel() {
+        return powerLevel;
+    }
+
+    public void setPowerLevel(int powerLevel) {
+        this.powerLevel = powerLevel;
     }
 
     @Override

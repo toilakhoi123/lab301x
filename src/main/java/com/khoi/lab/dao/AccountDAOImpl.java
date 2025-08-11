@@ -30,12 +30,12 @@ public class AccountDAOImpl implements AccountDAO {
         System.out.println("| [initiate] Initiating test data.");
 
         // 1. Create and save roles
-        roleCreate("manager", DefaultRolePermissions.getPermissionsForRole("manager"));
-        roleCreate("admin", DefaultRolePermissions.getPermissionsForRole("admin"));
-        roleCreate("user", DefaultRolePermissions.getPermissionsForRole("user"));
-        roleCreate("blog_manager", DefaultRolePermissions.getPermissionsForRole("blog_manager"));
-        roleCreate("campaign_manager", DefaultRolePermissions.getPermissionsForRole("campaign_manager"));
-        roleCreate("donation_manager", DefaultRolePermissions.getPermissionsForRole("donation_manager"));
+        roleCreate("manager", DefaultRolePermissions.getPermissionsForRole("manager"), 4);
+        roleCreate("admin", DefaultRolePermissions.getPermissionsForRole("admin"), 3);
+        roleCreate("user", DefaultRolePermissions.getPermissionsForRole("user"), 1);
+        roleCreate("blog_manager", DefaultRolePermissions.getPermissionsForRole("blog_manager"), 2);
+        roleCreate("campaign_manager", DefaultRolePermissions.getPermissionsForRole("campaign_manager"), 2);
+        roleCreate("donation_manager", DefaultRolePermissions.getPermissionsForRole("donation_manager"), 2);
 
         // 2. Register accounts and assign roles
         Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi", "manager");
@@ -119,8 +119,8 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     @Transactional
-    public Role roleCreate(String roleName, List<UserPermission> permissions) {
-        Role role = new Role(roleName.toLowerCase(), permissions);
+    public Role roleCreate(String roleName, List<UserPermission> permissions, int powerLevel) {
+        Role role = new Role(roleName.toLowerCase(), permissions, powerLevel);
         roleSave(role);
         System.out.println("| [roleCreate] Role created: " + role);
         return role;

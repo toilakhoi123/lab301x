@@ -23,7 +23,7 @@ public interface AccountDAO {
      * @param permissions
      * @return
      */
-    Role roleCreate(String roleName, List<UserPermission> permissions);
+    Role roleCreate(String roleName, List<UserPermission> permissions, int powerLevel);
 
     Role roleSave(Role role);
 
