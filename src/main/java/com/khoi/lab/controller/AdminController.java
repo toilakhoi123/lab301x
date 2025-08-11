@@ -2,16 +2,19 @@ package com.khoi.lab.controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.BlogDAO;
 import com.khoi.lab.dao.DonationDAO;
+import com.khoi.lab.data.DefaultRolePermissions;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.BlogPost;
 import com.khoi.lab.entity.Campaign;
@@ -732,7 +735,7 @@ public class AdminController {
      * @return
      */
     @PostMapping("/manage-blogs/create")
-    public ModelAndView blogPostCreate(
+    public ModelAndView blogCreate(
             HttpSession session,
             @RequestParam String title,
             @RequestParam String description,
@@ -875,6 +878,13 @@ public class AdminController {
         return mav;
     }
 
+    /**
+     * Mapping to show manage-roles page
+     * (notLoggedIn/notAuthorized)
+     * 
+     * @param session
+     * @return
+     */
     @GetMapping("/manage-roles")
     public ModelAndView rolesManage(
             HttpSession session) {
@@ -893,6 +903,98 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("admin/manage-roles");
         mav.addObject("roles", accountDAO.roleList());
         mav.addObject("permissions", UserPermission.values());
+        return mav;
+    }
+
+    /**
+     * Handle role create request
+     * (notLoggedIn/notAuthorized/roleCreateSuccess)
+     * 
+     * @param session
+     * @param roleName
+     * @return
+     */
+    @PostMapping("/manage-roles/create")
+    public ModelAndView rolesCreate(
+            HttpSession session,
+            @RequestParam String roleName) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = new GeneralController(donationDAO, accountDAO, blogDAO).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_ROLES)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        accountDAO.roleCreate(roleName.replaceAll(" ", "_").toLowerCase(),
+                DefaultRolePermissions.getPermissionsForRole("user"));
+        return rolesManage(session).addObject("roleCreateSuccess", true);
+    }
+
+    @PostMapping("/manage-roles/update")
+    public ModelAndView updateRoles(HttpSession session, @RequestParam MultiValueMap<String, String> formData) {
+        // --- Permission Checks ---
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = new GeneralController(donationDAO, accountDAO, blogDAO).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_ROLES)) {
+            ModelAndView mav = new ModelAndView("admin/dashboard");
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        // Iterate through the submitted form data to find and update roles
+        for (String paramName : formData.keySet()) {
+            // Check if the parameter is a permissions checkbox for a specific role
+            if (paramName.startsWith("permissions[")) {
+                // Extract the role ID from the parameter name (e.g., "permissions[123]")
+                try {
+                    String roleIdStr = paramName.substring(paramName.indexOf('[') + 1, paramName.indexOf(']'));
+                    Long roleId = Long.parseLong(roleIdStr);
+
+                    // Find the role in the database
+                    Role role = accountDAO.roleFindById(roleId);
+                    if (role == null) {
+                        System.err.println("Role with ID " + roleId + " not found. Skipping update.");
+                        continue;
+                    }
+
+                    // Get the list of permission strings submitted for this role
+                    List<String> permissionStrings = formData.get(paramName);
+                    List<UserPermission> updatedPermissions = new ArrayList<>();
+
+                    if (permissionStrings != null) {
+                        for (String permName : permissionStrings) {
+                            try {
+                                updatedPermissions.add(UserPermission.valueOf(permName));
+                            } catch (IllegalArgumentException e) {
+                                System.err.println("Invalid permission name: " + permName + ". Skipping.");
+                            }
+                        }
+                    }
+
+                    // Update the role's permissions
+                    role.setPermissions(updatedPermissions);
+
+                    // Save the updated role to the database
+                    accountDAO.roleUpdate(role);
+
+                } catch (Exception e) {
+                    // Log any parsing errors to the console
+                    System.err.println("Error parsing role ID or permissions: " + e.getMessage());
+                }
+            }
+        }
+
+        // compose view and redirect on success
+        ModelAndView mav = new ModelAndView("redirect:/admin/manage-roles");
+        mav.addObject("roleUpdateSuccess", true);
         return mav;
     }
 }
