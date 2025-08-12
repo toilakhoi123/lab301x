@@ -113,7 +113,7 @@ public class DonationController {
      *         or failure.
      */
     @GetMapping("/campaign/follow")
-    public ModelAndView followCampaign(HttpSession session, @RequestParam(name = "id") Long id) {
+    public ModelAndView followCampaign(HttpSession session, @RequestParam Long id) {
         Campaign campaign = donationDAO.campaignFindById(id);
 
         if (campaign == null) {
@@ -128,9 +128,19 @@ public class DonationController {
         }
 
         sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
-        sessionAccount.getFollowedCampaigns().add(campaign);
+        List<Long> followedCampaignsIds = sessionAccount.getFollowedCampaignIds();
+
+        if (!followedCampaignsIds.contains(campaign.getId())) {
+            // add to followed campaigns
+            sessionAccount.addFollowedCampaign(campaign, false);
+        } else {
+            // remove from followed campaigns
+            sessionAccount.removeFollowedCampaign(campaign);
+        }
+        // update account
         accountDAO.accountUpdate(sessionAccount);
 
+        // build
         return campaignsPage()
                 .addObject("campaignFollowSuccess", true);
     }

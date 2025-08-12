@@ -72,13 +72,13 @@ public class Account {
 
     /**
      * Campaigns that this account is following.
-     * This is the corrected relationship: a many-to-many relationship.
-     * The join table `account_campaign_followers` is created to link accounts and
-     * campaigns.
+     * This is the corrected relationship using an intermediate entity.
+     * The `orphanRemoval = true` attribute ensures that when a
+     * AccountCampaignFollower entity is removed from this list, it is also
+     * deleted from the database.
      */
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(name = "account_campaign_followers", joinColumns = @JoinColumn(name = "account_id"), inverseJoinColumns = @JoinColumn(name = "campaign_id"))
-    private List<Campaign> followedCampaigns = new ArrayList<>();
+    @OneToMany(mappedBy = "account", cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<AccountCampaignFollower> followedCampaigns = new ArrayList<>();
 
     public Account() {
     }
@@ -225,20 +225,38 @@ public class Account {
         this.role = role;
     }
 
-    // new getters and setters for campaigns
     public List<Campaign> getFollowedCampaigns() {
-        return followedCampaigns;
+        return followedCampaigns.stream()
+                .map(AccountCampaignFollower::getCampaign)
+                .collect(Collectors.toList());
     }
 
     public List<Long> getFollowedCampaignIds() {
-        return followedCampaigns.stream().map(fc -> fc.getId()).collect(Collectors.toList());
+        return getFollowedCampaigns().stream()
+                .map(Campaign::getId)
+                .collect(Collectors.toList());
     }
 
-    public void setFollowedCampaigns(List<Campaign> followedCampaigns) {
+    public List<AccountCampaignFollower> getAccountCampaignFollowers() {
+        return followedCampaigns;
+    }
+
+    public void setAccountCampaignFollowers(List<AccountCampaignFollower> followedCampaigns) {
         this.followedCampaigns = followedCampaigns;
     }
 
-    // helper
+    // Helper method to add a new followed campaign with notification preference
+    public void addFollowedCampaign(Campaign campaign, boolean receiveNotifications) {
+        AccountCampaignFollower follower = new AccountCampaignFollower(this, campaign, receiveNotifications);
+        this.followedCampaigns.add(follower);
+    }
+
+    public void removeFollowedCampaign(Campaign campaign) {
+        this.followedCampaigns
+                .removeIf(acf -> acf.getCampaign().getId().equals(campaign.getId()));
+    }
+
+    // new helper
     public void addDonation(Donation donation) {
         this.donations.add(donation);
     }

@@ -17,6 +17,9 @@ import jakarta.persistence.*;
  * This class maps to the "campaign" table in the database and manages all
  * campaign-related data,
  * including donations and goal tracking.
+ *
+ * NOTE: The followers relationship has been updated to use the
+ * AccountCampaignFollower join entity.
  */
 @Entity
 @Table(name = "campaign")
@@ -53,12 +56,11 @@ public class Campaign {
     private List<Donation> donations = new ArrayList<>();
 
     /**
-     * A list of accounts that are following this campaign.
-     * This is the other side of the many-to-many relationship, mapped by the field
-     * in the Account entity.
+     * A list of join entities that link this campaign to its followers.
+     * This replaces the direct Many-to-Many relationship.
      */
-    @ManyToMany(mappedBy = "followedCampaigns")
-    private List<Account> followers = new ArrayList<>();
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<AccountCampaignFollower> followers = new ArrayList<>();
 
     /**
      * Default constructor for JPA.
@@ -68,7 +70,7 @@ public class Campaign {
 
     /**
      * Constructor to create a new Campaign.
-     * 
+     *
      * @param name        The name of the campaign.
      * @param receiver    The donation receiver associated with this campaign.
      * @param description A detailed description of the campaign.
@@ -213,11 +215,11 @@ public class Campaign {
     }
 
     // Getter and setter for followers
-    public List<Account> getFollowers() {
+    public List<AccountCampaignFollower> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<Account> followers) {
+    public void setFollowers(List<AccountCampaignFollower> followers) {
         this.followers = followers;
     }
 
