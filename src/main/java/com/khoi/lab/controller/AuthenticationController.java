@@ -112,8 +112,11 @@ public class AuthenticationController {
      * @return
      */
     @GetMapping("/register")
-    public ModelAndView register() {
-        return new ModelAndView("register");
+    public ModelAndView register(@RequestParam(required = false) String email) {
+        ModelAndView mav = new ModelAndView("register");
+        if (email != null)
+            mav.addObject("emailValue", email);
+        return mav;
     }
 
     /**
@@ -141,7 +144,7 @@ public class AuthenticationController {
         // check password confirm
         if (!password.equals(passwordConfirm)) {
             System.out.println("| Password mismatch: " + password + " vs " + passwordConfirm);
-            ModelAndView mav = register();
+            ModelAndView mav = register(null);
             mav.addObject("passwordMismatch", true);
             return mav;
         }
@@ -149,7 +152,7 @@ public class AuthenticationController {
         // check account username exist
         if (accountDAO.accountFindWithUsername(username) != null) {
             System.out.println("| Username exists!");
-            ModelAndView mav = register();
+            ModelAndView mav = register(null);
             mav.addObject("registerUsernameExists", true);
             return mav;
         }
@@ -157,7 +160,7 @@ public class AuthenticationController {
         // check account username exist
         if (accountDAO.accountFindWithEmail(email) != null) {
             System.out.println("| Email exists!");
-            ModelAndView mav = register();
+            ModelAndView mav = register(null);
             mav.addObject("registerEmailExists", true);
             return mav;
         }
@@ -165,7 +168,7 @@ public class AuthenticationController {
         // check account phone number exist
         if (accountDAO.accountFindWithPhoneNumber(phoneNumber) != null) {
             System.out.println("| Phone number exists!");
-            ModelAndView mav = register();
+            ModelAndView mav = register(null);
             mav.addObject("registerPhoneNumberExists", true);
             return mav;
         }

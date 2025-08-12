@@ -6,17 +6,19 @@
             <div class="footer-area footer-padding">
                 <div class="container">
                     <div class="row d-flex justify-content-between">
+                        <!-- logo -->
                         <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="single-footer-caption mb-30">
-                                <div class="footer-tittle">
-                                    <div class="footer-logo mb-20">
-                                        <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt="Footer Logo"></a>
+                            <div class="single-footer-caption mb-50">
+                                <div class="single-footer-caption mb-30">
+                                    <div class="footer-tittle">
+                                        <div class="footer-logo mb-20">
+                                            <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt="Footer Logo"></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        </div>
+                        <!-- contact info -->
                         <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                             <div class="single-footer-caption mb-50">
                                 <div class="footer-tittle">
@@ -32,6 +34,7 @@
     
                             </div>
                         </div>
+                        <!-- important links -->
                         <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                             <div class="single-footer-caption mb-50">
                                 <div class="footer-tittle">
@@ -45,26 +48,26 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- campaign updates register -->
                         <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
                             <div class="single-footer-caption mb-50">
                                 <div class="footer-tittle">
-                                    <h4>Newsletter</h4>
+                                    <h4>Campaign updates</h4>
                                     <div class="footer-pera footer-pera2">
-                                        <p>Subscribe to our newsletter to receive campaign updates!</p>
+                                        <p>Register with email to receive updates from campaigns!</p>
                                     </div>
                                     <!-- Form -->
                                     <div class="footer-form" >
-                                        <div id="mc_embed_signup">
-                                            <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                            method="get" class="subscribe_form relative mail_part">
+                                        <div>
+                                            <form th:action="@{/register}" method="get" class="subscribe_form relative mail_part">
                                                 <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                                class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                                onblur="this.placeholder = ' Email Address '">
+                                                    class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
+                                                    onblur="this.placeholder = ' Email Address '" autocomplete="off">
                                                 <div class="form-icon">
-                                                    <button type="submit" name="submit" id="newsletter-submit"
-                                                    class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt="Subscribe"></button>
+                                                    <button type="submit" id="newsletter-submit" class="email_icon newsletter-submit button-contactForm">
+                                                        <img th:src="@{/assets/img/gallery/form.png}" alt="Subscribe">
+                                                    </button>
                                                 </div>
-                                                <div class="mt-10 info"></div>
                                             </form>
                                         </div>
                                     </div>
