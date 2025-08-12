@@ -32,481 +32,383 @@
     <!-- header -->
     <div th:insert="~{fragment.header :: mainHeader}"></div>
     
+    <!-- main content -->
     <main>
-    <!--? Hero Start -->
-    <div class="slider-area2">
-        <div class="slider-height2 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap hero-cap2 pt-20 text-center">
-                            <h2>Campaigns</h2>
-                        </div>
-                        <!-- Selection dropdown -->
-                        <div class="d-flex justify-content-center mt-4 mb-50">
-                            <select id="campaignFilter" class="form-select w-auto d-inline">
-                                <option value="all">All</option>
-                                <option value="upcoming">Upcoming</option>
-                                <option value="ongoing">Ongoing</option>
-                                <option value="complete">Complete</option>
-                                <option value="past">Past</option>
-                            </select>
+        <!--? Hero Start -->
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-20 text-center">
+                                <h2>Campaigns</h2>
+                            </div>
+                            <!-- Selection dropdown -->
+                            <div class="d-flex justify-content-center mt-4 mb-50">
+                                <select id="campaignFilter" class="form-select w-auto d-inline">
+                                    <option value="all">All</option>
+                                    <option value="upcoming">Upcoming</option>
+                                    <option value="ongoing">Ongoing</option>
+                                    <option value="complete">Complete</option>
+                                    <option value="past">Past</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Campaigns -->
-    <div class="our-cases-area section-padding30">
-        <!-- campaign displays -->
-        <div class="container">
-            <!-- css fixes -->
-            <style>
-                .cases-img {
-                    height: 259px;
-                    overflow: hidden;
-                    position: relative; /* Already present, good for positioning the heart button */
-                }
+        <!-- Campaigns -->
+        <div class="our-cases-area section-padding30">
+            <!-- campaign displays -->
+            <div class="container">
+                <!-- css fixes -->
+                <style>
+                    .cases-img {
+                        height: 259px;
+                        overflow: hidden;
+                        position: relative; /* Already present, good for positioning the heart button */
+                    }
 
-                .cases-img img {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    /* New CSS for a smooth transition on opacity */
-                    transition: opacity 0.3s ease-in-out;
-                }
+                    .cases-img img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        /* New CSS for a smooth transition on opacity */
+                        transition: opacity 0.3s ease-in-out;
+                    }
 
-                /* New CSS to dim the image on hover */
-                .cases-img:hover img {
-                    opacity: 0.7; /* Change this value to adjust the dimming level */
-                }
+                    /* New CSS to dim the image on hover */
+                    .cases-img:hover img {
+                        opacity: 0.7; /* Change this value to adjust the dimming level */
+                    }
 
-                select#campaignFilter {
-                    display: none !important;
-                }
+                    select#campaignFilter {
+                        display: none !important;
+                    }
 
-                #campaignFilter + .nice-select {
-                    margin-top: 30px;
-                }
+                    #campaignFilter + .nice-select {
+                        margin-top: 30px;
+                    }
 
-                /* New styles for the heart button functionality */
-                .follow-button-container {
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    opacity: 0;
-                    transition: opacity 0.3s ease-in-out;
-                }
+                    /* New styles for the heart button functionality */
+                    .follow-button-container {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        opacity: 0;
+                        transition: opacity 0.3s ease-in-out;
+                    }
 
-                .cases-img::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0); /* Start as transparent black */
-                    transition: background-color 0.3s ease-in-out;
-                }
+                    .cases-img::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0); /* Start as transparent black */
+                        transition: background-color 0.3s ease-in-out;
+                    }
 
-                .cases-img:hover::before {
-                    background-color: rgba(0, 0, 0, 0.8); /* Darken the overlay on hover */
-                }
+                    .cases-img:hover::before {
+                        background-color: rgba(0, 0, 0, 0.8); /* Darken the overlay on hover */
+                    }
 
-                .cases-img:hover .follow-button-container {
-                    opacity: 1;
-                }
+                    .cases-img:hover .follow-button-container {
+                        opacity: 1;
+                    }
 
-                .follow-button {
-                    background-color: rgba(0, 0, 0, 0.5);
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    color: #1dc88a; /* Red color for the heart */
-                    font-size: 1.2rem;
-                    transition: background-color 0.2s ease-in-out;
-                }
-                
-                .follow-button .far.fa-heart {
-                    display: block; /* Show empty heart by default */
-                }
-
-                .follow-button .fas.fa-heart {
-                    display: none; /* Hide filled heart by default */
-                }
-
-                .follow-button.following .far.fa-heart {
-                    display: none; /* Hide empty heart when following */
-                }
-
-                .follow-button.following .fas.fa-heart {
-                    display: block; /* Show filled heart when following */
-                }
-            </style>
-
-            <!-- upcoming campaigns -->
-            <div id="upcoming-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Upcoming</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsCreated)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- upcoming campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsCreated}">
-                        <div class="single-cases mb-40">
-                            <!-- image container for hover effect -->
-                            <div class="cases-img position-relative">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                                <!-- Heart button, only visible to non-admin users -->
-                                <div th:if="${session.account != null}" class="follow-button-container d-flex justify-content-center align-items-center">
-                                    <a 
-                                        href="javascript:void(0)"
-                                        class="follow-button"
-                                        th:data-campaign-id="${campaign.getId()}"
-                                        th:classappend="${#lists.contains(session.account.getFollowedCampaignIds(), campaign.getId()) ? 'following' : ''}"
-                                    >
-                                        <i class="far fa-heart"></i>
-                                        <i class="fas fa-heart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-
-            <!-- ongoing campaigns -->
-            <div id="ongoing-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Ongoing</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsOpen)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- ongoing campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsOpen}">
-                        <div class="single-cases mb-40">
-                            <!-- image container for hover effect -->
-                            <div class="cases-img position-relative">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                                <!-- Heart button, only visible to non-admin users -->
-                                <div th:if="${session.account != null}" class="follow-button-container d-flex justify-content-center align-items-center">
-                                    <a 
-                                        href="javascript:void(0)"
-                                        class="follow-button"
-                                        th:data-campaign-id="${campaign.getId()}"
-                                        th:classappend="${#lists.contains(session.account.getFollowedCampaignIds(), campaign.getId()) ? 'following' : ''}"
-                                    >
-                                        <i class="far fa-heart"></i>
-                                        <i class="fas fa-heart"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                                <!-- Details and Donate buttons -->
-                                <div class="mb-3 d-flex justify-content-between px-3">
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2" th:if="${session.account==null or !userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_DONATIONS)}">Donate</a>
-                                    <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}" class="btn btn-success btn-sm">Edit</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-
-            <!-- complete campaigns -->
-            <div id="complete-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Completed</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsClosed)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- complete campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsClosed}">
-                        <div class="single-cases mb-40">
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-
-            <!-- past campaigns -->
-            <div id="past-campaigns">
-                <div class="section-tittle text-center mb-50">
-                    <h2>Past</h2>
-                </div>
-                <div class="row">
-                    <div th:if="${#lists.isEmpty(campaignsPast)}" class="col-12 text-center my-4">
-                        <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
-                    </div>
-                    <!-- complete campaigns -->
-                    <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsPast}">
-                        <div class="single-cases mb-40">
-                            <div class="cases-img">
-                                <img th:src="${campaign.getImageUrl()}" alt="">
-                            </div>
-                            <div class="cases-caption">
-                                <!-- title, redirect -->
-                                <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
-                                <!-- progresss bar -->
-                                <div class="single-skill mb-15">
-                                    <div class="bar-progress">
-                                        <div class="barfiller">
-                                            <div class="tipWrap">
-                                                <span class="tip"></span>
-                                            </div>
-                                            <span 
-                                                class="fill"
-                                                th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- / progress -->
-                                <div class="prices d-flex justify-content-between">
-                                    <p>Raised:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                    <p>Goal:
-                                        <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr class="my-4">
-            </div>
-
-            <!-- js: follow campaign -->
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const followButtons = document.querySelectorAll('.follow-button');
+                    .follow-button {
+                        background-color: rgba(0, 0, 0, 0.5);
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: #1dc88a; /* Red color for the heart */
+                        font-size: 1.2rem;
+                        transition: background-color 0.2s ease-in-out;
+                    }
                     
-                    followButtons.forEach(button => {
-                        button.addEventListener('click', async (event) => {
-                            event.preventDefault();
-                            const campaignId = button.getAttribute('data-campaign-id');
-                            if (campaignId) {
-                                try {
-                                    const response = await fetch(`/campaigns/campaign/follow?id=${campaignId}`, {
-                                        method: 'GET'
-                                    });
+                    .follow-button .far.fa-heart {
+                        display: block; /* Show empty heart by default */
+                    }
 
-                                    if (response.ok) {
-                                        // Toggle the 'following' class to switch the heart icon
-                                        button.classList.toggle('following');
-                                        console.log(`Campaign ${campaignId} follow status toggled.`);
-                                    } else {
-                                        console.error('Failed to toggle follow status.');
+                    .follow-button .fas.fa-heart {
+                        display: none; /* Hide filled heart by default */
+                    }
+
+                    .follow-button.following .far.fa-heart {
+                        display: none; /* Hide empty heart when following */
+                    }
+
+                    .follow-button.following .fas.fa-heart {
+                        display: block; /* Show filled heart when following */
+                    }
+                </style>
+
+                <!-- upcoming campaigns -->
+                <div id="upcoming-campaigns">
+                    <div class="section-tittle text-center mb-50">
+                        <h2>Upcoming</h2>
+                    </div>
+                    <div class="row">
+                        <div th:if="${#lists.isEmpty(campaignsCreated)}" class="col-12 text-center my-4">
+                            <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
+                        </div>
+                        <!-- upcoming campaigns -->
+                        <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsCreated}">
+                            <div class="single-cases mb-40">
+                                <!-- image container for hover effect -->
+                                <div class="cases-img position-relative">
+                                    <img th:src="${campaign.getImageUrl()}" alt="">
+                                    <!-- Heart button, only visible to non-admin users -->
+                                    <div th:if="${session.account != null}" class="follow-button-container d-flex justify-content-center align-items-center">
+                                        <a 
+                                            href="javascript:void(0)"
+                                            class="follow-button"
+                                            th:data-campaign-id="${campaign.getId()}"
+                                            th:classappend="${#lists.contains(session.account.getFollowedCampaignIds(), campaign.getId()) ? 'following' : ''}"
+                                        >
+                                            <i class="far fa-heart"></i>
+                                            <i class="fas fa-heart"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="cases-caption">
+                                    <!-- title, redirect -->
+                                    <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
+                                    <!-- progresss bar -->
+                                    <div class="single-skill mb-15">
+                                        <div class="bar-progress">
+                                            <div class="barfiller">
+                                                <div class="tipWrap">
+                                                    <span class="tip"></span>
+                                                </div>
+                                                <span 
+                                                    class="fill"
+                                                    th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- / progress -->
+                                    <div class="prices d-flex justify-content-between">
+                                        <p>Raised:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                        <p>Goal:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                </div>
+
+                <!-- ongoing campaigns -->
+                <div id="ongoing-campaigns">
+                    <div class="section-tittle text-center mb-50">
+                        <h2>Ongoing</h2>
+                    </div>
+                    <div class="row">
+                        <div th:if="${#lists.isEmpty(campaignsOpen)}" class="col-12 text-center my-4">
+                            <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
+                        </div>
+                        <!-- ongoing campaigns -->
+                        <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsOpen}">
+                            <div class="single-cases mb-40">
+                                <!-- image container for hover effect -->
+                                <div class="cases-img position-relative">
+                                    <img th:src="${campaign.getImageUrl()}" alt="">
+                                    <!-- Heart button, only visible to non-admin users -->
+                                    <div th:if="${session.account != null}" class="follow-button-container d-flex justify-content-center align-items-center">
+                                        <a 
+                                            href="javascript:void(0)"
+                                            class="follow-button"
+                                            th:data-campaign-id="${campaign.getId()}"
+                                            th:classappend="${#lists.contains(session.account.getFollowedCampaignIds(), campaign.getId()) ? 'following' : ''}"
+                                        >
+                                            <i class="far fa-heart"></i>
+                                            <i class="fas fa-heart"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="cases-caption">
+                                    <!-- title, redirect -->
+                                    <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
+                                    <!-- progresss bar -->
+                                    <div class="single-skill mb-15">
+                                        <div class="bar-progress">
+                                            <div class="barfiller">
+                                                <div class="tipWrap">
+                                                    <span class="tip"></span>
+                                                </div>
+                                                <span
+                                                    class="fill"
+                                                    th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- / progress -->
+                                    <div class="prices d-flex justify-content-between">
+                                        <p>Raised:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                        <p>Goal:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                    </div>
+                                    <!-- Details and Donate buttons -->
+                                    <div class="mb-3 d-flex justify-content-between px-3">
+                                        <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2" th:if="${session.account==null or !userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_DONATIONS)}">Donate</a>
+                                        <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}" class="btn btn-success btn-sm">Edit</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                </div>
+
+                <!-- complete campaigns -->
+                <div id="complete-campaigns">
+                    <div class="section-tittle text-center mb-50">
+                        <h2>Completed</h2>
+                    </div>
+                    <div class="row">
+                        <div th:if="${#lists.isEmpty(campaignsClosed)}" class="col-12 text-center my-4">
+                            <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
+                        </div>
+                        <!-- complete campaigns -->
+                        <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsClosed}">
+                            <div class="single-cases mb-40">
+                                <div class="cases-img">
+                                    <img th:src="${campaign.getImageUrl()}" alt="">
+                                </div>
+                                <div class="cases-caption">
+                                    <!-- title, redirect -->
+                                    <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
+                                    <!-- progresss bar -->
+                                    <div class="single-skill mb-15">
+                                        <div class="bar-progress">
+                                            <div class="barfiller">
+                                                <div class="tipWrap">
+                                                    <span class="tip"></span>
+                                                </div>
+                                                <span 
+                                                    class="fill"
+                                                    th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- / progress -->
+                                    <div class="prices d-flex justify-content-between">
+                                        <p>Raised:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                        <p>Goal:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                </div>
+
+                <!-- past campaigns -->
+                <div id="past-campaigns">
+                    <div class="section-tittle text-center mb-50">
+                        <h2>Past</h2>
+                    </div>
+                    <div class="row">
+                        <div th:if="${#lists.isEmpty(campaignsPast)}" class="col-12 text-center my-4">
+                            <p class="text-muted fs-5">Hiện tại chưa có, hãy quay lại sau!</p>
+                        </div>
+                        <!-- complete campaigns -->
+                        <div class="col-lg-4 col-md-6 col-sm-6" th:each="campaign : ${campaignsPast}">
+                            <div class="single-cases mb-40">
+                                <div class="cases-img">
+                                    <img th:src="${campaign.getImageUrl()}" alt="">
+                                </div>
+                                <div class="cases-caption">
+                                    <!-- title, redirect -->
+                                    <h3><a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" th:text="${campaign.getName()}"></a></h3>
+                                    <!-- progresss bar -->
+                                    <div class="single-skill mb-15">
+                                        <div class="bar-progress">
+                                            <div class="barfiller">
+                                                <div class="tipWrap">
+                                                    <span class="tip"></span>
+                                                </div>
+                                                <span 
+                                                    class="fill"
+                                                    th:attr="data-percentage=${campaign.getDonatedPercentageCapped()}">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- / progress -->
+                                    <div class="prices d-flex justify-content-between">
+                                        <p>Raised:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getDonatedAmount(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                        <p>Goal:
+                                            <span th:text="${#numbers.formatDecimal(campaign.getGoal(), 0, 'COMMA', 0, 'POINT') + '₫'}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-4">
+                </div>
+
+                <!-- js: follow campaign -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const followButtons = document.querySelectorAll('.follow-button');
+                        
+                        followButtons.forEach(button => {
+                            button.addEventListener('click', async (event) => {
+                                event.preventDefault();
+                                const campaignId = button.getAttribute('data-campaign-id');
+                                if (campaignId) {
+                                    try {
+                                        const response = await fetch(`/campaigns/campaign/follow?id=${campaignId}`, {
+                                            method: 'GET'
+                                        });
+
+                                        if (response.ok) {
+                                            // Toggle the 'following' class to switch the heart icon
+                                            button.classList.toggle('following');
+                                            console.log(`Campaign ${campaignId} follow status toggled.`);
+                                        } else {
+                                            console.error('Failed to toggle follow status.');
+                                        }
+                                    } catch (error) {
+                                        console.error('An error occurred while toggling follow status:', error);
                                     }
-                                } catch (error) {
-                                    console.error('An error occurred while toggling follow status:', error);
                                 }
-                            }
+                            });
                         });
                     });
-                });
-            </script>
+                </script>
+            </div>
         </div>
-    </div>
-    <!-- Our Cases End -->
     </main> 
     
-    <!-- Footer -->
-    <footer>
-        <div class="footer-wrapper" style="background-color: #1f1f1f;">
-            <!-- Footer Top-->
-            <div class="footer-area footer-padding">
-                <div class="container">
-                    <div class="row d-flex justify-content-between">
-                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-footer-caption mb-50">
-                            <div class="single-footer-caption mb-30">
-                                <div class="footer-tittle">
-                                    <div class="footer-logo mb-20">
-                                        <a href="index"><img th:src="@{/assets/img/logo/logo2_footer.png}" alt=""></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                            <div class="single-footer-caption mb-50">
-                                <div class="footer-tittle">
-                                    <h4>Contact Info</h4>
-                                    <ul>
-                                        <li>
-                                            <p>Address: Gia Lam, Ha Noi, Viet Nam</p>
-                                        </li>
-                                        <li><a href="tel:+84793300359">Phone: +84 793 300 359</a></li>
-                                        <li><a href="mailto:leqwoi@protonmail.com">Email: leqwoi@protonmail.com</a></li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                            <div class="single-footer-caption mb-50">
-                                <div class="footer-tittle">
-                                    <h4>Important Links</h4>
-                                    <ul>
-                                        <li><a href="/about">About Us</a></li>
-                                        <li><a href="/contact">Contact Us</a></li>
-                                        <li><a href="/index#testimonial">Testimonial</a></li>
-                                        <li><a href="/campaigns">Campaigns</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-5">
-                            <div class="single-footer-caption mb-50">
-                                <div class="footer-tittle">
-                                    <h4>Newsletter</h4>
-                                    <div class="footer-pera footer-pera2">
-                                    <p>Subscribe to our newsletter to receive campaign updates!</p>
-                                </div>
-                                <!-- Form -->
-                                <div class="footer-form" >
-                                    <div id="mc_embed_signup">
-                                        <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                                        method="get" class="subscribe_form relative mail_part">
-                                            <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                                            class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                                            onblur="this.placeholder = ' Email Address '">
-                                            <div class="form-icon">
-                                                <button type="submit" name="submit" id="newsletter-submit"
-                                                class="email_icon newsletter-submit button-contactForm"><img th:src="@{/assets/img/gallery/form.png}" alt=""></button>
-                                            </div>
-                                            <div class="mt-10 info"></div>
-                                        </form>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- footer-bottom -->
-            <div class="footer-bottom-area">
-                <div class="container">
-                    <div class="footer-border">
-                        <div class="row d-flex justify-content-between align-items-center">
-                            <div class="col-xl-10 col-lg-9 ">
-                                <div class="footer-copy-right">
-                                    <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                                </div>
-                            </div>
-                            <div class="col-xl-2 col-lg-3">
-                                <div class="footer-social f-right">
-                                    <a href="https://web.facebook.com/ffhyme/"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="https://leqwoi2.vercel.app/"><i class="fas fa-globe"></i></a>
-                                    <a href="https://www.instagram.com/leqwoi/"><i class="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- footer -->
+    <div th:insert="~{fragment.footer :: footer}"></div>
 
     <!-- To top button -->
     <div id="back-top" >
