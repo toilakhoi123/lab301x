@@ -231,20 +231,22 @@
                         <div class="home-blog-single mb-30">
                             <div class="blog-img-cap">
                                 <div class="blog-img">
+                                    <!-- image -->
                                     <img 
-                                        th:src="${blogPost.getImageUrl()}" 
+                                        th:src="${blogPost.imageUrl}" 
                                         alt="Blog Post Image"
                                         style="height: 330px; width: 100%; object-fit: cover; display: block;"
                                     >
-                                    <!-- Blog date -->
+                                    <!-- date -->
                                     <div class="blog-date text-center">
                                         <span th:text="${#temporals.format(blogPost.date, 'dd')}"></span>
                                         <p th:text="${#temporals.format(blogPost.date, 'MMMM')}"></p>
                                     </div>
                                 </div>
+                                <!-- caption -->
                                 <div class="blog-cap">
-                                    <p>Creative derector</p>
-                                    <h3><a th:href="@{/blogs/blog(id=${blogPost.getId()})}" th:text="${blogPost.getTitle()}"></a></h3>
+                                    <h3><a th:href="@{/blogs/blog(id=${blogPost.id})}" th:text="${blogPost.title}"></a></h3>
+                                    <p th:text="'by ' + ${blogPost.author.fullName}"></p>
                                 </div>
                             </div>
                         </div>
