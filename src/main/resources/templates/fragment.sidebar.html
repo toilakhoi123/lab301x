@@ -1,0 +1,118 @@
+<!--
+    This fragment contains the reusable sidebar.
+    The 'currentPage' parameter is used to dynamically set the active menu item.
+-->
+<div th:fragment="sidebar (currentPage)">
+    <!-- css fixes -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevents the main window from scrolling */
+        }
+        #wrapper {
+            display: flex;
+            height: 100%;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto; /* Adds a scrollbar to the sidebar if its content is too long */
+            z-index: 1000;
+        }
+        #content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* This is the key: it makes the content area scrollable */
+            margin-left: 14rem; /* Compensates for the width of the sidebar */
+        }
+        /* Mobile-specific adjustments to fix content-wrapper margin */
+        @media (max-width: 768px) {
+            #content-wrapper {
+                margin-left: 0;
+            }
+        }
+    </style>
+
+    <!-- sidebar -->
+    <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/index">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <img th:src="@{/favicon.ico}" alt="">
+            </div>
+            <div class="sidebar-brand-text mx-3">LH,BD<sup>ADMIN</sup></div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item" th:classappend="${currentPage == 'dashboard'} ? 'active' : ''" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).VIEW_DASHBOARD)}">
+            <a class="nav-link" href="/admin/dashboard">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            Management
+        </div>
+
+        <!-- Nav Item - Accounts -->
+        <li class="nav-item" th:classappend="${currentPage == 'accounts'} ? 'active' : ''" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
+            <a class="nav-link" href="/admin/manage-accounts">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Accounts</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Roles -->
+        <li class="nav-item" th:classappend="${currentPage == 'roles'} ? 'active' : ''" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_ROLES)}">
+            <a class="nav-link" href="/admin/manage-roles">
+                <i class="fas fa-fw fa-user-tag"></i>
+                <span>Roles</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Campaigns -->
+        <li class="nav-item" th:classappend="${currentPage == 'campaigns'} ? 'active' : ''" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}">
+            <a class="nav-link" href="/admin/manage-campaigns">
+                <i class="fas fa-fw fa-bullhorn"></i>
+                <span>Campaigns</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Donations -->
+        <li class="nav-item" th:classappend="${currentPage == 'donations'} ? 'active' : ''" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_DONATIONS)}">
+            <a class="nav-link" href="/admin/manage-donations">
+                <i class="fas fa-fw fa-hand-holding-heart"></i>
+                <span>Donations</span>
+            </a>
+        </li>
+
+        <!-- Nav Item - Blog Posts -->
+        <li class="nav-item" th:classappend="${currentPage == 'blogs'} ? 'active' : ''" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_BLOGS)}">
+            <a class="nav-link" href="/admin/manage-blogs">
+                <i class="fas fa-fw fa-newspaper"></i>
+                <span>Blog Posts</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+</div>
