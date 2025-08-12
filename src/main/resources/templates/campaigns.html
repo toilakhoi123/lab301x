@@ -368,7 +368,6 @@
                                 </div>
                                 <!-- Details and Donate buttons -->
                                 <div class="mb-3 d-flex justify-content-between px-3">
-                                    <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
                                     <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2" th:if="${session.account==null or !userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_DONATIONS)}">Donate</a>
                                     <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}" class="btn btn-success btn-sm">Edit</a>
                                 </div>
