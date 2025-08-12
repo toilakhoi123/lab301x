@@ -267,7 +267,7 @@
                             <div class="cases-img position-relative">
                                 <img th:src="${campaign.getImageUrl()}" alt="">
                                 <!-- Heart button, only visible to non-admin users -->
-                                <div th:if="${session.account != null and !session.account.isAdmin()}" class="follow-button-container d-flex justify-content-center align-items-center">
+                                <div th:if="${session.account != null}" class="follow-button-container d-flex justify-content-center align-items-center">
                                     <a 
                                         href="javascript:void(0)"
                                         class="follow-button"
@@ -328,7 +328,7 @@
                             <div class="cases-img position-relative">
                                 <img th:src="${campaign.getImageUrl()}" alt="">
                                 <!-- Heart button, only visible to non-admin users -->
-                                <div th:if="${session.account != null and !session.account.isAdmin()}" class="follow-button-container d-flex justify-content-center align-items-center">
+                                <div th:if="${session.account != null}" class="follow-button-container d-flex justify-content-center align-items-center">
                                     <a 
                                         href="javascript:void(0)"
                                         class="follow-button"
@@ -369,8 +369,8 @@
                                 <!-- Details and Donate buttons -->
                                 <div class="mb-3 d-flex justify-content-between px-3">
                                     <a th:href="@{/campaigns/campaign(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2">Details</a>
-                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm" th:if="${session.account==null or !session.account.isAdmin()}">Donate</a>
-                                    <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and session.account.isAdmin()}" class="btn btn-success btn-sm">Edit</a>
+                                    <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2" th:if="${session.account==null or !userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_DONATIONS)}">Donate</a>
+                                    <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${session.account!=null and userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}" class="btn btn-success btn-sm">Edit</a>
                                 </div>
                             </div>
                         </div>

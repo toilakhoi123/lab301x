@@ -20,6 +20,7 @@ import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.DonationStatus;
 import com.khoi.lab.service.CampaignStatusUpdaterService;
+import com.khoi.lab.service.EmailSenderService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -32,9 +33,11 @@ import jakarta.transaction.Transactional;
 @Repository
 public class DonationDAOImpl implements DonationDAO {
     private EntityManager em;
+    private final EmailSenderService senderService;
 
-    public DonationDAOImpl(EntityManager em) {
+    public DonationDAOImpl(EntityManager em, EmailSenderService senderService) {
         this.em = em;
+        this.senderService = senderService;
     }
 
     @Override
@@ -74,7 +77,7 @@ public class DonationDAOImpl implements DonationDAO {
         Account account2 = em.find(Account.class, 2);
         Account account3 = em.find(Account.class, 3);
 
-        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
+        (new CampaignStatusUpdaterService(this, senderService)).updateCampaignStatuses();
 
         accountDonate(campaign1, account1, 1500000);
         accountDonate(campaign1, account1, 500000);
@@ -213,7 +216,7 @@ public class DonationDAOImpl implements DonationDAO {
     public Campaign campaignChangeStatus(Campaign campaign, CampaignStatus status) {
         campaign.setStatus(status);
         campaign = campaignUpdate(campaign);
-        System.out.println("| [campaignChangeStatus] Modified campaign status to: " + campaign);
+        System.out.println("| [campaignChangeStatus] Modified campaign status to: " + campaign.getStatus());
         return campaign;
     }
 
@@ -339,7 +342,7 @@ public class DonationDAOImpl implements DonationDAO {
         donation.setStatus(DonationStatus.CONFIRMED);
         donation = donationUpdate(donation);
         System.out.println("| [donationConfirm] Confirmed donation: " + donation);
-        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
+        (new CampaignStatusUpdaterService(this, senderService)).updateCampaignStatuses();
         return donation;
     }
 
@@ -349,7 +352,7 @@ public class DonationDAOImpl implements DonationDAO {
         donation.setStatus(DonationStatus.REFUSED);
         donation = donationUpdate(donation);
         System.out.println("| [donationRefuse] Refused donation: " + donation);
-        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
+        (new CampaignStatusUpdaterService(this, senderService)).updateCampaignStatuses();
         return donation;
     }
 
@@ -359,7 +362,7 @@ public class DonationDAOImpl implements DonationDAO {
         donation.setStatus(DonationStatus.PENDING);
         donation = donationUpdate(donation);
         System.out.println("| [donationRefuse] Resetted donation: " + donation);
-        (new CampaignStatusUpdaterService(this)).updateCampaignStatuses();
+        (new CampaignStatusUpdaterService(this, senderService)).updateCampaignStatuses();
         return donation;
     }
 

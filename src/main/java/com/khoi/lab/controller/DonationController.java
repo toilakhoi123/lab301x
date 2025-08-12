@@ -11,7 +11,6 @@ import com.khoi.lab.config.Constants;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
-import com.khoi.lab.entity.AccountCampaignFollower;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationPaymentCode;
@@ -64,16 +63,6 @@ public class DonationController {
         List<Campaign> campaignsOpen = donationDAO.campaignFindByStatus(CampaignStatus.OPEN);
         List<Campaign> campaignsComplete = donationDAO.campaignFindByStatus(CampaignStatus.COMPLETE);
         List<Campaign> campaignsClosed = donationDAO.campaignFindByStatus(CampaignStatus.CLOSED);
-
-        for (Campaign campaign : campaignsOpen) {
-            for (AccountCampaignFollower acf : campaign.getFollowers()) {
-                System.out.println(campaign.getName()
-                        + " | followed by: "
-                        + acf.getAccount().getFullName()
-                        + " | notifications on: "
-                        + acf.isReceiveNotifications());
-            }
-        }
 
         return new ModelAndView("campaigns")
                 .addObject("campaignsCreated", campaignsCreated)
@@ -157,7 +146,7 @@ public class DonationController {
 
     /**
      * Handle notification status toggle request
-     * (campaignNotExist/notLoggedIn/notFollowingCampaign/notificationToggleSuccess)
+     * (noEmailLinked/campaignNotExist/notLoggedIn/notFollowingCampaign/notificationToggleSuccess)
      * 
      * @param session
      * @param id
@@ -179,6 +168,12 @@ public class DonationController {
                     .addObject("notLoggedIn", true);
         }
         sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
+
+        // check if user has email
+        if (sessionAccount.getEmail() == null) {
+            return campaignsPage()
+                    .addObject("noEmailLinked", true);
+        }
 
         // Toggle the notification state
         boolean toggleSuccess = sessionAccount.toggleCampaignNotification(id);
