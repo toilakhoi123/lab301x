@@ -11,6 +11,7 @@ import com.khoi.lab.config.Constants;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
 import com.khoi.lab.entity.Account;
+import com.khoi.lab.entity.AccountCampaignFollower;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationPaymentCode;
@@ -64,12 +65,21 @@ public class DonationController {
         List<Campaign> campaignsComplete = donationDAO.campaignFindByStatus(CampaignStatus.COMPLETE);
         List<Campaign> campaignsClosed = donationDAO.campaignFindByStatus(CampaignStatus.CLOSED);
 
-        ModelAndView mav = new ModelAndView("campaigns");
-        mav.addObject("campaignsCreated", campaignsCreated);
-        mav.addObject("campaignsOpen", campaignsOpen);
-        mav.addObject("campaignsComplete", campaignsComplete);
-        mav.addObject("campaignsClosed", campaignsClosed);
-        return mav;
+        for (Campaign campaign : campaignsOpen) {
+            for (AccountCampaignFollower acf : campaign.getFollowers()) {
+                System.out.println(campaign.getName()
+                        + " | followed by: "
+                        + acf.getAccount().getFullName()
+                        + " | notifications on: "
+                        + acf.isReceiveNotifications());
+            }
+        }
+
+        return new ModelAndView("campaigns")
+                .addObject("campaignsCreated", campaignsCreated)
+                .addObject("campaignsOpen", campaignsOpen)
+                .addObject("campaignsComplete", campaignsComplete)
+                .addObject("campaignsClosed", campaignsClosed);
     }
 
     /**
