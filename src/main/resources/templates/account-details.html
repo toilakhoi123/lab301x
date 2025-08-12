@@ -58,7 +58,7 @@
         </div>
     </div>
     
-    <!-- Header Start -->
+    <!-- header -->
     <header>
         <div class="header-area">
             <div class="main-header">
@@ -67,7 +67,7 @@
                         <div class="col-xl-12">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="header-info-left d-flex">
-                                    <ul>     
+                                    <ul>    
                                         <li>Phone: +84 (0) 793 300 359</li>
                                         <li>Email: leqwoi@protonmail.com</li>
                                     </ul>
@@ -92,8 +92,8 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <ul class="contact-now">     
-                                        <li><a href="/register">Register Now!</a></li>
+                                    <ul class="contact-now">    
+                                        <li><a th:href="@{/register}">Register Now!</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                             <!-- Logo -->
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="/index"><img th:src="@{/assets/img/logo/logo.png}" alt=""></a>
+                                    <a th:href="@{/index}"><img th:src="@{/assets/img/logo/logo.png}" alt="Little Hearts, Big Dreams Logo"></a>
                                 </div>
                             </div>
                             <div class="col-xl-10 col-lg-10">
@@ -114,20 +114,20 @@
                                     <!-- Main-menu -->
                                     <div class="main-menu d-none d-lg-block">
                                         <nav>
-                                            <ul id="navigation">                                                                                          
-                                                <li><a href="/index">Home</a></li>
-                                                <li><a href="/about">About</a></li>
-                                                <li><a href="/campaigns">Campaigns</a></li>
-                                                <li><a href="/blogs">Blogs</a></li>
-                                                <li><a href="/contact">Contact</a></li>
+                                            <ul id="navigation">                                                                                                                                     
+                                                <li><a th:href="@{/index}">Home</a></li>
+                                                <li><a th:href="@{/about}">About</a></li>
+                                                <li><a th:href="@{/campaigns}">Campaigns</a></li>
+                                                <li><a th:href="@{/blogs}">Blogs</a></li>
+                                                <li><a th:href="@{/contact}">Contact</a></li>
 
                                                 <!-- account info dropdown -->
                                                 <li th:if="${session.account}">
-                                                    <a href="/account" th:text="${session.account.getFullName()}"></a>
+                                                    <a th:href="@{/account}" th:text="${session.account.getFullName()}"></a>
                                                     <ul class="submenu">
-                                                        <li><a href="/account">Edit Account</a></li>
-                                                        <li><a href="/change-password">Change Password</a></li>
-                                                        <li><a href="/logout">Log Out</a></li>
+                                                        <li><a th:href="@{/account}">Edit Account</a></li>
+                                                        <li><a th:href="@{/change-password}">Change Password</a></li>
+                                                        <li><a th:href="@{/logout}">Log Out</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -136,7 +136,7 @@
                                     <!-- Header-btn -->
                                     <div class="header-right-btn d-none d-lg-block ml-20">
                                         <div th:if="${session.account==null}">
-                                            <a href="/login" class="btn header-btn">Log In</a>
+                                            <a th:href="@{/login}" class="btn header-btn">Log In</a>
                                         </div>
                                         <div th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).VIEW_DASHBOARD)}">
                                             <a th:href="@{/admin/dashboard}" class="btn header-btn">Management</a>
@@ -217,15 +217,74 @@
                                     </h6>
                                 </div>
 
-                                <!-- Notification Checkbox -->
+                                <!-- Notification Bell Icon -->
                                 <div class="d-flex flex-column align-items-center ml-4">
-                                    <label for="notificationCheckbox" class="text-sm text-muted mb-1">Nhận thông báo</label>
-                                    <input type="checkbox" name="notificationCheckbox" th:checked="${campaign != null}" th:attr="data-campaign-id=${campaign.getId()}" class="form-check-input">
+                                    <a href="#" 
+                                       th:attr="data-campaign-id=${campaign.getId()}" 
+                                       class="notification-toggle-icon">
+                                        <i th:classappend="${session.account.isCampaignIdEnableNotifications(campaign.id)} ? 'fas fa-bell' : 'far fa-bell'" 
+                                           style="font-size: 1.5rem; cursor: pointer; color: #ff5722;"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Custom script for notification toggle -->
+                <script>
+                    document.querySelectorAll('.notification-toggle-icon').forEach(icon => {
+                        icon.addEventListener('click', function(event) {
+                            event.preventDefault(); // Prevent the default link behavior
+                            
+                            const campaignId = this.getAttribute('data-campaign-id');
+                            const bellIcon = this.querySelector('i');
+                            const isCurrentlyEnabled = bellIcon.classList.contains('fas');
+                            
+                            // Toggle the icon's appearance immediately for a responsive feel
+                            if (isCurrentlyEnabled) {
+                                bellIcon.classList.remove('fas', 'fa-bell');
+                                bellIcon.classList.add('far', 'fa-bell');
+                            } else {
+                                bellIcon.classList.remove('far', 'fa-bell');
+                                bellIcon.classList.add('fas', 'fa-bell');
+                            }
+
+                            // Make the API call to update the state on the server
+                            fetch(`/campaigns/campaign/notifications?id=${campaignId}`, {
+                                method: 'GET'
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    // If the server returns an error, revert the icon state
+                                    console.error('Failed to update notification state:', response.statusText);
+                                    if (isCurrentlyEnabled) {
+                                        bellIcon.classList.remove('far', 'fa-bell');
+                                        bellIcon.classList.add('fas', 'fa-bell');
+                                    } else {
+                                        bellIcon.classList.remove('fas', 'fa-bell');
+                                        bellIcon.classList.add('far', 'fa-bell');
+                                    }
+                                } else {
+                                    // The server successfully handled the request. The UI is already updated.
+                                    console.log('Notification state updated successfully.');
+                                }
+                            })
+                            .catch(error => {
+                                // Handle network errors
+                                console.error('Network error during notification update:', error);
+                                // Revert the icon state on error
+                                if (isCurrentlyEnabled) {
+                                    bellIcon.classList.remove('far', 'fa-bell');
+                                    bellIcon.classList.add('fas', 'fa-bell');
+                                } else {
+                                    bellIcon.classList.remove('fas', 'fa-bell');
+                                    bellIcon.classList.add('far', 'fa-bell');
+                                }
+                            });
+                        });
+                    });
+                </script>
             </div>
 
             <!-- NEW SECTION: Donations -->

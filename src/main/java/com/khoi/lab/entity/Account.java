@@ -7,6 +7,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -259,6 +260,61 @@ public class Account {
     // new helper
     public void addDonation(Donation donation) {
         this.donations.add(donation);
+    }
+
+    public boolean isFollowingCampaignId(Long id) {
+        return getFollowedCampaignIds().contains(id);
+    }
+
+    /**
+     * Finds and returns a single AccountCampaignFollower by campaign ID.
+     * This method now uses a stream to safely find the element without modifying
+     * the original list.
+     * It returns an Optional to handle cases where no follower is found.
+     *
+     * @param campaignId The ID of the campaign to find the follower for.
+     * @return An Optional containing the follower, or an empty Optional if not
+     *         found.
+     */
+    public Optional<AccountCampaignFollower> getAccountCampaignFollowerById(Long campaignId) {
+        return getAccountCampaignFollowers().stream()
+                .filter(acf -> acf.getCampaign().getId().equals(campaignId))
+                .findFirst();
+    }
+
+    /**
+     * Checks if notifications are enabled for a given campaign ID.
+     * This method now safely handles the Optional returned by
+     * getAccountCampaignFollowerById.
+     *
+     * @param campaignId The ID of the campaign.
+     * @return true if a follower is found and notifications are enabled, false
+     *         otherwise.
+     */
+    public boolean isCampaignIdEnableNotifications(Long campaignId) {
+        return getAccountCampaignFollowerById(campaignId)
+                .map(AccountCampaignFollower::isReceiveNotifications)
+                .orElse(false);
+    }
+
+    /**
+     * toggle campaign notification status, returns true if success, false if not
+     * following
+     * 
+     * @param id
+     * @return
+     */
+    public boolean toggleCampaignNotification(Long id) {
+        Optional<AccountCampaignFollower> acfOptional = getAccountCampaignFollowerById(id);
+        AccountCampaignFollower acf = acfOptional.isPresent() ? acfOptional.get() : null;
+
+        if (acf == null) {
+            System.out.println("| [Account::toggleCampaignNotification] Account does not follow campaign id: " + id);
+            return false;
+        }
+
+        acf.setReceiveNotifications(!acf.isReceiveNotifications());
+        return true;
     }
 
     @Override

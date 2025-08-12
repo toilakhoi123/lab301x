@@ -146,6 +146,46 @@ public class DonationController {
     }
 
     /**
+     * Handle notification status toggle request
+     * (campaignNotExist/notLoggedIn/notFollowingCampaign/notificationToggleSuccess)
+     * 
+     * @param session
+     * @param id
+     * @return
+     */
+    @GetMapping("/campaign/notifications")
+    public ModelAndView toggleNotifications(HttpSession session, @RequestParam Long id) {
+        // Check if the campaign exists
+        Campaign campaign = donationDAO.campaignFindById(id);
+        if (campaign == null) {
+            return campaignsPage()
+                    .addObject("campaignNotExist", true);
+        }
+
+        // Check if the user is logged in
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            return campaignsPage()
+                    .addObject("notLoggedIn", true);
+        }
+        sessionAccount = accountDAO.accountFindWithId(sessionAccount.getId());
+
+        // Toggle the notification state
+        boolean toggleSuccess = sessionAccount.toggleCampaignNotification(id);
+        if (!toggleSuccess) {
+            return campaignsPage()
+                    .addObject("notFollowingCampaign", true);
+        }
+
+        // Update the account in the database
+        accountDAO.accountUpdate(sessionAccount);
+
+        // Return to the campaigns page with a success message
+        return campaignsPage()
+                .addObject("notificationToggleSuccess", true);
+    }
+
+    /**
      * Returns donate page for a campaign
      * (campaignNotExist/campaignNotOpen/campaignClosed)
      * 
