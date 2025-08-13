@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -19,8 +21,10 @@ import com.khoi.lab.entity.DonationPaymentCode;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.enums.CampaignStatus;
 import com.khoi.lab.enums.DonationStatus;
+import com.khoi.lab.enums.UserPermission;
 import com.khoi.lab.service.CampaignStatusUpdaterService;
 import com.khoi.lab.service.EmailSenderService;
+import com.khoi.lab.service.UserPermissionService;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -34,10 +38,71 @@ import jakarta.transaction.Transactional;
 public class DonationDAOImpl implements DonationDAO {
     private EntityManager em;
     private final EmailSenderService senderService;
+    private final UserPermissionService userPermissionService;
 
-    public DonationDAOImpl(EntityManager em, EmailSenderService senderService) {
+    public DonationDAOImpl(EntityManager em, EmailSenderService senderService,
+            UserPermissionService userPermissionService) {
         this.em = em;
         this.senderService = senderService;
+        this.userPermissionService = userPermissionService;
+    }
+
+    @Override
+    public List<Donation> generateRandomDonations(
+            List<Campaign> campaigns,
+            List<Account> accounts,
+            int minDonationsPerCampaign,
+            int maxDonationsPerCampaign,
+            long minAmount,
+            long maxAmount,
+            long amountInterval,
+            int maxDaysAgo) {
+        // Ensure that minAmount and maxAmount are multiples of the interval.
+        if (minAmount % amountInterval != 0 || maxAmount % amountInterval != 0) {
+            System.err.println("Error: minAmount and maxAmount must be multiples of amountInterval.");
+            return new ArrayList<>();
+        }
+
+        Random random = new Random();
+        List<Donation> allDonations = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now().minusHours(1);
+
+        // Iterate through each campaign to generate donations.
+        for (Campaign campaign : campaigns) {
+            // Determine a random number of donations for the current campaign.
+            int numberOfDonations = random.nextInt(maxDonationsPerCampaign - minDonationsPerCampaign + 1)
+                    + minDonationsPerCampaign;
+
+            for (int i = 0; i < numberOfDonations; i++) {
+                // Generate a random amount that is a multiple of the interval.
+                long randomAmountIntervals = (random.nextLong((maxAmount - minAmount) / amountInterval + 1));
+                long amount = minAmount + randomAmountIntervals * amountInterval;
+
+                // Randomly select a donor account (or null for anonymous).
+                Account donorAccount = null;
+                if (accounts != null && !accounts.isEmpty() && random.nextBoolean()) {
+                    int accountIndex = random.nextInt(accounts.size());
+                    donorAccount = accounts.get(accountIndex);
+                }
+
+                // Generate a random donation date within the specified range of days ago.
+                int daysAgo = random.nextInt(maxDaysAgo + 1);
+                LocalDateTime donateTime = now.minusDays(daysAgo);
+
+                // Create and update donate time
+                Donation newDonation = accountDonate(campaign, donorAccount, (int) amount);
+
+                if (newDonation != null) {
+                    newDonation.setDonateTime(donateTime);
+                    donationUpdate(newDonation);
+
+                    // add to return list
+                    allDonations.add(newDonation);
+                }
+
+            }
+        }
+        return allDonations;
     }
 
     @Override
@@ -79,23 +144,9 @@ public class DonationDAOImpl implements DonationDAO {
 
         (new CampaignStatusUpdaterService(this, senderService)).updateCampaignStatuses();
 
-        accountDonate(campaign1, account1, 1500000);
-        accountDonate(campaign1, account1, 500000);
-        accountDonate(campaign2, account1, 25000000);
-        accountDonate(campaign3, account1, 300000);
-        accountDonate(campaign1, account2, 500000);
-        accountDonate(campaign3, account2, 25000000);
-        accountDonate(campaign1, account3, 3500000);
-        accountDonate(campaign1, null, 3000000);
-        accountDonate(campaign2, null, 3250000);
-        accountDonate(campaign2, null, 1000000);
-
-        Donation do1 = accountDonate(campaign2, null, 200000);
-        Donation do2 = accountDonate(campaign3, account3, 250000);
-        do1.setDonateTime(LocalDateTime.parse("2025-07-04 12:30", formatter));
-        do2.setDonateTime(LocalDateTime.parse("2025-06-29 00:10", formatter));
-        donationUpdate(do1);
-        donationUpdate(do2);
+        // generate random donations
+        generateRandomDonations(Arrays.asList(campaign1, campaign2, campaign3),
+                Arrays.asList(account1, account2, account3), 5, 10, 100000, 5000000, 10000, 7);
     }
 
     @Override
@@ -313,8 +364,9 @@ public class DonationDAOImpl implements DonationDAO {
         }
 
         // check if admin
-        if (account != null && account.isAdmin()) {
-            System.out.println("| [accountDonate] Unable to donate! Account: " + account + " is an admin!");
+        if (account != null && userPermissionService.hasPermission(account, UserPermission.CREATE_DONATIONS)) {
+            System.out.println(
+                    "| [accountDonate] Unable to donate! Account: " + account + " lacks CREATE_DONATIONS permission!");
             return null;
         }
 
@@ -539,23 +591,56 @@ public class DonationDAOImpl implements DonationDAO {
     }
 
     @Override
-    public List<LocalDate> getLast30Days() {
-        List<LocalDate> dates = new ArrayList<>();
-        LocalDate today = LocalDate.now();
-        for (int i = 29; i >= 0; i--) { // oldest first
-            dates.add(today.minusDays(i));
+    public int donationGetAmountOnDay(LocalDate date, Long campaignId) {
+        int total = 0;
+        for (Donation donation : donationList(false).stream()
+                .filter(d -> d.getCampaign().getId().equals(campaignId)).toList()) {
+            if (donation.getDonateTime().toLocalDate().equals(date)
+                    && donation.isConfirmed()) {
+                total += donation.getAmount();
+            }
         }
-        return dates;
+        return total;
     }
 
     @Override
-    public List<Integer> getDonationAmountsLast30Days() {
+    public List<LocalDate> getLastXDays(int days) {
+        List<LocalDate> dates = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (int i = days - 1; i >= 0; i--) {
+            dates.add(today.minusDays(i));
+        }
+        return dates;
+    };
+
+    @Override
+    public List<Integer> getDonationAmountsLastXDays(int days) {
         List<Integer> amounts = new ArrayList<>();
-        List<LocalDate> dates = getLast30Days();
+        List<LocalDate> dates = getLastXDays(days);
         for (LocalDate date : dates) {
             amounts.add(donationGetAmountOnDay(date));
         }
         return amounts;
+    };
+
+    @Override
+    public List<Integer> getDonationAmountsLastXDays(int days, Long campaignId) {
+        List<Integer> amounts = new ArrayList<>();
+        List<LocalDate> dates = getLastXDays(days);
+        for (LocalDate date : dates) {
+            amounts.add(donationGetAmountOnDay(date, campaignId));
+        }
+        return amounts;
+    };
+
+    @Override
+    public List<LocalDate> getLast30Days() {
+        return getLastXDays(30);
+    }
+
+    @Override
+    public List<Integer> getDonationAmountsLast30Days() {
+        return getDonationAmountsLastXDays(30);
     }
 
     @Override

@@ -145,11 +145,6 @@ public class Account {
         this.password = CryptographyService.encrypt(password);
     }
 
-    // This method now checks the role name, maintaining compatibility
-    public boolean isAdmin() {
-        return this.role != null && "ADMIN".equalsIgnoreCase(this.role.getRoleName());
-    }
-
     // New helper method to check if the account has a specific permission
     public boolean hasPermission(UserPermission permission) {
         return this.role != null && this.role.getPermissions().contains(permission);

@@ -24,6 +24,7 @@ import com.khoi.lab.entity.Donation;
 import com.khoi.lab.entity.DonationReceiver;
 import com.khoi.lab.entity.Role;
 import com.khoi.lab.enums.CampaignStatus;
+import com.khoi.lab.enums.DonationStatus;
 import com.khoi.lab.enums.TimeMinutes;
 import com.khoi.lab.enums.UserPermission;
 import com.khoi.lab.object.DonationConfirmRequest;
@@ -90,15 +91,14 @@ public class AdminController {
         int nonAnonymousDonations = donationDAO.donationGetNonAnonymous();
 
         // view
-        ModelAndView mav = new ModelAndView("admin/dashboard");
-        mav.addObject("donationsWeekly", donationsWeekly);
-        mav.addObject("donationsMonthly", donationsMonthly);
-        mav.addObject("campaignCompletedPercentage", campaignCompletedPercentage);
-        mav.addObject("donationsPending", donationsPending);
-        mav.addObject("labels", dateLabels);
-        mav.addObject("donations", donationAmounts);
-        mav.addObject("groups", Arrays.asList(anonymousDonations, nonAnonymousDonations));
-        return mav;
+        return new ModelAndView("admin/dashboard")
+                .addObject("donationsWeekly", donationsWeekly)
+                .addObject("donationsMonthly", donationsMonthly)
+                .addObject("campaignCompletedPercentage", campaignCompletedPercentage)
+                .addObject("donationsPending", donationsPending)
+                .addObject("labels", dateLabels)
+                .addObject("donations", donationAmounts)
+                .addObject("groups", Arrays.asList(anonymousDonations, nonAnonymousDonations));
     }
 
     /**
@@ -236,6 +236,86 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("admin/manage-campaigns");
         mav.addObject("campaigns", donationDAO.campaignList());
         return mav;
+    }
+
+    /**
+     * Show campaign statistics
+     * (notLoggedIn/notAuthorized/campaignNotFound)
+     * 
+     * @param session
+     * @param id
+     * @return
+     */
+    @GetMapping("/manage-campaigns/statistics")
+    public ModelAndView campaignsViewCampaignStatistics(HttpSession session,
+            @RequestParam(name = "campaign") Long id) {
+        // permission checks
+        Account sessionAccount = (Account) session.getAttribute("account");
+        if (sessionAccount == null) {
+            ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
+            mav.addObject("notLoggedIn", true);
+            return mav;
+        } else if (!userPermissionService.hasPermission(sessionAccount, UserPermission.MANAGE_CAMPAIGNS)) {
+            ModelAndView mav = dashboardPage(session);
+            mav.addObject("notAuthorized", true);
+            return mav;
+        }
+
+        Campaign campaign = donationDAO.campaignFindById(id);
+        if (campaign == null) {
+            return campaignsManage(session)
+                    .addObject("campaignNotFound", true);
+        }
+
+        // calculate general stats
+        int donationCount = campaign.getDonations().size();
+        int donorCount = campaign.getDonations().stream()
+                .map(donation -> donation.getAccount())
+                .distinct().toList().size();
+        int campaignProgress = campaign.getDonatedPercentageCapped();
+        int donatedAmount = campaign.getDonatedAmount();
+        Long daysLeft = campaign.getDaysLeft();
+        long anonymousDonations = campaign.getDonations().stream().filter(d -> d.isAnonymous()).count();
+        long nonAnonymousDonations = campaign.getDonations().size() - anonymousDonations;
+        long pendingDonations = campaign.getDonations().stream().filter(d -> d.getStatus() == DonationStatus.PENDING)
+                .count();
+        long confirmedDonations = campaign.getDonations().stream()
+                .filter(d -> d.getStatus() == DonationStatus.CONFIRMED).count();
+        long refusedDonations = campaign.getDonations().size() - pendingDonations - confirmedDonations;
+
+        // calculate donation history stats
+        int numberOfDays = 10;
+        List<LocalDate> dates = donationDAO.getLastXDays(numberOfDays);
+        List<String> dateLabels = dates.stream()
+                .map(d -> d.toString())
+                .collect(Collectors.toList());
+        List<Integer> donationAmounts = donationDAO.getDonationAmountsLastXDays(numberOfDays, campaign.getId());
+
+        System.out.println("dateLabels:");
+        for (String dateLabel : dateLabels) {
+            System.out.println(dateLabel);
+        }
+
+        System.out.println("donationAmounts:");
+        for (Integer donationAmount : donationAmounts) {
+            System.out.println(donationAmount);
+        }
+
+        return new ModelAndView("admin/campaign-stats")
+                .addObject("campaign", campaign)
+                .addObject("donationCount", donationCount)
+                .addObject("donorCount", donorCount)
+                .addObject("campaignProgress", campaignProgress)
+                .addObject("donatedAmount", donatedAmount)
+                .addObject("donationGoal", campaign.getGoal())
+                .addObject("daysLeft", daysLeft)
+                .addObject("anonymousDonations", anonymousDonations)
+                .addObject("nonAnonymousDonations", nonAnonymousDonations)
+                .addObject("pendingDonations", pendingDonations)
+                .addObject("confirmedDonations", confirmedDonations)
+                .addObject("refusedDonations", refusedDonations)
+                .addObject("dateLabels", dateLabels)
+                .addObject("donationAmounts", donationAmounts);
     }
 
     /**

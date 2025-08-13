@@ -3,6 +3,7 @@ package com.khoi.lab.entity;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -71,13 +72,13 @@ public class Campaign {
     /**
      * Constructor to create a new Campaign.
      *
-     * @param name        The name of the campaign.
-     * @param receiver    The donation receiver associated with this campaign.
+     * @param name               The name of the campaign.
+     * @param receiver       The donation receiver associated with this campaign.
      * @param description A detailed description of the campaign.
-     * @param imageUrl    The URL for the campaign's image.
-     * @param goal        The fundraising goal in currency units.
-     * @param startTime   The start date and time of the campaign.
-     * @param endTime     The end date and time of the campaign.
+     * @param imageUrl       The URL for the campaign's image.
+     * @param goal               The fundraising goal in currency units.
+     * @param startTime     The start date and time of the campaign.
+     * @param endTime         The end date and time of the campaign.
      */
     public Campaign(String name, DonationReceiver receiver, String description,
             String imageUrl, int goal, LocalDateTime startTime, LocalDateTime endTime) {
@@ -221,6 +222,20 @@ public class Campaign {
 
     public void setFollowers(List<AccountCampaignFollower> followers) {
         this.followers = followers;
+    }
+
+    /**
+     * Calculates the number of days remaining until the campaign ends.
+     * If the campaign has already ended, this will return a non-positive integer.
+     *
+     * @return The number of days left as an integer.
+     */
+    public long getDaysLeft() {
+        if (endTime == null) {
+            return -1; // Or throw an exception, depending on your business logic.
+        }
+        // Use ChronoUnit.DAYS to calculate the difference in days.
+        return -ChronoUnit.DAYS.between(LocalDateTime.now(), endTime);
     }
 
     @Override

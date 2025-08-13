@@ -1,0 +1,381 @@
+<!doctype html>
+<html class="no-js" lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Campaign Statistics | Little Hearts, Big Dreams.</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/assets/img/favicon.ico}">
+
+    <!-- CSS here -->
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- preloader -->
+    <div th:insert="~{fragment.preloader :: preloader}"></div>
+    
+    <!-- header -->
+    <div th:insert="~{fragment.header :: mainHeader}"></div>
+
+    <!-- main content -->
+    <main>
+        <!-- Campaign Statistics Container -->
+        <div style="background-color: #09cc7f; width: 100%; padding-top: 50px; padding-bottom: 50px;">
+            <div class="container d-flex justify-content-center">
+                <div class="p-4 mt-5" 
+                     style="width: 65%; background-color: #f8f9fa; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1);"
+                     th:data-donated-amount="${donatedAmount}"
+                     th:data-donation-goal="${donationGoal}"
+                     th:data-anonymous-donations="${anonymousDonations}"
+                     th:data-non-anonymous-donations="${nonAnonymousDonations}"
+                     th:data-pending-donations="${pendingDonations}"
+                     th:data-confirmed-donations="${confirmedDonations}"
+                     th:data-refused-donations="${refusedDonations}"
+                     th:data-date-labels="${dateLabels}"
+                     th:data-donation-amounts="${donationAmounts}">
+                    
+                    <div style="padding: 15px;">
+                        <h3 class="mb-4 text-center">Campaign Statistics</h3>
+                        <p class="text-center" style="color: #6c757d; margin-bottom: 1.5rem;">Tóm tắt các thông số của chiến dịch</p>
+
+                        <!-- Campaign Details Section -->
+                        <div class="p-4 rounded" style="background-color: #f8f9fa; border: 1px solid #e9ecef; margin-bottom: 1.5rem;">
+                            <h4 class="mb-3" style="font-size: 1.5rem; font-weight: 600; color: #495057;" th:text="${campaign.getName()}"></h4>
+                            <p style="color: #6c757d; margin-bottom: 1rem;" th:text="${campaign.getDescription()}"></p>
+                            <div class="row">
+                                <div class="col-sm-6 d-flex align-items-center mb-2">
+                                    <i class="fas fa-calendar-alt" style="font-size: 1.25rem; margin-right: 0.5rem; color: #09cc7f;"></i>
+                                    <span style="font-size: 0.875rem; color: #6c757d;">Start Date: <span style="font-weight: 500;" th:text="${#temporals.format(campaign.getStartTime(), 'dd MMMM, yyyy')}"></span></span>
+                                </div>
+                                <div class="col-sm-6 d-flex align-items-center mb-2">
+                                    <i class="fas fa-calendar-check" style="font-size: 1.25rem; margin-right: 0.5rem; color: #09cc7f;"></i>
+                                    <span style="font-size: 0.875rem; color: #6c757d;">End Date: <span style="font-weight: 500;" th:text="${#temporals.format(campaign.getEndTime(), 'dd MMMM, yyyy')}"></span></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics Cards Grid -->
+                        <div class="row mb-4">
+                            <!-- Goal Amount Card -->
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 text-center rounded shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                                    <i class="fas fa-bullseye" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #dc3545;"></i>
+                                    <p style="color: #6c757d; font-size: 0.875rem;">Goal</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; color: #212529;" th:text="${#numbers.formatDecimal(donationGoal, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                </div>
+                            </div>
+                            <!-- Amount Raised Card -->
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 text-center rounded shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                                    <i class="fas fa-dollar-sign" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #ffc107;"></i>
+                                    <p style="color: #6c757d; font-size: 0.875rem;">Raised</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; color: #212529;" th:text="${#numbers.formatDecimal(donatedAmount, 0, 'COMMA', 0, 'POINT')} + '₫'"></p>
+                                </div>
+                            </div>
+                            <!-- Donors Card -->
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 text-center rounded shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                                    <i class="fas fa-users" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #007bff;"></i>
+                                    <p style="color: #6c757d; font-size: 0.875rem;">Donors</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; color: #212529;" th:text="${donorCount}"></p>
+                                </div>
+                            </div>
+                            <!-- Days Remaining Card -->
+                            <div class="col-md-3 mb-3">
+                                <div class="p-3 text-center rounded shadow-sm" style="background-color: #f8f9fa; border: 1px solid #e9ecef;">
+                                    <i class="fas fa-clock" style="font-size: 2.5rem; margin-bottom: 0.5rem; color: #17a2b8;"></i>
+                                    <p style="color: #6c757d; font-size: 0.875rem;">Days Left</p>
+                                    <p style="font-size: 1.5rem; font-weight: bold; color: #212529;" th:text="${daysLeft}"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Section -->
+                        <div class="row mb-4">
+                            <!-- Campaign Progress Chart -->
+                            <div class="col-md-4 text-center">
+                                <label style="display: block; color: #495057; font-weight: 600; margin-bottom: 0.5rem;">Campaign Progress</label>
+                                <div style="max-width: 250px; margin: auto;">
+                                    <canvas id="progressChart"></canvas>
+                                </div>
+                            </div>
+                            <!-- Anonymous vs. Non-Anonymous Chart -->
+                            <div class="col-md-4 text-center">
+                                <label style="display: block; color: #495057; font-weight: 600; margin-bottom: 0.5rem;">Donation Types</label>
+                                <div style="max-width: 250px; margin: auto;">
+                                    <canvas id="donationTypeChart"></canvas>
+                                </div>
+                            </div>
+                            <!-- Donation Status Chart -->
+                            <div class="col-md-4 text-center">
+                                <label style="display: block; color: #495057; font-weight: 600; margin-bottom: 0.5rem;">Donation Status</label>
+                                <div style="max-width: 250px; margin: auto;">
+                                    <canvas id="donationStatusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- New Line Chart for Donation History -->
+                        <div class="row mb-4">
+                            <div class="col-12 text-center">
+                                <label style="display: block; color: #495057; font-weight: 600; margin-bottom: 0.5rem;">Donation History</label>
+                                <div style="max-width: 100%; height: 300px; margin: auto;">
+                                    <canvas id="donationTrendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-4">
+                            <label for="progress-bar" style="display: block; color: #495057; font-weight: 600; margin-bottom: 0.5rem;">Campaign Progress</label>
+                            <div class="progress" style="height: 1.5rem; border-radius: 0.75rem; position: relative;">
+                                <!-- Set dynamic width for the progress bar -->
+                                <div id="progress-bar" class="progress-bar" role="progressbar" th:style="'width: ' + ${campaignProgress} + '%; background-color: #09cc7f;'" th:aria-valuenow="${campaignProgress}" aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                                <span id="progress-percentage" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; color: white;" th:text="${campaignProgress} + '%'"></span>
+                            </div>
+                        </div>
+                        
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/admin/manage-campaigns" class="btn btn-secondary">
+                                Back to Campaigns
+                            </a>
+                            <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" class="btn btn-success">
+                                Edit Campaign
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <div th:insert="~{fragment.footer :: footer}"></div>
+
+    <!-- To top button -->
+    <div id="back-top" >
+        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS here -->
+    <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script th:src="@{/assets/js/vendor/jquery-1.12.4.min.js}"></script>
+    <script th:src="@{/assets/js/popper.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <!-- Jquery Mobile Menu -->
+    <script th:src="@{/assets/js/jquery.slicknav.min.js}"></script>
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script th:src="@{/assets/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/assets/js/slick.min.js}"></script>
+    <!-- One Page, Animated-HeadLin -->
+    <script th:src="@{/assets/js/wow.min.js}"></script>
+    <script th:src="@{/assets/js/animated.headline.js}"></script>
+    <script th:src="@{/assets/js/jquery.magnific-popup.js}"></script>
+    <!-- Date Picker -->
+    <script th:src="@{/assets/js/gijgo.min.js}"></script>
+    <!-- Nice-select, sticky -->
+    <script th:src="@{/assets/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.sticky.js}"></script>
+    <!-- Progress -->
+    <script th:src="@{/assets/js/jquery.barfiller.js}"></script>
+    <!-- counter , waypoint,Hover Direction -->
+    <script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
+    <script th:src="@{/assets/js/waypoints.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.countdown.min.js}"></script>
+    <script th:src="@{/assets/js/hover-direction-snake.min.js}"></script>
+    <!-- contact js -->
+    <script th:src="@{/assets/js/contact.js}"></script>
+    <script th:src="@{/assets/js/jquery.form.js}"></script>
+    <script th:src="@{/assets/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/js/mail-script.js}"></script>
+    <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
+    <!-- Jquery Plugins, main Jquery -->      
+    <script th:src="@{/assets/js/plugins.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <!-- chart scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get data from Thymeleaf attributes on the main container div
+            const mainContainer = document.querySelector('.p-4');
+            if (mainContainer) {
+                // Chart 1: Campaign Progress
+                const donatedAmount = parseFloat(mainContainer.getAttribute('data-donated-amount'));
+                const donationGoal = parseFloat(mainContainer.getAttribute('data-donation-goal'));
+                const remainingAmount = donationGoal - donatedAmount;
+
+                const ctxProgress = document.getElementById('progressChart').getContext('2d');
+                new Chart(ctxProgress, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Amount Raised', 'Remaining Goal'],
+                        datasets: [{
+                            data: [donatedAmount, remainingAmount > 0 ? remainingAmount : 0],
+                            backgroundColor: [
+                                '#09cc7f', // Green for raised amount
+                                '#e9ecef' // Light gray for remaining amount
+                            ],
+                            borderColor: [
+                                '#09cc7f',
+                                '#e9ecef'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        const value = tooltipItem.raw;
+                                        return `${tooltipItem.label}: ${value.toLocaleString()}₫`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Chart 2: Donation Types (Anonymous vs. Non-Anonymous)
+                const anonymousDonations = parseFloat(mainContainer.getAttribute('data-anonymous-donations'));
+                const nonAnonymousDonations = parseFloat(mainContainer.getAttribute('data-non-anonymous-donations'));
+                
+                const ctxDonationTypes = document.getElementById('donationTypeChart').getContext('2d');
+                new Chart(ctxDonationTypes, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Anonymous', 'Non-Anonymous'],
+                        datasets: [{
+                            data: [anonymousDonations, nonAnonymousDonations],
+                            backgroundColor: [
+                                '#ffc107', // Amber for anonymous
+                                '#007bff'  // Blue for non-anonymous
+                            ],
+                            borderColor: [
+                                '#ffc107',
+                                '#007bff'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+
+                // Chart 3: Donation Status
+                const pendingDonations = parseFloat(mainContainer.getAttribute('data-pending-donations'));
+                const confirmedDonations = parseFloat(mainContainer.getAttribute('data-confirmed-donations'));
+                const refusedDonations = parseFloat(mainContainer.getAttribute('data-refused-donations'));
+                
+                const ctxDonationStatus = document.getElementById('donationStatusChart').getContext('2d');
+                new Chart(ctxDonationStatus, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pending', 'Confirmed', 'Refused'],
+                        datasets: [{
+                            data: [pendingDonations, confirmedDonations, refusedDonations],
+                            backgroundColor: [
+                                '#17a2b8', // Cyan for pending
+                                '#28a745', // Green for confirmed
+                                '#dc3545'  // Red for refused
+                            ],
+                            borderColor: [
+                                '#17a2b8',
+                                '#28a745',
+                                '#dc3545'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+
+                // Chart 4: Donation Trend (line chart)
+                const dateLabels = mainContainer.getAttribute('data-date-labels').split(',').map(label => label.replace('[', '').replace(']', ''));
+                const donationAmounts = mainContainer.getAttribute('data-donation-amounts').split(',').map(amount => amount.replace('[', '').replace(']', '')).map(Number);
+                
+                const ctxDonationTrend = document.getElementById('donationTrendChart').getContext('2d');
+                new Chart(ctxDonationTrend, {
+                    type: 'line',
+                    data: {
+                        labels: dateLabels,
+                        datasets: [{
+                            label: 'Donation Amount',
+                            data: donationAmounts,
+                            borderColor: '#09cc7f', // Line color
+                            backgroundColor: 'rgba(9, 204, 127, 0.2)', // Area fill color
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Amount (₫)'
+                                },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

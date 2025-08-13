@@ -18,6 +18,23 @@ import com.khoi.lab.enums.CampaignStatus;
  */
 public interface DonationDAO {
     /**
+     * Generate random donations for test data
+     * 
+     * @param campaigns
+     * @param accounts
+     * @param minDonationsPerCampaign
+     * @param maxDonationsPerCampaign
+     * @param minAmount
+     * @param maxAmount
+     * @param amountInterval
+     * @param maxDaysAgo
+     * @return
+     */
+    List<Donation> generateRandomDonations(List<Campaign> campaigns, List<Account> accounts,
+            int minDonationsPerCampaign, int maxDonationsPerCampaign, long minAmount, long maxAmount,
+            long amountInterval, int maxDaysAgo);
+
+    /**
      * Initiate test data
      */
     void initiate();
@@ -310,6 +327,41 @@ public interface DonationDAO {
      * @return
      */
     int donationGetAmountOnDay(LocalDate date);
+
+    /**
+     * Get the amount donated on day [date], but for a specific campaign
+     * 
+     * @param date
+     * @param campaignId
+     * @return
+     */
+    int donationGetAmountOnDay(LocalDate date, Long campaignId);
+
+    /**
+     * Get x-axis of bar chart donations for the last X days
+     * 
+     * @param days
+     * @return
+     */
+    List<LocalDate> getLastXDays(int days);
+
+    /**
+     * Get y-axis of bar chart donations (amount donated) for the last X days
+     * 
+     * @param days
+     * @return
+     */
+    List<Integer> getDonationAmountsLastXDays(int days);
+
+    /**
+     * Get y-axis of bar chart donations (amount donated) for the last 30 days, but
+     * for a specific campaign
+     * 
+     * @param days
+     * @param campaignId
+     * @return
+     */
+    List<Integer> getDonationAmountsLastXDays(int days, Long campaignId);
 
     /**
      * Get x-axis of bar chart donations for the last 30 days
