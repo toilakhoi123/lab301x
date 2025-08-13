@@ -291,16 +291,6 @@ public class AdminController {
                 .collect(Collectors.toList());
         List<Integer> donationAmounts = donationDAO.getDonationAmountsLastXDays(numberOfDays, campaign.getId());
 
-        System.out.println("dateLabels:");
-        for (String dateLabel : dateLabels) {
-            System.out.println(dateLabel);
-        }
-
-        System.out.println("donationAmounts:");
-        for (Integer donationAmount : donationAmounts) {
-            System.out.println(donationAmount);
-        }
-
         return new ModelAndView("admin/campaign-stats")
                 .addObject("campaign", campaign)
                 .addObject("donationCount", donationCount)
