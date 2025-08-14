@@ -85,7 +85,7 @@
                                 <p><strong>Lần đăng nhập gần nhất:</strong> <span th:text="${#dates.format(account.getLastLoginDate(), 'dd MMM yyyy')}">01 Jan 2025 12:00</span></p>
                             </div>
                             <!-- Buttons -->
-                            <div class="d-flex justify-content-between mt-4" th:if="${session.account != null and (session.account.getId() == account.getId() or session.account.isAdmin())}">
+                            <div class="d-flex justify-content-between mt-4" th:if="${(session.account != null and session.account.getId() == account.getId()) or userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
                                 <a href="/edit-account" class="btn btn-success">Edit</a>
                             </div>
                         </div>

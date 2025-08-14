@@ -48,7 +48,7 @@
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username"
                                 th:value="${account.getUsername()}" 
-                                th:disabled="${session.account != null and !session.account.isAdmin()}">
+                                th:disabled="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
                         </div>
 
                         <!-- First Name -->
@@ -80,7 +80,7 @@
                         </div>
 
                         <!-- Extra fields for compat -->
-                        <div th:if="${session.account.isAdmin()}">
+                        <div th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">
                             <input type="hidden" name="isAdmin" th:value="false">
                         </div>
 

@@ -299,38 +299,39 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-12 col-md-12">
-                        <div class="count-down-wrapper" >
+                        <div class="count-down-wrapper">
                             <div class="row justify-content-between">
+                                <!-- Donation Count -->
                                 <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <!-- Counter Up -->
                                     <div class="single-counter text-center">
-                                        <span class="counter color-green">6,200</span>
-                                        <span class="plus">+</span>
-                                        <p class="color-green">Donation</p>
+                                        <!-- Placeholder for donationCount -->
+                                        <span class="counter color-green">[[${donationCount}]]</span>
+                                        <p class="color-green">Donations</p>
                                     </div>
                                 </div>
+                                <!-- Campaign Count -->
                                 <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <!-- Counter Up -->
                                     <div class="single-counter text-center">
-                                        <span class="counter color-green">80</span>
-                                        <span class="plus">+</span>
-                                        <p class="color-green">Fund Raised</p>
+                                        <!-- Placeholder for campaignCount -->
+                                        <span class="counter color-green">[[${campaignCount}]]</span>
+                                        <p class="color-green">Campaigns</p>
                                     </div>
                                 </div>
+                                <!-- Donor Count -->
                                 <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <!-- Counter Up -->
                                     <div class="single-counter text-center">
-                                        <span class="counter color-green">256</span>
-                                        <span class="plus">+</span>
-                                        <p class="color-green">Donation</p>
+                                        <!-- Placeholder for donorCount -->
+                                        <span class="counter color-green">[[${donorCount}]]</span>
+                                        <p class="color-green">Donors</p>
                                     </div>
                                 </div>
+                                <!-- Donated Amount -->
                                 <div class="col-lg-3 col-md-6 col-sm-6">
-                                    <!-- Counter Up -->
                                     <div class="single-counter text-center">
-                                        <span class="counter color-green">256</span>
-                                        <span class="plus">+</span>
-                                        <p class="color-green">Donation</p>
+                                        <!-- Placeholder for donatedAmount with VND and comma formatting -->
+                                        <span class="counter color-green">[[${#numbers.formatDecimal(donatedAmount, 0, 'COMMA', 0, 'POINT')}]]</span>
+                                        <span class="plus color-green">₫</span>
+                                        <p class="color-green">Total Raised</p>
                                     </div>
                                 </div>
                             </div>

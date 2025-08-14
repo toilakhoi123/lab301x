@@ -44,16 +44,28 @@ public class GeneralController {
      */
     @GetMapping("/index")
     public ModelAndView index() {
-        ModelAndView mav = new ModelAndView("index");
         List<Campaign> campaigns = donationDAO.campaignList().stream()
                 .filter(c -> c.getDonatedPercentageUncapped() < 100)
                 .sorted((a, b) -> Integer.compare(b.getDonatedPercentageUncapped(), a.getDonatedPercentageUncapped()))
                 .limit(3)
                 .toList();
         List<BlogPost> blogPosts = blogDAO.listBlogPosts().stream().limit(2).toList();
-        mav.addObject("campaigns", campaigns);
-        mav.addObject("blogPosts", blogPosts);
-        return mav;
+
+        // stats
+        List<Donation> allDonations = donationDAO.donationList(true);
+        int donationCount = allDonations.size();
+        int campaignCount = donationDAO.campaignList().size();
+        long donorCount = donationDAO.getAlltimeDonorCount();
+        long donatedAmount = donationDAO.getAllTimeDonatedAmount();
+
+        // compose view
+        return new ModelAndView("index")
+                .addObject("campaigns", campaigns)
+                .addObject("blogPosts", blogPosts)
+                .addObject("donationCount", donationCount)
+                .addObject("campaignCount", campaignCount)
+                .addObject("donorCount", donorCount)
+                .addObject("donatedAmount", donatedAmount);
     }
 
     /**

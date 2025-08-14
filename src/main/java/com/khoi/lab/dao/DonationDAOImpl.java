@@ -662,4 +662,19 @@ public class DonationDAOImpl implements DonationDAO {
     public int donationGetNonAnonymous() {
         return donationList(false).stream().filter(d -> !d.isAnonymous() && d.isConfirmed()).toList().size();
     }
+
+    @Override
+    public long getAllTimeDonatedAmount() {
+        long sum = 0;
+        for (Donation donation : donationList(false)) {
+            sum += donation.getAmount();
+        }
+        return Math.round(sum / 1000) * 1000;
+    }
+
+    @Override
+    public int getAlltimeDonorCount() {
+        List<Donation> donations = donationList(false);
+        return donationGetAnonymous() + (int) donations.stream().filter(d -> !d.isAnonymous()).distinct().count();
+    }
 }
