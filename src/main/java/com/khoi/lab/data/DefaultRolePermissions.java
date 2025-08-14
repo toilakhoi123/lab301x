@@ -32,7 +32,6 @@ public class DefaultRolePermissions {
                     UserPermission.MANAGE_ROLES,
                     UserPermission.CREATE_CAMPAIGNS,
                     UserPermission.MANAGE_CAMPAIGNS,
-                    UserPermission.CREATE_DONATIONS,
                     UserPermission.MANAGE_DONATIONS,
                     UserPermission.CREATE_BLOGS,
                     UserPermission.MANAGE_OWN_BLOGS,
