@@ -56,10 +56,10 @@ public class DefaultRolePermissions {
             "campaign_manager", List.of(
                     UserPermission.VIEW_DASHBOARD,
                     UserPermission.CREATE_CAMPAIGNS,
-                    UserPermission.MANAGE_CAMPAIGNS),
+                    UserPermission.MANAGE_CAMPAIGNS,
+                    UserPermission.MANAGE_DONATIONS),
             "donation_manager", List.of(
                     UserPermission.VIEW_DASHBOARD,
-                    UserPermission.CREATE_DONATIONS,
                     UserPermission.MANAGE_DONATIONS));
 
     /**
