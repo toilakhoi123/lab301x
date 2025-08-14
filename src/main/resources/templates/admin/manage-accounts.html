@@ -111,7 +111,7 @@
                                                         th:each="role : ${roles}"
                                                         th:value="${role.getRoleName()}"
                                                         th:text="${role.getRoleName()}"
-                                                        th:if="${!(role.powerLevel >= session.account.role.powerLevel and session.account.role.powerLevel < 4)}"
+                                                        th:if="${!(role.powerLevel >= session.account.role.powerLevel and session.account.role.powerLevel < 4) or (role.getRoleName() == account.getRole().getRoleName())}"
                                                         th:selected="${role.getRoleName() == account.getRole().getRoleName()}"
                                                     ></option>
                                                 </select>
