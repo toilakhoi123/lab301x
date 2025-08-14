@@ -78,11 +78,11 @@
                         <h3 class="mb-3"><strong>Thông tin tài khoản</strong></h3>
                         <div class="border rounded p-4 shadow-sm">
                             <div class="scrollable-content">
-                                <p><strong>Họ tên:</strong> <span th:text="${account.getFullName()}">Full Name</span></p>
-                                <p><strong>Email:</strong> <span th:text="${account.getEmail()}">email@example.com</span></p>
-                                <p><strong>Số điện thoại:</strong> <span th:text="${account.getPhoneNumber()}">0123456789</span></p>
+                                <p><strong>Họ tên:</strong> <span th:text="${account.fullName}">Full Name</span></p>
+                                <p><strong>Email:</strong> <span th:text="${account.email}">email@example.com</span></p>
+                                <p><strong>Số điện thoại:</strong> <span th:text="${account.phoneNumber}">0123456789</span></p>
                                 <p><strong>Vai trò:</strong> <span th:text="${account.role.roleName}"></span></p>
-                                <p><strong>Lần đăng nhập gần nhất:</strong> <span th:text="${#dates.format(account.getLastLoginDate(), 'dd MMM yyyy')}">01 Jan 2025 12:00</span></p>
+                                <p><strong>Lần đăng nhập gần nhất:</strong> <span th:text="${#dates.format(account.lastLoginDate, 'dd MMM yyyy')}">01 Jan 2025 12:00</span></p>
                             </div>
                             <!-- Buttons -->
                             <div class="d-flex justify-content-between mt-4" th:if="${(session.account != null and session.account.getId() == account.getId()) or userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_USERS)}">

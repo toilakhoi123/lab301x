@@ -109,6 +109,11 @@ public class OAuthController {
         if (existingAccount != null) {
             // === LOGIN EXISTING USER ===
             if (!existingAccount.isDisabled()) {
+                // set login date
+                existingAccount.setLastLoginDate(new java.sql.Date(System.currentTimeMillis()));
+                existingAccount = accountDAO.accountUpdate(existingAccount);
+
+                // set session attributes
                 session.setAttribute("account", existingAccount);
                 ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
                 mav.addObject("loginSuccess", true);
@@ -130,11 +135,14 @@ public class OAuthController {
         String password = ""; // empty password
 
         // Save to DB
-        accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber, password, "user");
+        Account registeredAccount = accountDAO.accountRegister(username, firstName, lastName, email, phoneNumber,
+                password, "user");
+        registeredAccount.setLastLoginDate(new java.sql.Date(System.currentTimeMillis()));
+        registeredAccount = accountDAO.accountUpdate(registeredAccount);
 
         // Fetch the new account and log in
-        Account newAccount = accountDAO.accountFindWithEmail(email);
-        session.setAttribute("account", newAccount);
+        registeredAccount = accountDAO.accountFindWithEmail(email);
+        session.setAttribute("account", registeredAccount);
 
         ModelAndView mav = (new GeneralController(donationDAO, accountDAO, blogDAO)).index();
         mav.addObject("registerSuccess", true);
