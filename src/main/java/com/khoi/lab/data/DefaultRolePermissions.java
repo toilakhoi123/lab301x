@@ -49,7 +49,6 @@ public class DefaultRolePermissions {
                     UserPermission.CREATE_BLOGS,
                     UserPermission.MANAGE_OWN_BLOGS,
                     UserPermission.MANAGE_BLOGS,
-                    UserPermission.CREATE_DONATIONS,
                     UserPermission.CREATE_COMMENTS,
                     UserPermission.MANAGE_OWN_COMMENTS,
                     UserPermission.MANAGE_COMMENTS),
