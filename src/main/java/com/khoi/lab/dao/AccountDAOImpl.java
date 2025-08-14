@@ -40,7 +40,7 @@ public class AccountDAOImpl implements AccountDAO {
         // 2. Register accounts and assign roles
         Account acc1 = accountRegister("waf", "Le", "Khoi", "kxyz207@gmail.com", "0793300359", "toilakhoi", "manager");
         Account acc2 = accountRegister("akari", "Le", "Khang", "lmkhang165@gmail.com", "0904339600", "lmkhang165",
-                "campaign_manager");
+                "admin");
         Account acc3 = accountRegister("imitadora", "Jane", "Doe", "milk.yy2k@gmail.com", "0699201920", "abari11",
                 "user");
         Account acc4 = accountRegister("skywalker", "Luke", "Skywalker", "luke.skywalker@jedi.com", "0812345678",
@@ -85,7 +85,7 @@ public class AccountDAOImpl implements AccountDAO {
                 "darkforce", "user");
 
         // set details
-        acc2.setDisabled(true);
+        acc3.setDisabled(true);
         acc13.setDisabled(true);
         acc15.setDisabled(true);
 

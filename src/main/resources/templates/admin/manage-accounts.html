@@ -105,12 +105,13 @@
                                                     class="form-control role-dropdown my-dropdown"
                                                     th:id="'role-select-' + ${account.getId()}"
                                                     th:onchange="'handleRoleChange(this, \'' + ${account.getId()} + '\')'"
-                                                    th:disabled="${account.getId() == session.account.id}"
+                                                    th:disabled="${(account.id == session.account.id) or (account.role.powerLevel >= session.account.role.powerLevel and session.account.role.powerLevel < 4) or (account.id == session.account.id and session.account.role.powerLevel == 4)}"
                                                 >
                                                     <option
                                                         th:each="role : ${roles}"
                                                         th:value="${role.getRoleName()}"
                                                         th:text="${role.getRoleName()}"
+                                                        th:if="${!(role.powerLevel >= session.account.role.powerLevel and session.account.role.powerLevel < 4)}"
                                                         th:selected="${role.getRoleName() == account.getRole().getRoleName()}"
                                                     ></option>
                                                 </select>
@@ -121,7 +122,7 @@
                                                     class="form-control account-disabled-dropdown my-dropdown"
                                                     th:id="'disabled-select-' + ${account.getId()}"
                                                     th:onchange="'handleDisabledChange(this, \'' + ${account.getId()} + '\')'"
-                                                    th:disabled="${account.getId() == session.account.id}"
+                                                    th:disabled="${account.getId() == session.account.id or (account.role.powerLevel >= session.account.role.powerLevel and session.account.role.powerLevel < 4) or (account.id == session.account.id and session.account.role.powerLevel == 4)}"
                                                 >
                                                     <option value="false" th:selected="${!account.isDisabled()}">❌</option>
                                                     <option value="true" th:selected="${account.isDisabled()}">✔️</option>
@@ -139,7 +140,7 @@
                                                     </span>
                                                     <span class="text">Donations</span>
                                                 </a>
-                                                <!-- edit campaign -->
+                                                <!-- edit account -->
                                                 <a 
                                                     th:href="@{/admin/manage-accounts/edit(id=${account.getId()})}"
                                                     class="btn-sm btn-warning btn-icon-split m-1"
