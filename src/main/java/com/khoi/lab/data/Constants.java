@@ -1,4 +1,4 @@
-package com.khoi.lab.config;
+package com.khoi.lab.data;
 
 /**
  * Store constants

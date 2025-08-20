@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.khoi.lab.config.Constants;
 import com.khoi.lab.dao.AccountDAO;
 import com.khoi.lab.dao.DonationDAO;
+import com.khoi.lab.data.Constants;
 import com.khoi.lab.entity.Account;
 import com.khoi.lab.entity.Campaign;
 import com.khoi.lab.entity.Donation;
