@@ -212,9 +212,9 @@
                                         */
                                         async function handleDisabledChange(selectElement, accountId) {
                                             const newStatus = selectElement.value === 'true';
-                                            const currentStatus = selectElement.options[selectElement.selectedIndex].value === 'true';
+                                            const currentStatus = !newStatus;
 
-                                            const confirmation = window.confirm(`Are you sure you want to change the account status?`);
+                                            const confirmation = window.confirm(`Are you sure you want to change the account status from ${currentStatus} to ${newStatus}?`);
 
                                             if (!confirmation) {
                                                 // Revert the dropdown to its original value if the user cancels.
