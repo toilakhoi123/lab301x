@@ -72,6 +72,10 @@ public class Role {
         return accounts;
     }
 
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
     public int getPowerLevel() {
         return powerLevel;
     }

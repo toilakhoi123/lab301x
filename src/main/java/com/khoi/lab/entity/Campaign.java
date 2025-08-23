@@ -243,4 +243,8 @@ public class Campaign {
         return "Campaign [id=" + id + ", name=" + name + ", receiver=" + receiver + ", status=" + status + ", goal="
                 + goal + "]";
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
