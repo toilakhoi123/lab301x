@@ -239,8 +239,7 @@ public class DonationController {
     public ModelAndView campaignsDonateRequest(HttpSession session, @RequestBody String entity) {
         // permission checks
         Account sessionAccount = (Account) session.getAttribute("account");
-        if (sessionAccount != null
-                && !userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_DONATIONS)) {
+        if (!userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_DONATIONS)) {
             ModelAndView mav = campaignsPage();
             mav.addObject("notAuthorized", true);
             return mav;
@@ -298,8 +297,7 @@ public class DonationController {
             @RequestParam PaymentMethod paymentMethod) {
         // permission checks
         Account sessionAccount = (Account) session.getAttribute("account");
-        if (sessionAccount != null
-                && !userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_DONATIONS)) {
+        if (!userPermissionService.hasPermission(sessionAccount, UserPermission.CREATE_DONATIONS)) {
             ModelAndView mav = campaignsPage();
             mav.addObject("notAuthorized", true);
             return mav;

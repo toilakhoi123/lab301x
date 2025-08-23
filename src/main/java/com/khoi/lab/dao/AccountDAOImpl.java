@@ -85,7 +85,7 @@ public class AccountDAOImpl implements AccountDAO {
                 "darkforce", "user");
 
         // set details
-        acc3.setDisabled(true);
+        acc9.setDisabled(true);
         acc13.setDisabled(true);
         acc15.setDisabled(true);
 

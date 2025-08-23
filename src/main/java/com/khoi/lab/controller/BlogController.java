@@ -85,7 +85,8 @@ public class BlogController {
         // 2. Apply category filter if 'query' is present.
         if (query != null && !query.trim().isEmpty()) {
             blogPosts = blogPosts.stream()
-                    .filter(post -> post.getTitle().contains(query) || post.getDescription().contains(query))
+                    .filter(post -> post.getTitle().toLowerCase().contains(query.toLowerCase())
+                            || post.getDescription().toLowerCase().contains(query.toLowerCase()))
                     .collect(Collectors.toList());
         }
 

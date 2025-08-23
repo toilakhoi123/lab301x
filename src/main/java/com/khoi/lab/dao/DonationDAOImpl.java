@@ -138,15 +138,19 @@ public class DonationDAOImpl implements DonationDAO {
                 "https://givenow.vn/wp-content/uploads/2025/05/z6624724319867_f54a0e7837b0fbb3da97046c3b934293-768x525.jpg");
 
         // donations
-        Account account1 = em.find(Account.class, 1);
-        Account account2 = em.find(Account.class, 2);
         Account account3 = em.find(Account.class, 3);
+        Account account1 = em.find(Account.class, 4);
+        Account account2 = em.find(Account.class, 5);
+        Account account4 = em.find(Account.class, 6);
+        Account account5 = em.find(Account.class, 7);
+        Account account6 = em.find(Account.class, 8);
 
         (new CampaignStatusUpdaterService(this, senderService)).updateCampaignStatuses();
 
         // generate random donations
         generateRandomDonations(Arrays.asList(campaign1, campaign2, campaign3),
-                Arrays.asList(account1, account2, account3), 5, 10, 100000, 5000000, 10000, 7);
+                Arrays.asList(account1, account2, account3, account4, account5, account6), 5, 10, 100000, 5000000,
+                10000, 7);
     }
 
     @Override
@@ -364,7 +368,7 @@ public class DonationDAOImpl implements DonationDAO {
         }
 
         // check if admin
-        if (account != null && userPermissionService.hasPermission(account, UserPermission.CREATE_DONATIONS)) {
+        if (!userPermissionService.hasPermission(account, UserPermission.CREATE_DONATIONS)) {
             System.out.println(
                     "| [accountDonate] Unable to donate! Account: " + account + " lacks CREATE_DONATIONS permission!");
             return null;

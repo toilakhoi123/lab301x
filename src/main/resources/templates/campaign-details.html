@@ -94,7 +94,7 @@
                         </div>
 
                         <!-- Donate button -->
-                        <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" th:if="${!userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_DONATIONS)}" class="btn btn-success btn-lg mt-3">Donate Now</a>
+                        <a th:href="@{/campaigns/donate(id=${campaign.getId()})}" class="btn btn-success btn-sm mr-2" th:if="${session.account==null or userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).CREATE_DONATIONS)}">Donate</a>
                         <a th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}" th:if="${userPermissionService.hasPermission(session.account, T(com.khoi.lab.enums.UserPermission).MANAGE_CAMPAIGNS)}" class="btn btn-primary btn-lg mt-3">Edit</a>
                     </div>
                 </div>

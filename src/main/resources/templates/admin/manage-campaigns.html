@@ -207,6 +207,7 @@
                                                 <!-- edit campaign -->
                                                 <a 
                                                     th:href="@{/admin/manage-campaigns/edit(id=${campaign.getId()})}"
+                                                    th:if="${campaign.getStatus().name()=='CREATED'}"
                                                     class="btn-sm btn-warning btn-icon-split m-1"
                                                 >
                                                     <span class="icon text-white-50">
