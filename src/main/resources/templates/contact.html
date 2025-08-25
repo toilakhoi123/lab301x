@@ -1,0 +1,191 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> Charity | Teamplate</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.ico">
+
+   <!-- CSS here -->
+    <link rel="stylesheet" href="@{/assets/css/hamburgers.min.css}">
+
+    <link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/progressbar_barfiller.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/gijgo.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/animated-headline.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/magnific-popup.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/fontawesome-all.min.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/slick.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/nice-select.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+    <style>
+        .map-container {
+            height: 50vh; /* Set map container height to 50% of viewport height */
+            width: 100%;
+        }
+    </style>
+</head>
+    <!-- preloader -->
+    <div th:insert="~{fragment.preloader :: preloader}"></div>
+    
+    <!-- header -->
+    <div th:insert="~{fragment.header :: mainHeader}"></div>
+
+    <!-- main content -->
+    <main>
+        <!--? Hero Start -->
+        <div class="slider-area2">
+            <div class="slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap hero-cap2 pt-20 text-center">
+                                <h2>Contact Us</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <section class="contact-section py-5">
+            <div class="container">
+                <!-- Map Section -->
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <div class="map-container shadow-sm rounded">
+                             <!-- Google Maps iframe with Gia Lam, Hanoi coordinates -->
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14897.4191380998!2d105.9221147!3d21.0369204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135a9d8c0b561c1%3A0x6296316719143a59!2zR2lhIEzhuqFtLCBIw6AgTuG7mWksIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1628169600000!5m2!1svi!2s" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Contact Information Cards -->
+                    <div class="col-12 mb-4">
+                        <h2 class="h3 font-weight-bold text-dark text-center mb-4">Thông tin liên hệ</h2>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card h-100 border-0 shadow-sm rounded">
+                            <div class="card-body text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="d-block mx-auto mb-3" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                </svg>
+                                <h3 class="h5 font-weight-bold">Địa chỉ</h3>
+                                <p class="text-secondary">Gia Lâm, Hà Nội</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card h-100 border-0 shadow-sm rounded">
+                            <div class="card-body text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="d-block mx-auto mb-3" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24.95.27 1.95.41 2.96.41.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.74 21 3 13.26 3 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 .09 1.01.23 2.01.5 2.96.12.35.03.75-.24 1.02l-2.2 2.2z"/>
+                                </svg>
+                                <h3 class="h5 font-weight-bold">Điện thoại</h3>
+                                <p class="text-secondary">+84 (0)793300359</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card h-100 border-0 shadow-sm rounded">
+                            <div class="card-body text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="d-block mx-auto mb-3" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                                <h3 class="h5 font-weight-bold">Email</h3>
+                                <p class="text-secondary text-truncate">leqwoi@protonmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="card h-100 border-0 shadow-sm rounded">
+                            <div class="card-body text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="d-block mx-auto mb-3" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07c3.252.148 4.602 1.547 4.75 4.748.058 1.265.07 1.645.07 4.85s-.012 3.584-.07 4.85c-.148 3.252-1.547 4.602-4.748 4.75-.26.06-.394.072-1.002.076s-.742-.004-1.282-.016a5.523 5.523 0 0 1-2.914 0c-1.265-.058-1.645-.07-4.85-.07s-3.584.012-4.85.07c-3.252.148-4.602 1.547-4.75 4.748-.058 1.265-.07 1.645-.07 4.85s.012 3.584.07 4.85c.148 3.252 1.547 4.602 4.748 4.75.26.06.394.072 1.002.076s.742-.004 1.282-.016a5.523 5.523 0 0 1 2.914 0c1.265-.058 1.645-.07 4.85-.07zm-1.8-11.8a4.522 4.522 0 0 1 4.522 4.522c0 2.522-2.046 4.568-4.568 4.568s-4.522-2.046-4.522-4.568c0-2.476 2.016-4.484 4.492-4.484zm-4.385-2.613c-.886.886-2.126.541-2.67-.003-.54-.54-2.227-1.125-2.227-1.125s-.585 1.687-.003 2.227c.54.54 2.025.594 2.61.003s.54-.54.003-.54-.54.003-.54.003-1.687.585-2.227 2.227-1.125 4.707-1.125 4.707.585 1.687 2.227 2.227 4.707-.003 4.707-.003-1.687-.585-2.227-2.227-1.125-4.707-1.125-4.707.585-1.687 2.227-2.227 4.707-.003 4.707-.003-1.687-.585-2.227-2.227-1.125-4.707-1.125-4.707.585-1.687 2.227-2.227-1.125-4.707-1.125-4.707"/>
+                                </svg>
+                                <h3 class="h5 font-weight-bold">Mạng xã hội</h3>
+                                <div class="mt-2">
+                                    <a href="https://web.facebook.com/ffhyme/" target="_blank" class="text-primary d-block">Facebook</a>
+                                    <a href="https://www.instagram.com/leqwoi/" target="_blank" class="text-danger d-block">Instagram</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- footer -->
+    <div th:insert="~{fragment.footer :: footer}"></div>
+
+    <!-- To Top button -->
+    <div id="back-top" >
+        <a title="Go to Top" href="#"><i class="fas fa-level-up-alt"></i></a>
+    </div>
+
+    <!-- JS here -->
+
+    <script th:src="@{/assets/js/vendor/modernizr-3.5.0.min.js}"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script th:src="@{/assets/js/vendor/jquery-1.12.4.min.js}"></script>
+    <script th:src="@{/assets/js/popper.min.js}"></script>
+    <script th:src="@{/assets/js/bootstrap.min.js}"></script>
+    <!-- Jquery Mobile Menu -->
+    <script th:src="@{/assets/js/jquery.slicknav.min.js}"></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script th:src="@{/assets/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/assets/js/slick.min.js}"></script>
+    <!-- One Page, Animated-HeadLin -->
+    <script th:src="@{/assets/js/wow.min.js}"></script>
+    <script th:src="@{/assets/js/animated.headline.js}"></script>
+    <script th:src="@{/assets/js/jquery.magnific-popup.js}"></script>
+
+    <!-- Date Picker -->
+    <script th:src="@{/assets/js/gijgo.min.js}"></script>
+    <!-- Nice-select, sticky -->
+    <script th:src="@{/assets/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.sticky.js}"></script>
+    
+    <!-- counter , waypoint, Hover Direction -->
+    <script th:src="@{/assets/js/jquery.counterup.min.js}"></script>
+    <script th:src="@{/assets/js/waypoints.min.js}"></script>
+    <script th:src="@{/assets/js/jquery.countdown.min.js}"></script>
+    <script th:src="@{/assets/js/hover-direction-snake.min.js}"></script>
+
+    <!-- contact js -->
+    <script th:src="@{/assets/js/contact.js}"></script>
+    <script th:src="@{/assets/js/jquery.form.js}"></script>
+    <script th:src="@{/assets/js/jquery.validate.min.js}"></script>
+    <script th:src="@{/assets/js/mail-script.js}"></script>
+    <script th:src="@{/assets/js/jquery.ajaxchimp.min.js}"></script>
+    
+    <!-- Jquery Plugins, main Jquery -->    
+    <script th:src="@{/assets/js/plugins.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+     
+    </body>
+</html>

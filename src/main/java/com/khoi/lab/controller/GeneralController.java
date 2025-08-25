@@ -117,4 +117,9 @@ public class GeneralController {
         mav.addObject("notLoggedIn", true);
         return mav;
     }
+
+    @GetMapping("/contact")
+    public ModelAndView viewContactPage() {
+        return new ModelAndView("contact");
+    }
 }
